@@ -1,0 +1,14 @@
+C:\Users\dinhh\Desktop\nienluan\PoseApp\src-tauri\target\debug\deps\serde-e2e6b91ec6a9f81c.d: C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\dinhh\Desktop\nienluan\PoseApp\src-tauri\target\debug\build\serde-2debad09e2a4bb94\out/private.rs
+
+C:\Users\dinhh\Desktop\nienluan\PoseApp\src-tauri\target\debug\deps\libserde-e2e6b91ec6a9f81c.rlib: C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\dinhh\Desktop\nienluan\PoseApp\src-tauri\target\debug\build\serde-2debad09e2a4bb94\out/private.rs
+
+C:\Users\dinhh\Desktop\nienluan\PoseApp\src-tauri\target\debug\deps\libserde-e2e6b91ec6a9f81c.rmeta: C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\dinhh\Desktop\nienluan\PoseApp\src-tauri\target\debug\build\serde-2debad09e2a4bb94\out/private.rs
+
+C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs:
+C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs:
+C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs:
+C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs:
+C:\Users\dinhh\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs:
+C:\Users\dinhh\Desktop\nienluan\PoseApp\src-tauri\target\debug\build\serde-2debad09e2a4bb94\out/private.rs:
+
+# env-dep:OUT_DIR=C:\\Users\\dinhh\\Desktop\\nienluan\\PoseApp\\src-tauri\\target\\debug\\build\\serde-2debad09e2a4bb94\\out

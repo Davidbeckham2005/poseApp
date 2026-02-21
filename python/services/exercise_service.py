@@ -1,0 +1,71 @@
+from utils.calc import goc_tai_tham_so_thu_nhat, convert_to_px,calculating_accuracy, calculating_distance
+from utils.detecting import check_distance_between_knee_and_sholder, isBalance, isReadyVisibility, drawtext, update_history, check_view
+from services.pose_service import PoseDetector
+from services.drawing_service import DrawingService
+from services.video_services import VideoService
+import cv2
+class exercise_Service:
+    def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService):
+        self.count_total = 0
+        self.count_good = 0
+        self.require = ""
+        self.estimate = "estimate. . ."
+        self.state = "up"
+        self.isEstimate = True
+        self.pose = pose
+        self.draw = draw
+        self.capture = capture
+        self.record_couting = []
+        self.max_frame = 10
+        self.isDrawing = True
+        self.isAnalyst = True   
+        self.isCheck_view = True
+        self.isMake_Result = False
+        self.history_x_sholder = []
+        self.history_x_hip = []
+        self.origin = 0
+    def check_view(self,pose_landmark):
+        result_check_oriantation = self.pose.check_oriantation(pose_landmark)
+        update_history(self.history_x_hip,result_check_oriantation['hip_dis'])
+        update_history(self.history_x_sholder,result_check_oriantation['shoulder_dis'])
+        view = check_view(self.history_x_hip,self.history_x_sholder)
+        return view
+    
+    def show_analyst(self,frame):
+        drawtext(frame,(20,150),f"State: {str(self.state)}",(128,0,0))
+        drawtext(frame,(20,100),f"Reps: {str(self.count_total)}",(128,0,0))
+        drawtext(frame,(20,250),self.estimate,(128,0,0))
+        drawtext(frame,(20,200),f'Good: {str(self.count_good)}',(128,0,0))
+        drawtext(frame,(20,300),f'FPS: {str(self.capture.getFPS())}',(0,128,128))
+        cv2.line(frame,(310,0),(310,310),(255,0,0),5)
+        cv2.line(frame,(0,310),(310,310),(255,0,0),5)
+
+    def run_detection(self,frame):
+        result = self.pose.run_process(frame)
+        if result.pose_landmarks:
+            pose_landmark = result.pose_landmarks[0]
+
+            if self.isAnalyst:
+                self.show_analyst(frame)
+            if check_view:
+                drawtext(frame,(10,50),"view: Horizontal",(0,0,255))
+            else:
+                drawtext(frame,(10,50),"View: Vertical",(0,0,255))
+            if self.isDrawing:
+                self.draw.draw_skeleton(frame,pose_landmark)
+            if self.isMake_Result:
+                self.capture.makeResult(frame)  
+            self.run_estimate(pose_landmark,frame)
+            
+    def run_estimate(self,pose_landmark,frame):
+        pass
+    def getResult(self):
+        data = {
+            "total" : self.count_total,
+            "good" : self.count_good,
+            "accuracy" : calculating_accuracy(self.count_good,self.count_total),
+            "record" : self.record_couting,
+            "src_output": self.capture.get_file_name(), 
+        }
+        return data
+    

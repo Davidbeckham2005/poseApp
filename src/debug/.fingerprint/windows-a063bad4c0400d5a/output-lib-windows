@@ -1,0 +1,35 @@
+memory allocation of 8519696 bytes failed
+stack backtrace:
+   0:     0x7fff585d67d2 - <unknown>
+   1:     0x7fff585ebac1 - <unknown>
+   2:     0x7fff5859ee54 - <unknown>
+   3:     0x7fff585bc0af - <unknown>
+   4:     0x7fff585bc19c - <unknown>
+   5:     0x7fff585b741f - <unknown>
+   6:     0x7fff585bc16b - <unknown>
+   7:     0x7fff585997a8 - <unknown>
+   8:     0x7fff5c6a38aa - <unknown>
+   9:     0x7fff593f0b94 - <unknown>
+  10:     0x7fff5944cada - <unknown>
+  11:     0x7fff594dd455 - <unknown>
+  12:     0x7fff5971404f - <unknown>
+  13:     0x7fff58ddb97a - <unknown>
+  14:     0x7fff58e96d44 - <unknown>
+  15:     0x7fff58e4c64d - <unknown>
+  16:     0x7fff58e25990 - <unknown>
+  17:     0x7fff58db7263 - <unknown>
+  18:     0x7fff58d546c5 - <unknown>
+  19:     0x7fff5940586b - <unknown>
+  20:     0x7fff594a9ff2 - <unknown>
+  21:     0x7fff594d3192 - <unknown>
+  22:     0x7fff5861866b - <unknown>
+  23:     0x7fff58620efb - <unknown>
+  24:     0x7fff58018f3a - <unknown>
+  25:     0x7fff58023163 - <unknown>
+  26:     0x7fff581019b3 - <unknown>
+  27:     0x7fff55b49f17 - <unknown>
+  28:     0x7fff55b42d6f - <unknown>
+  29:     0x7fff55b50859 - <unknown>
+  30:     0x7fff585afa28 - <unknown>
+  31:     0x7ff82246e8d7 - BaseThreadInitThunk
+  32:     0x7ff823cac53c - <unknown>
