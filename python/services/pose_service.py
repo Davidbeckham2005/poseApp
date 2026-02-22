@@ -6,7 +6,7 @@ from mediapipe.tasks.python import vision
 from utils.calc import convert_to_px
 import time
 class PoseDetector:
-    def __init__(self, model_path='C:/Users/dinhh/Desktop/nienluan/PoseApp/src-tauri/python/pose_landmarker_full.task'):
+    def __init__(self, model_path='C:/Users/dinhh/Desktop/nienluan/PoseApp/python/pose_landmarker_full.task'):
         self.base_options = python.BaseOptions(model_asset_path=model_path)
         self.options = vision.PoseLandmarkerOptions(
             base_options=self.base_options,
