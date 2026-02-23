@@ -106,8 +106,8 @@ class plankService(exercise_Service):
             # self.record_couting.append(record)
     def getResult(self):
         data = {
-            "total" : self.total_time,
-            "good" : self.correct_time,
+            "total" : round(self.total_time,2),
+            "good" : round(self.correct_time,2),
             "accuracy" : calculating_accuracy(self.count_good,self.count_total),
             "record" : self.record_couting,
             "src_output": self.capture.get_file_name(), 

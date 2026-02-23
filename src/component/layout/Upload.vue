@@ -49,12 +49,13 @@ async function upload() {
             const encodePath = encodeURIComponent(pathSelected)
             const data = {
                 "path_video": encodePath,
+                "type": "squat"
             }
             isloading.value = true
             const res = await addVideo(data)
             while (true) {
                 await videoStore.fetchVideo()
-                const all_video = await get_all_video()
+                // const all_video = await get_all_video()
                 // console.log(res.output_path, all_video)
                 // console.log(res.output_path, videoStore.videos)
 

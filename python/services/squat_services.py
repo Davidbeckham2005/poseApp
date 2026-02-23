@@ -1,5 +1,3 @@
-from re import S
-
 from utils.calc import goc_tai_tham_so_thu_nhat, convert_to_px,calculating_accuracy, calculating_distance
 from utils.detecting import check_distance_between_knee_and_sholder, isBalance, isReadyVisibility, drawtext, update_history, check_view
 from services.pose_service import PoseDetector
@@ -70,26 +68,27 @@ class squatService(exercise_Service):
             if isBalance(self.history_origin_squat) and self.isEstimate:
                 if origin < self.bad_standard:
                     self.estimate = "bad"
-                    self.count_total+=1
+                    
                     self.require = f"Lower than threshold!"
                 elif origin< self.good_standard:
                     if check_distance_between_knee_and_sholder(self.history_distance_knee,self.history_distance_shoulder):
                         self.estimate = "good"
                         self.count_good+=1
-                        self.count_total+=1
+                        
                         self.require = "good form detected!"
                     else:
                         self.estimate = "Stance is too narrow!"
-                        self.count_total+=1
+                        
                         self.require = "Widen your stance!"
                 else:
-                    self.count_total+=1
+                    
                     self.require = f"Higher than threshold!"
                     self.estimate = "high"
                 self.isEstimate = False
                 self.state = "down"
         elif origin>self.up_standard and self.state=="down":
             self.state = "up"
+            self.count_total +=1
             # print(f"rep {self.}")
             self.isEstimate = True
             record = {
@@ -99,10 +98,4 @@ class squatService(exercise_Service):
             }
             self.record_couting.append(record)
             self.estimate="estimate"
-        else:
-            record = {
-            "count" : self.count_total,
-            "estimate" : self.estimate,
-            "require" : self.require         
-            }
-            self.record_couting.append(record)
+      

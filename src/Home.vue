@@ -108,7 +108,6 @@ const Analysis_value = computed(() => {
 // 3. có thể spam fetch
 watch(currentFile, async () => {
     await videoStore.fetchVideo()
-
     // console.log(currentFile.value, videoStore.videos)
     // const result = videoStore.videos.find(v => v.output_path == currentFile.value)
     // console.log(result)
