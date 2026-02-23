@@ -90,7 +90,7 @@ class squatService(exercise_Service):
                 self.state = "down"
         elif origin>self.up_standard and self.state=="down":
             self.state = "up"
-            
+            # print(f"rep {self.}")
             self.isEstimate = True
             record = {
             "count" : self.count_total,
@@ -99,3 +99,10 @@ class squatService(exercise_Service):
             }
             self.record_couting.append(record)
             self.estimate="estimate"
+        else:
+            record = {
+            "count" : self.count_total,
+            "estimate" : self.estimate,
+            "require" : self.require         
+            }
+            self.record_couting.append(record)

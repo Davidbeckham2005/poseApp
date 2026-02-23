@@ -24,5 +24,11 @@ dist-ssr
 *.sw?
 
 .env
-
+sql
 src/assets/
+
+
+**/__pycache__/
+*.pyc
+*.db
+sql.poseApp.db
