@@ -4,7 +4,8 @@ import {
     VideoIcon
 } from "lucide-vue-next"
 
-
+// khai bao veevalidate
+import { Form, Field } from 'vee-validate'
 // khai bao cac component
 import title_content from "../bases/title_content.vue";
 import VideoResult from "./VideoResult.vue";
@@ -33,10 +34,23 @@ const videoStore = useVideo()
 const src_video = ref()
 const isloading = get_status_upload_video()
 const translate_class = get_translate()
-
-const emit = defineEmits(['analying'])
+// list cac bai tap 
+const exercises = [
+    { name: 'Squat', value: 'squat' },
+    { name: 'Push-up', value: 'pushup' },
+    { name: 'Plank', value: 'plank' },
+]
+// const select_type = ref(true)
+const exercise_selected = ref()
+// const emit = defineEmits(['analying'])
 async function upload() {
+    if (!exercise_selected.value) {
+        // select_type.value = false
+        // alert("Please choose a exercise type first!")
+        return
+    }
     try {
+        console.log(exercise_selected.value)
         const pathSelected = await open({
             filters: [{
                 name: "video",
@@ -49,7 +63,7 @@ async function upload() {
             const encodePath = encodeURIComponent(pathSelected)
             const data = {
                 "path_video": encodePath,
-                "type": "squat"
+                "type": exercise_selected.value
             }
             isloading.value = true
             const res = await addVideo(data)
@@ -58,15 +72,12 @@ async function upload() {
                 // const all_video = await get_all_video()
                 // console.log(res.output_path, all_video)
                 // console.log(res.output_path, videoStore.videos)
-
                 if (videoStore.get_video(res.output_path)) break
                 await new Promise(r => setTimeout(r, 500))
             }
             switch_dashbroad(res.output_path)
-
         }
     }
-
     catch (error) {
         console.log(error)
     } finally {
@@ -80,7 +91,7 @@ async function upload() {
         <div v-if="isloading" class="flex flex-col items-center animate-fade-in duration-1000 p-2 pb-3">
             <cp_Load speed="3s"></cp_Load>
             <VideoResult :path_video="src_video" title="Review" content="Review your video first!" size_video="w-80"
-                :is-controls="false" :isloop="true" class="m-auto"
+                :is-controls="true" :isloop="true" class="m-auto"
                 text_video="Please do not switch tabs during the detection!">
             </VideoResult>
             <div class="w-120 h-4 pt-2">
@@ -88,14 +99,17 @@ async function upload() {
             </div>
         </div>
         <div v-else>
-            <title_content title="Upload Video"
+            <title_content class="mt-5" title="Upload Video"
                 content="Upload your exercise video for automated pose detection and analysis"></title_content>
-            <div class="rounded-2xl bg-gray-700/50 p-3 mb-5 h-30 space-y-5">
-
-                <!-- <Label for="type"></Label>
-                <Field name="type" as="select">
-                    <option value="squat">squat</option>
-                </Field> -->
+            <div class="rounded-2xl bg-gray-700/50 p-3 mb-5 h-36">
+                <title_content title="Exercise Type" content="Pre-select exercise for optimized detection" class="ml-2">
+                </title_content>
+                <Field name="type" as="select" v-model="exercise_selected"
+                    :class="['w-full rounded-2xl bg-gray-700/80 h-10 pl-2 pr-2 border border-red-400 hover:border hover:border-cyan-400', { 'border-red-400': !exercise_selected, 'border-0': exercise_selected }]">
+                    <option value="" disabled class="text-white">-- Select Exercise --</option>
+                    <option v-for="exercise in exercises" :value="exercise.value" class="group">{{
+                        exercise.name }}</option>
+                </Field>
             </div>
             <div @click.prevent="upload" class="max-w-6xl border-2 border-dashed border-gray-700 rounded-2xl
         bg-stone-900/70 p-10 sm:p-20 flex flex-col items-center justify-center text-center cursor-pointer
