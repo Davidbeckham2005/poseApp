@@ -22,7 +22,7 @@ def calculating_accuracy(good,total):
     accuracy = 0
     if total == 0:
         return accuracy
-    return round((good/total)*100,2)
+    return round((good/total)*100,0)
 
 def calculating_distance(a,b):
     A = np.array([a.x,a.y])

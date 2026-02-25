@@ -8,15 +8,18 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy import Column, Float, ForeignKey,Integer, String, create_engine, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
-
+# data cua video
 class data_Video(BaseModel):
     isDrawing: bool = True
     isAnalyst: bool = True
     isCheck_view: bool = True
     type: str
     path_video: str
+
+     
 # **********
 SQLALCHEMY_DATABASE_URL = "sqlite:///../sql.poseApp.db"
+# SQLALCHEMY_DATABASE_URL = "sqlite:///../sql.settingPoseApp.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread":False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False,bind=engine)
 Base = declarative_base()
@@ -28,10 +31,15 @@ class video(Base):
     total = Column(Integer)
     count_good = Column(Integer)
     accuracy_good = Column(Float)
+    type = Column(String)
     # Sử dụng kiểu JSON để SQLAlchemy tự động convert dict/list Python cho bạn
     record_detail = Column(JSON)
     class Config:
             orm_mode = True 
+class Setting(Base):
+    __tablename__ = "setting_table"
+    id = Column(Integer,primary_key=True, index=True)
+    isDrawing = Column(String)
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 def get_db():
@@ -53,6 +61,7 @@ app.add_middleware(
 
 @app.post("/addVideo/")
 async def add_Video(input: data_Video, db: Session = Depends(get_db)):
+    update_setting(input,db)
     result = process(input)
     new_video = video(
     output_path = result["result"]["src_output"],
@@ -60,11 +69,25 @@ async def add_Video(input: data_Video, db: Session = Depends(get_db)):
     count_good = result["result"]["good"],
     accuracy_good = result["result"]["accuracy"],
     record_detail = result["result"]["record"],
-    )
+    type = result['type'])
+
     db.add(new_video)
     db.commit()
     db.refresh(new_video)
     return new_video
+
+def update_setting(input: data_Video, db: Session = Depends(get_db)):
+    db_setting =  db.query(Setting).filter(Setting.id == 1).first()
+    if db_setting:
+        db_setting.isDrawing = input.isDrawing
+    else:
+        new_setting = Setting(
+            id=1,
+            isDrawing = input.isDrawing
+        )
+        db.add(new_setting)
+    db.commit()
+
 
 @app.get("/get_video/{filename}")
 def get_video_content(filename:str, db: Session = Depends(get_db)):

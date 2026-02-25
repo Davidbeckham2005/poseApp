@@ -12,11 +12,9 @@
                     <Analyst v-bind="Analysis_value" class="sm:ml-4 w-full lg:w-1/4"></Analyst>
                 </div>
                 <Upload v-else-if="currentTab === `upload`"></Upload>
-                <!-- <Loading v-else-if="currentTab === 'loading_video'"></Loading> -->
-                <!-- <div v-else class="flex justify-center items-center">
-                    <Loading_progres></Loading_progres> -->
-                <!-- <title_content title="Comming soon" content="will be update soon"></title_content> -->
-                <!-- </div> -->
+                <Settings v-else-if="currentTab === `settings`">
+                </Settings>
+
                 <!-- <div class="grid grid-cols-3 gap-6">
                     <div v-for="i in 3" :key="i"
                         class="bg-gray-900/40 border border-gray-800 p-5 rounded-xl hover:border-gray-700 transition cursor-pointer">
@@ -64,7 +62,7 @@ import Header from './component/layout/Header.vue';
 import sidebar from './component/layout/sidebar/sidebar.vue';
 import Upload from './component/layout/Upload.vue';
 import VideoResult from './component/layout/VideoResult.vue';
-
+import Settings from './component/layout/Settings.vue';
 
 import { watch, ref, computed, onMounted } from "vue";
 import { useNavigation } from "./composable/helpers";
@@ -76,8 +74,8 @@ const videoStore = useVideo()
 const menuItems = [
     { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
     { name: 'upload', label: 'Upload', icon: UploadIcon },
-    { name: 'analysis', label: 'Analysis', icon: AnalysisIcon },
-    { name: 'history', label: 'History', icon: HistoryIcon },
+    // { name: 'analysis', label: 'Analysis', icon: AnalysisIcon },
+    // { name: 'history', label: 'History', icon: HistoryIcon },
     { name: 'settings', label: 'Settings', icon: SettingsIcon },
 
 ];
@@ -86,20 +84,23 @@ switch_on_sidebar("upload")
 // thay doi cac tab
 const setActive = (item) => {
     switch_on_sidebar(item.name)
+    console.log(currentTab.value)
 }
 
 
 const Analysis_value = computed(() => {
     if (video.value) {
         return {
-            reps_count: video.value.total,
-            accuracy: video.value.accuracy_good,
-            video_record: video.value.record_detail
+            reps_count: video.value.total + " reps",
+            accuracy: video.value.accuracy_good + "%",
+            video_record: video.value.record_detail,
+            type: video.value.type
         }
     }
     return {
         reps_count: "...",
-        accuracy: "..."
+        accuracy: "...",
+        type: "..."
     }
 })
 // ta quan sat current file chu khong the quan sat current file . value boi vi 

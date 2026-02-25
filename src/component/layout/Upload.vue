@@ -101,7 +101,7 @@ async function upload() {
         <div v-else>
             <title_content class="mt-5" title="Upload Video"
                 content="Upload your exercise video for automated pose detection and analysis"></title_content>
-            <div class="rounded-2xl bg-gray-700/50 p-3 mb-5 h-36">
+            <div class="rounded-2xl bg-gray-700/60 p-3 mb-5 h-40">
                 <title_content title="Exercise Type" content="Pre-select exercise for optimized detection" class="ml-2">
                 </title_content>
                 <Field name="type" as="select" v-model="exercise_selected"

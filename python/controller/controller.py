@@ -51,6 +51,7 @@ def process(data):
 
     data = {
         "status" : True,
-        "result" : service.getResult()
+        "result" : service.getResult(),
+        "type" : type
     }
     return data

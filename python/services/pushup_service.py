@@ -65,16 +65,16 @@ class pushupService(exercise_Service):
                     self.require = f"Lower than threshold!"
                     self.origin = origin
                 elif origin< self.good_standard:
-                    if(check_y_hip_and_shoulder(self.history_y_hip,self.history_y_shoulder)): 
-                        self.estimate = "good"
-                        self.count_good+=1
-                        self.count_total+=1
-                        self.require = "good form detected!"
-                        self.origin = origin             
-                    else:
-                        self.estimate = "Hips are too high!"
-                        self.count_total+=1
-                        self.require = "Lower your hips!"
+                    # if(check_y_hip_and_shoulder(self.history_y_hip,self.history_y_shoulder)): 
+                    self.estimate = "good"
+                    self.count_good+=1
+                    self.count_total+=1
+                    self.require = "good form detected!"
+                    self.origin = origin             
+                    # else:
+                    #     self.estimate = "Hips are too high!"
+                    #     self.count_total+=1
+                    #     self.require = "Lower your hips!"
                 else:
                     self.count_total+=1
                     self.require = f"Higher than threshold!"
