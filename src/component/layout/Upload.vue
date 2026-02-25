@@ -29,7 +29,8 @@ import { convertFileSrc } from "@tauri-apps/api/core";
 // khai bao pinia
 import { useVideo } from "../../store/video.store";
 const videoStore = useVideo()
-
+import { useSetting } from "../../store/setting.store";
+const settingStore = useSetting()
 // khai bao bien
 const src_video = ref()
 const isloading = get_status_upload_video()
@@ -63,12 +64,19 @@ async function upload() {
             const encodePath = encodeURIComponent(pathSelected)
             const data = {
                 "path_video": encodePath,
-                "type": exercise_selected.value
+                "type": exercise_selected.value,
+                "isDrawing": settingStore.setting.isDrawing,
+                "isAnalyst": settingStore.setting.isAnalyst,
+                "isCheck_view": settingStore.setting.isCheck_view
+                // "is" : fffdkfdkf.isfdffmd => pinia se luu setting, click xong => vấn đề là sau khi updata thì pinia mới có giá trị vậy trước đó ta buộc phải truyèn 
+                //  từ cha sang con??? , đó là vấn đề => nếu setting xong lưu vào database luôn thì điều gì sẽ lưu hả không gì cả, vậy cách
+                // tốt nhất ở đây là truyền truyền truyền , truyền từ content_click => setting => home => update
             }
             isloading.value = true
             const res = await addVideo(data)
             while (true) {
                 await videoStore.fetchVideo()
+
                 // const all_video = await get_all_video()
                 // console.log(res.output_path, all_video)
                 // console.log(res.output_path, videoStore.videos)

@@ -24,3 +24,6 @@ export async function get_video(filename) {
 export async function get_all_video() {
     return (await api.get('/get_video/')).data
 }
+export async function get_setting() {
+    return (await api.get('/get_setting')).data
+}

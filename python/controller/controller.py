@@ -28,6 +28,7 @@ def process(data):
         service = plankService(draw, detector, capture)
     if not capture.getCap().isOpened():
         return False
+    service.set_setting(data)
     # cho phep thay doi kich thuoc bang chuot
     cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
     while True:    
@@ -40,11 +41,11 @@ def process(data):
         # frame = cv2.resize(frame,(520,1280))
         # print(service.capture.set_current_time_ms())
         service.run_detection(frame)    
-        cv2.imshow("video",frame)
+        # cv2.imshow("video",frame)
         
-        wait_time = max(30,int(800/capture.getFPS()))
-        if cv2.waitKey(wait_time) & 0xFF == ord("q"):
-            break
+        # wait_time = max(30,int(800/capture.getFPS()))
+        # if cv2.waitKey(wait_time) & 0xFF == ord("q"):
+        #     break
     capture.writer_release()       
     capture.release()
     cv2.destroyAllWindows()

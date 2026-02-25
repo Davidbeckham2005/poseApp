@@ -5,7 +5,7 @@ from controller.controller import process
 
 # cau hinh sqlite
 from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy import Column, Float, ForeignKey,Integer, String, create_engine, JSON
+from sqlalchemy import Boolean, Column, Float, ForeignKey,Integer, String, create_engine, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
 # data cua video
@@ -40,6 +40,8 @@ class Setting(Base):
     __tablename__ = "setting_table"
     id = Column(Integer,primary_key=True, index=True)
     isDrawing = Column(String)
+    isAnalyst = Column(String)
+    isCheck_view = Column(String)
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 def get_db():
@@ -80,15 +82,23 @@ def update_setting(input: data_Video, db: Session = Depends(get_db)):
     db_setting =  db.query(Setting).filter(Setting.id == 1).first()
     if db_setting:
         db_setting.isDrawing = input.isDrawing
+        db_setting.isAnalyst = input.isAnalyst
+        db_setting.isCheck_view = input.isCheck_view
+
     else:
         new_setting = Setting(
             id=1,
-            isDrawing = input.isDrawing
+            isDrawing = input.isDrawing,
+            isAnalyst = input.isAnalyst,
+            isCheck_view = input.isCheck_view
         )
         db.add(new_setting)
     db.commit()
 
-
+@app.get("/get_setting")
+def get_setting(db: Session = Depends(get_db)):
+    setting = db.query(Setting).filter(Setting.id == 1).first()
+    return setting
 @app.get("/get_video/{filename}")
 def get_video_content(filename:str, db: Session = Depends(get_db)):
     video_content = db.query(video).filter(video.output_path==filename).first()

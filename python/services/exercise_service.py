@@ -17,6 +17,8 @@ class exercise_Service:
         self.capture = capture
         self.record_couting = []
         self.max_frame = 10
+
+        # setting
         self.isDrawing = True
         self.isAnalyst = True   
         self.isCheck_view = True
@@ -47,16 +49,20 @@ class exercise_Service:
 
             if self.isAnalyst:
                 self.show_analyst(frame)
-            if check_view:
-                drawtext(frame,(10,50),"view: Horizontal",(0,0,255))
-            else:
-                drawtext(frame,(10,50),"View: Vertical",(0,0,255))
+            if self.isCheck_view:
+                if check_view:
+                    drawtext(frame,(10,50),"view: Horizontal",(0,0,255))
+                else:
+                    drawtext(frame,(10,50),"View: Vertical",(0,0,255))
             if self.isDrawing:
                 self.draw.draw_skeleton(frame,pose_landmark)
             if self.isMake_Result:
                 self.capture.makeResult(frame)  
             self.run_estimate(pose_landmark,frame)
-            
+    def set_setting(self,input):
+        self.isDrawing = input.isDrawing
+        self.isAnalyst = input.isAnalyst
+        self.isCheck_view = input.isCheck_view
     def run_estimate(self,pose_landmark,frame):
         pass
     def getResult(self):

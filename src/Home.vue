@@ -69,8 +69,15 @@ import { useNavigation } from "./composable/helpers";
 const { switch_on_sidebar, currentTab, currentFile } = useNavigation()
 
 //pinia 
+import { useSetting } from './store/setting.store';
 import { useVideo } from './store/video.store';
 const videoStore = useVideo()
+const settingStore = useSetting()
+
+// onMounted(async () => {
+//     await settingStore.fetchSetting()
+//     console.log(settingStore.setting)
+// })
 const menuItems = [
     { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
     { name: 'upload', label: 'Upload', icon: UploadIcon },
@@ -84,7 +91,7 @@ switch_on_sidebar("upload")
 // thay doi cac tab
 const setActive = (item) => {
     switch_on_sidebar(item.name)
-    console.log(currentTab.value)
+    // console.log(currentTab.value)
 }
 
 
