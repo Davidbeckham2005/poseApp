@@ -26,6 +26,11 @@ class exercise_Service:
         self.history_x_sholder = []
         self.history_x_hip = []
         self.origin = 0
+        self.Analyst_state = True
+        self.Analyst_FPS = True
+        self.Analyst_count = True
+        self.Analyst_count_good = True
+        self.Analyst_estimate = True
     def check_view(self,pose_landmark):
         result_check_oriantation = self.pose.check_oriantation(pose_landmark)
         update_history(self.history_x_hip,result_check_oriantation['hip_dis'])
@@ -34,11 +39,16 @@ class exercise_Service:
         return view
     
     def show_analyst(self,frame):
-        drawtext(frame,(20,150),f"State: {str(self.state)}",(128,0,0))
-        drawtext(frame,(20,100),f"Reps: {str(self.count_total)}",(128,0,0))
-        drawtext(frame,(20,250),self.estimate,(128,0,0))
-        drawtext(frame,(20,200),f'Good: {str(self.count_good)}',(128,0,0))
-        drawtext(frame,(20,300),f'FPS: {str(self.capture.getFPS())}',(0,128,128))
+        if self.Analyst_state:
+            drawtext(frame,(20,150),f"State: {str(self.state)}",(128,0,0))
+        if self.Analyst_FPS:
+            drawtext(frame,(20,300),f'FPS: {str(self.capture.getFPS())}',(0,128,128))
+        if self.Analyst_count:
+            drawtext(frame,(20,100),f"Reps: {str(self.count_total)}",(128,0,0))
+        if self.Analyst_estimate:
+            drawtext(frame,(20,250),self.estimate,(128,0,0))
+        if self.Analyst_count_good:
+            drawtext(frame,(20,200),f'Good: {str(self.count_good)}',(128,0,0))
         cv2.line(frame,(310,0),(310,310),(255,0,0),5)
         cv2.line(frame,(0,310),(310,310),(255,0,0),5)
 
@@ -63,6 +73,11 @@ class exercise_Service:
         self.isDrawing = input.isDrawing
         self.isAnalyst = input.isAnalyst
         self.isCheck_view = input.isCheck_view
+        self.Analyst_FPS = input.Analyst_FPS
+        self.Analyst_state = input.Analyst_state
+        self.Analyst_count = input.Analyst_count
+        self.Analyst_count_good = input.Analyst_count_good
+        self.Analyst_estimate = input.Analyst_estimate
     def run_estimate(self,pose_landmark,frame):
         pass
     def getResult(self):

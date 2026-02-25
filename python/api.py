@@ -13,9 +13,13 @@ class data_Video(BaseModel):
     isDrawing: bool = True
     isAnalyst: bool = True
     isCheck_view: bool = True
+    Analyst_FPS: bool = True
+    Analyst_state: bool = True
     type: str
     path_video: str
-
+    Analyst_count: bool = True
+    Analyst_count_good: bool = True
+    Analyst_estimate: bool = True
      
 # **********
 SQLALCHEMY_DATABASE_URL = "sqlite:///../sql.poseApp.db"
@@ -42,6 +46,12 @@ class Setting(Base):
     isDrawing = Column(String)
     isAnalyst = Column(String)
     isCheck_view = Column(String)
+    Analyst_FPS = Column(String)
+    Analyst_state = Column(String)
+    Analyst_count = Column(String)
+    Analyst_count_good = Column(String)
+    Analyst_estimate = Column(String)
+
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 def get_db():
@@ -84,13 +94,22 @@ def update_setting(input: data_Video, db: Session = Depends(get_db)):
         db_setting.isDrawing = input.isDrawing
         db_setting.isAnalyst = input.isAnalyst
         db_setting.isCheck_view = input.isCheck_view
-
+        db_setting.Analyst_FPS = input.Analyst_FPS
+        db_setting.Analyst_state = input.Analyst_state
+        db_setting.Analyst_count = input.Analyst_count
+        db_setting.Analyst_count_good = input.Analyst_count_good
+        db_setting.Analyst_estimate = input.Analyst_estimate
     else:
         new_setting = Setting(
             id=1,
             isDrawing = input.isDrawing,
+            Analyst_FPS = input.Analyst_FPS,
+            Analyst_state = input.Analyst_state,
             isAnalyst = input.isAnalyst,
-            isCheck_view = input.isCheck_view
+            isCheck_view = input.isCheck_view,
+            Analyst_count = input.Analyst_count,
+            Analyst_count_good = input.Analyst_count_good,
+            Analyst_estimate = input.Analyst_estimate,
         )
         db.add(new_setting)
     db.commit()

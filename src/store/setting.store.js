@@ -6,6 +6,11 @@ export const useSetting = defineStore('setting', () => {
         isCheck_view: true,
         isDrawing: true,
         isAnalyst: true,
+        Analyst_FPS: true,
+        Analyst_state: true,
+        Analyst_count: true,
+        Analyst_count_good: true,
+        Analyst_estimate: true
     })
     const fetchSetting = async () => {
         try {
