@@ -27,3 +27,9 @@ export async function get_all_video() {
 export async function get_setting() {
     return (await api.get('/get_setting')).data
 }
+export async function delete_video(data_video) {
+    return (await api.delete("/deleteVideo/", { data: data_video })).data
+}
+export async function delete_videos(data_video) {
+    return (await api.delete("/deleteVideos/", { data: data_video })).data
+}

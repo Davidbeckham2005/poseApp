@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import FastAPI # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from pydantic import BaseModel #type: ignore
@@ -88,7 +90,35 @@ async def add_Video(input: data_Video, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_video)
     return new_video
-
+# delete a video
+class VideoDelete(BaseModel):
+    output_path: str
+@app.delete("/deleteVideo/")
+async def delete_video(data: VideoDelete,db: Session = Depends(get_db) ):
+    video_to_delete = db.query(video).filter(video.output_path == data.output_path).first()
+    if not video_to_delete:
+        raise HTTPException(status_code=404, detail="Video không tồn tại")
+    try:
+        db.delete(video_to_delete)
+        db.commit()
+    except Exception as e:
+        db.rollback() # Hoàn tác nếu có lỗi xảy ra
+        raise HTTPException(status_code=500, detail=f"Lỗi khi xóa: {str(e)}")
+# de;ete list video
+class ListVideoDelete(BaseModel):
+    output_paths: List[str]
+@app.delete("/deleteVideos/")
+async def delete_video(data: ListVideoDelete,db: Session = Depends(get_db) ):
+    videos = db.query(video).filter(video.output_path.in_(data.output_paths))
+    count = videos.count()
+    if count == 0:
+        raise HTTPException(status_code=404, detail="Không tìm thấy video nào")
+    try:
+        videos.delete(synchronize_session=False)
+        db.commit()
+    except Exception as e:
+        db.rollback() # Hoàn tác nếu có lỗi xảy ra
+        raise HTTPException(status_code=500, detail=f"Lỗi khi xóa: {str(e)}")
 def update_setting(input: data_Video, db: Session = Depends(get_db)):
     db_setting =  db.query(Setting).filter(Setting.id == 1).first()
     if db_setting:

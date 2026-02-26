@@ -14,7 +14,9 @@
                 <Upload v-else-if="currentTab === `upload`"></Upload>
                 <Settings v-else-if="currentTab === `settings`">
                 </Settings>
+                <History_tab v-else-if="currentTab === `history`">
 
+                </History_tab>
                 <!-- <div class="grid grid-cols-3 gap-6">
                     <div v-for="i in 3" :key="i"
                         class="bg-gray-900/40 border border-gray-800 p-5 rounded-xl hover:border-gray-700 transition cursor-pointer">
@@ -63,6 +65,7 @@ import sidebar from './component/layout/sidebar/sidebar.vue';
 import Upload from './component/layout/Upload.vue';
 import VideoResult from './component/layout/VideoResult.vue';
 import Settings from './component/layout/Settings.vue';
+import History_tab from './component/layout/History/History_tab.vue';
 
 import { watch, ref, computed, onMounted } from "vue";
 import { useNavigation } from "./composable/helpers";
@@ -82,7 +85,7 @@ const menuItems = [
     { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
     { name: 'upload', label: 'Upload', icon: UploadIcon },
     // { name: 'analysis', label: 'Analysis', icon: AnalysisIcon },
-    // { name: 'history', label: 'History', icon: HistoryIcon },
+    { name: 'history', label: 'History', icon: HistoryIcon },
     { name: 'settings', label: 'Settings', icon: SettingsIcon },
 
 ];
