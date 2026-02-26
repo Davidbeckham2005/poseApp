@@ -97,8 +97,10 @@ const setActive = (item) => {
 
 const Analysis_value = computed(() => {
     if (video.value) {
+        let count = " reps"
+        if (video.value.type == 'plank') count = ' sec'
         return {
-            reps_count: video.value.total + " reps",
+            reps_count: video.value.total + count,
             accuracy: video.value.accuracy_good + "%",
             video_record: video.value.record_detail,
             type: video.value.type

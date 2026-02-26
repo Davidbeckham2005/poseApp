@@ -36,6 +36,7 @@ class video(Base):
     count_good = Column(Integer)
     accuracy_good = Column(Float)
     type = Column(String)
+    size_video = Column(String)
     # Sử dụng kiểu JSON để SQLAlchemy tự động convert dict/list Python cho bạn
     record_detail = Column(JSON)
     class Config:
@@ -81,8 +82,8 @@ async def add_Video(input: data_Video, db: Session = Depends(get_db)):
     count_good = result["result"]["good"],
     accuracy_good = result["result"]["accuracy"],
     record_detail = result["result"]["record"],
-    type = result['type'])
-
+    type = result['type'],
+    size_video = result['result']['size'])
     db.add(new_video)
     db.commit()
     db.refresh(new_video)

@@ -1,7 +1,7 @@
 import cv2
 from pathlib import Path
 from datetime import datetime
-
+import os
 class VideoService:
     def __init__(self, path: str):
         self.path = Path(path)
@@ -62,3 +62,7 @@ class VideoService:
     def set_current_time_ms(self):
         self.current_time_ms = self.cap.get(cv2.CAP_PROP_POS_MSEC)
         return self.current_time_ms
+    
+    def get_size(self):
+        size = os.path.getsize(self.path)
+        return f"{(size/1024**2):.2f}MB"

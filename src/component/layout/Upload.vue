@@ -67,7 +67,12 @@ async function upload() {
                 "type": exercise_selected.value,
                 "isDrawing": settingStore.setting.isDrawing,
                 "isAnalyst": settingStore.setting.isAnalyst,
-                "isCheck_view": settingStore.setting.isCheck_view
+                "isCheck_view": settingStore.setting.isCheck_view,
+                "Analyst_FPS": settingStore.setting.Analyst_FPS,
+                "Analyst_count": settingStore.setting.Analyst_count,
+                "Analyst_count_good": settingStore.setting.Analyst_count_good,
+                "Analyst_estimate": settingStore.setting.Analyst_estimate,
+                "Analyst_state": settingStore.setting.Analyst_state,
                 // "is" : fffdkfdkf.isfdffmd => pinia se luu setting, click xong => vấn đề là sau khi updata thì pinia mới có giá trị vậy trước đó ta buộc phải truyèn 
                 //  từ cha sang con??? , đó là vấn đề => nếu setting xong lưu vào database luôn thì điều gì sẽ lưu hả không gì cả, vậy cách
                 // tốt nhất ở đây là truyền truyền truyền , truyền từ content_click => setting => home => update

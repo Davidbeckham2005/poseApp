@@ -6,13 +6,13 @@
             </div>
             <div>
                 <p class="text-md font-semibold">{{ output_path }}</p>
-                <p class="text-gray-500 text-sm">2 house ago . 23GB</p>
+                <p class="text-gray-500 text-sm">{{ size_video }}</p>
             </div>
         </div>
         <div class="flex space-x-2">
             <div class="flex flex-col font-semibold text-sm mr-2">
-                <span class="">Reps</span>
-                <span class="text-cyan-400 text-sm">{{ count_good }}</span>
+                <span class="">count</span>
+                <span class="text-cyan-400 text-sm">{{ count }}</span>
             </div>
             <div class="flex flex-col font-semibold text-sm">
                 <span>Score</span>
@@ -34,9 +34,11 @@ import { FileCheckCorner, FileCheckCornerIcon } from 'lucide-vue-next'
 import { useNavigation } from '../../../composable/helpers';
 const { switch_dashbroad } = useNavigation()
 defineProps({
+    count: Number,
     count_good: Number,
     accuracy_good: Number,
-    output_path: String
+    output_path: String,
+    size_video: String,
 })
 const show_result = (output_path) => {
     switch_dashbroad(output_path)

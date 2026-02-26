@@ -87,6 +87,7 @@ class exercise_Service:
             "accuracy" : calculating_accuracy(self.count_good,self.count_total),
             "record" : self.record_couting,
             "src_output": self.capture.get_file_name(), 
+            "size" :self.capture.get_size()
         }
         return data
     

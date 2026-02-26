@@ -3,7 +3,7 @@
         <Title_content_horizontal title="Recents video" :content="videoStore.total_video"
             class="border-b-2 border-gray-700/30">
         </Title_content_horizontal>
-        <History_item :accuracy_good="video.accuracy_good" :count_good="video.count_good"
+        <History_item :accuracy_good="video.accuracy_good" :count="video.total" :size_video="video.size_video"
             :output_path="video.output_path" v-for="video in videoStore.videos"></History_item>
     </div>
 </template>
