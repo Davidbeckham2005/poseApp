@@ -34,6 +34,7 @@ export const useVideo = defineStore('video', () => {
             console.log("Loi khi xoa ", error)
         }
     }
+
     return {
         fetchVideo, total_video, videos, get_video, delete_video_store, delete_videos_store
     }

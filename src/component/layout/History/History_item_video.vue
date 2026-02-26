@@ -1,8 +1,9 @@
 <template>
-    <div class="bg-gray-700/50 p-6 rounded-2xl flex items-start gap-4 max-[80%]">
-        <div class="flex items-center gap-3">
+    <div
+        :class='["bg-gray-700/50  border p-6 rounded-3xl flex items-start gap-4 w-full", { "border-white/20": !isSelected, "border-cyan-400/80": isSelected }]'>
+        <div class="flex gap-3">
             <input type="checkbox" class="w-4 h-4 rounded border-gray-600 bg-transparent"
-                @click="emit('select_video', video.output_path)">
+                @change="select_handle(video.output_path)" :checked="isSelected">
             <div class="w-32 h-20 bg-[#121212] rounded-lg flex items-center justify-center border border-gray-800">
                 <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -65,12 +66,13 @@ const deleteThisVideo = (path) => {
     const data = {
         "output_path": path,
     }
-    console.log(data)
     videoStore.delete_video_store(data)
 }
-
 const isOpen = ref(false)
+const select_handle = (path) => {
+    emit("select_video", path)
+}
 const emit = defineEmits(["select_video"])
 
-defineProps({ video: Object })
+defineProps({ video: Object, isSelected: Boolean })
 </script>
