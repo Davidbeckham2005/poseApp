@@ -1,4 +1,4 @@
-from utils.calc import goc_tai_tham_so_thu_nhat, convert_to_px,calculating_accuracy, calculating_distance
+from utils.calc import calc_time, goc_tai_tham_so_thu_nhat, convert_to_px,calculating_accuracy, calculating_distance, get_form
 from utils.detecting import check_distance_between_knee_and_sholder, isBalance, isReadyVisibility, drawtext, update_history, check_view
 from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
@@ -22,7 +22,7 @@ class exercise_Service:
         self.isDrawing = True
         self.isAnalyst = True   
         self.isCheck_view = True
-        self.isMake_Result = True
+        self.isMake_Result = False
         self.history_x_sholder = []
         self.history_x_hip = []
         self.origin = 0
@@ -81,13 +81,16 @@ class exercise_Service:
     def run_estimate(self,pose_landmark,frame):
         pass
     def getResult(self):
+        accuracy = calculating_accuracy(self.count_good,self.count_total)
         data = {
             "total" : self.count_total,
             "good" : self.count_good,
-            "accuracy" : calculating_accuracy(self.count_good,self.count_total),
+            "accuracy" : accuracy,
             "record" : self.record_couting,
             "src_output": self.capture.get_file_name(), 
-            "size" :self.capture.get_size()
+            "size" :self.capture.get_size(),
+            "form" :get_form(accuracy),
+            "time" : calc_time()
         }
         return data
     

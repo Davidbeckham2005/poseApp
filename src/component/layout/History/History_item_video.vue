@@ -13,22 +13,22 @@
             </div>
         </div>
 
-        <div class="flex-1">
+        <div class="flex-1" @mouseleave="isOpen = false">
             <div class="flex justify-between items-start mb-1">
                 <title_content :title="video.type" :content="video.size_video"></title_content>
                 <div class="flex items-center gap-2">
                     <button
-                        class="bg-gray-700/50 text-[#4fd1ed] px-4 py-1.5 rounded-lg flex items-center gap-2 text-sm font-medium">
-                        <span class="animate-pulse">⚡</span> Comming
+                        :class='["bg-gray-700/50 px-4 py-1.5 rounded-lg flex items-center gap-2 text-xl font-semibold", { "text-green-400": video.accuracy_good >= 80, "text-orange-400": video.accuracy_good < 80 && video.accuracy_good >= 50, "text-red-400": video.accuracy_good < 50 }]'>
+                        <CircleCheck></CircleCheck> <span> {{ video.accuracy_good + '%' }} </span>
                     </button>
-                    <button @click="isOpen = !isOpen"
-                        class="text-gray-400 inline-block relative hover:bg-gray-700/50 p-3 hover:rounded-2xl">⋮
-                        <div v-if="isOpen" class="text-xs bg-gray-700 text-white mt-8 cursor-pointer z-50 absolute top-5 right-0 w-48 overflow-y-auto ease-in-out duration-300 transition-all
-                         rounded-2xl items-center">
+                    <button @click.prevent="isOpen = !isOpen"
+                        class="text-gray-400 inline-block relative hover:bg-gray-700/50 p-3 hover:rounded-xl">⋮
+                        <div v-if="isOpen" class="text-xs bg-gray-700/90 text-white mt-8 cursor-pointer z-50 absolute top-5 right-0 w-48 overflow-y-auto ease-in-out duration-300 transition-all
+                         rounded-xl items-center">
                             <icon_title :icon="Eye" title="Show Detail" @click="switch_dashbroad(video.output_path)">
                             </icon_title>
                             <icon_title :icon="Trash2" title="Delete" color="text-red-400"
-                                @click="deleteThisVideo(video.output_path)" class="border-t-2 border-gray-700">
+                                @click="deleteThisVideo(video.output_path)">
                             </icon_title>
                         </div>
                     </button>
@@ -37,16 +37,16 @@
 
             <div class="grid grid-cols-3 gap-4 mt-2">
                 <div>
-                    <p class="text-gray-500 text-xs uppercase tracking-wider">Duration</p>
-                    <p class="font-bold text-lg">00:00</p>
+                    <p class="text-gray-500 text-xs uppercase tracking-wider">Accuracy</p>
+                    <p class="text-lg font-semibold">{{ video.accuracy_good + "%" }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500 text-xs uppercase tracking-wider">Reps</p>
-                    <p class="font-bold text-lg">{{ video.count_good }}</p>
+                    <p class="text-lg font-semibold">{{ video.count_good }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500 text-xs uppercase tracking-wider">Form</p>
-                    <p class="font-bold text-lg">comming</p>
+                    <p class="text-lg font-semibold">{{ video.form }}</p>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@ import { computed, ref, watch } from 'vue';
 import { useNavigation } from '../../../composable/helpers';
 const { switch_dashbroad } = useNavigation()
 import title_content from '../../bases/title_content.vue';
-import { FileCheckCornerIcon, Eye, Trash2, View } from 'lucide-vue-next'
+import { FileCheckCornerIcon, Eye, Trash2, View, TicketCheckIcon, CircleCheck } from 'lucide-vue-next'
 import Icon_title from '../../bases/Icon_title.vue';
 import { useVideo } from '../../../store/video.store';
 const videoStore = useVideo()

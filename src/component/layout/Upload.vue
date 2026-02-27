@@ -101,7 +101,7 @@ async function upload() {
 </script>
 <template>
     <Transition v-bind="translate_class">
-        <div v-if="isloading" class="flex flex-col items-center animate-fade-in duration-1000 p-2 pb-3">
+        <div v-if="isloading" class="flex flex-col items-center animate-fade-in duration-1000 pb-3">
             <cp_Load speed="3s"></cp_Load>
             <VideoResult :path_video="src_video" title="Review" content="Review your video first!" size_video="w-80"
                 :is-controls="true" :isloop="true" class="m-auto"
@@ -112,7 +112,7 @@ async function upload() {
             </div>
         </div>
         <div v-else>
-            <title_content class="mt-5" title="Upload Video"
+            <title_content title="Upload Video"
                 content="Upload your exercise video for automated pose detection and analysis"></title_content>
             <div class="rounded-2xl bg-gray-700/60 p-3 mb-5 h-40">
                 <title_content title="Exercise Type" content="Pre-select exercise for optimized detection" class="ml-2">

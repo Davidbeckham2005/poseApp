@@ -31,7 +31,7 @@ const props = defineProps({
         </div>
         <div class="mt-4 flex justify-between items-center text-slate-400 px-2">
             <p class="text-sm italic">{{ text_video }}</p>
-            <span class="text-xs uppercase tracking-widest text-cyan-500 font-bold">Live Preview</span>
+            <span class="btn btn-error text-xs uppercase tracking-widest text-black font-bold">Live</span>
         </div>
     </div>
 </template>

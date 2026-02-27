@@ -59,7 +59,7 @@ import {
 
 } from 'lucide-vue-next';
 // component
-import Analyst from "./component/layout/Analyst.vue";
+import Analyst from './component/layout/Analyst.vue';
 import Header from './component/layout/Header.vue';
 import sidebar from './component/layout/sidebar/sidebar.vue';
 import Upload from './component/layout/Upload.vue';

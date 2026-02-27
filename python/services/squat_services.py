@@ -8,7 +8,7 @@ import cv2
 class squatService(exercise_Service):
     down_standard = 120
     up_standard = 160
-    good_standard = 60
+    good_standard = 90
     bad_standard = 30
     def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService):
         super().__init__(draw,pose,capture)
@@ -68,7 +68,6 @@ class squatService(exercise_Service):
             if isBalance(self.history_origin_squat) and self.isEstimate:
                 if origin < self.bad_standard:
                     self.estimate = "bad"
-                    
                     self.require = f"Lower than threshold!"
                 elif origin< self.good_standard:
                     if check_distance_between_knee_and_sholder(self.history_distance_knee,self.history_distance_shoulder):

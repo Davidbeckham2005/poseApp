@@ -3,7 +3,7 @@
         <title_content title="Settings" content="Configure your pose detection preferences">
         </title_content>
 
-        <div class="rounded-2xl w-[75%] bg-gray-700/50 p-5 pr-5 mt-5 pt-5 items-center">
+        <div class="rounded-2xl w-[75%] bg-gray-700/50 p-5 pr-5 pt-5 items-center">
             <Line_under text="Detection Settings"></Line_under>
             <content_click v-for="(setting, key) in settings_detect" :key="key" :title_setting="setting.title"
                 :key_value="key" :content_setting="setting.content" :checked_btn="setting.state" @set_active="active">
@@ -27,7 +27,6 @@ import title_content from '../bases/title_content.vue';
 // setting pinia
 import { useSetting } from '../../store/setting.store';
 import { computed, ref, watch } from 'vue';
-import Analyst_status from '../Analyst/Analyst_status.vue';
 const settingStore = useSetting()
 
 // tham so set_active duoc truyen tu component con

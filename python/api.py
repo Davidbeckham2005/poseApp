@@ -1,29 +1,17 @@
-from typing import List
-
 from fastapi import FastAPI # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from pydantic import BaseModel #type: ignore
-from controller.controller import process
+from controller.controller import process, show_cam
+# model
+from model.delete_model import VideoDelete,ListVideoDelete
+from model.webcam_model import webcam_model
+from model.video_model import video_model
 
 # cau hinh sqlite
 from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy import Boolean, Column, Float, ForeignKey,Integer, String, create_engine, JSON
+from sqlalchemy import Boolean, Column, Float, ForeignKey,Integer, String, create_engine, JSON, false
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
-# data cua video
-class data_Video(BaseModel):
-    isDrawing: bool = True
-    isAnalyst: bool = True
-    isCheck_view: bool = True
-    Analyst_FPS: bool = True
-    Analyst_state: bool = True
-    type: str
-    path_video: str
-    Analyst_count: bool = True
-    Analyst_count_good: bool = True
-    Analyst_estimate: bool = True
-     
-# **********
 SQLALCHEMY_DATABASE_URL = "sqlite:///../sql.poseApp.db"
 # SQLALCHEMY_DATABASE_URL = "sqlite:///../sql.settingPoseApp.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread":False})
@@ -39,6 +27,8 @@ class video(Base):
     accuracy_good = Column(Float)
     type = Column(String)
     size_video = Column(String)
+    form = Column(String)
+    time = Column(String)
     # Sử dụng kiểu JSON để SQLAlchemy tự động convert dict/list Python cho bạn
     record_detail = Column(JSON)
     class Config:
@@ -75,7 +65,7 @@ app.add_middleware(
 )
 
 @app.post("/addVideo/")
-async def add_Video(input: data_Video, db: Session = Depends(get_db)):
+async def add_Video(input: video_model, db: Session = Depends(get_db)):
     update_setting(input,db)
     result = process(input)
     new_video = video(
@@ -85,14 +75,15 @@ async def add_Video(input: data_Video, db: Session = Depends(get_db)):
     accuracy_good = result["result"]["accuracy"],
     record_detail = result["result"]["record"],
     type = result['type'],
-    size_video = result['result']['size'])
+    size_video = result['result']['size'],
+    form = result['result']['form'],
+    time = result['result']['time']
+    )
     db.add(new_video)
     db.commit()
     db.refresh(new_video)
     return new_video
-# delete a video
-class VideoDelete(BaseModel):
-    output_path: str
+
 @app.delete("/deleteVideo/")
 async def delete_video(data: VideoDelete,db: Session = Depends(get_db) ):
     video_to_delete = db.query(video).filter(video.output_path == data.output_path).first()
@@ -105,8 +96,7 @@ async def delete_video(data: VideoDelete,db: Session = Depends(get_db) ):
         db.rollback() # Hoàn tác nếu có lỗi xảy ra
         raise HTTPException(status_code=500, detail=f"Lỗi khi xóa: {str(e)}")
 # de;ete list video
-class ListVideoDelete(BaseModel):
-    output_paths: List[str]
+
 @app.delete("/deleteVideos/")
 async def delete_video(data: ListVideoDelete,db: Session = Depends(get_db) ):
     videos = db.query(video).filter(video.output_path.in_(data.output_paths))
@@ -119,7 +109,7 @@ async def delete_video(data: ListVideoDelete,db: Session = Depends(get_db) ):
     except Exception as e:
         db.rollback() # Hoàn tác nếu có lỗi xảy ra
         raise HTTPException(status_code=500, detail=f"Lỗi khi xóa: {str(e)}")
-def update_setting(input: data_Video, db: Session = Depends(get_db)):
+def update_setting(input: video_model, db: Session = Depends(get_db)):
     db_setting =  db.query(Setting).filter(Setting.id == 1).first()
     if db_setting:
         db_setting.isDrawing = input.isDrawing
@@ -165,3 +155,7 @@ def get_all_video(db:Session = Depends(get_db)):
          "total" : total_video,
          "video_items" : videos
     }
+
+@app.post("/show_webcam/")
+def show_webcam(input: webcam_model, db: Session = Depends(get_db)):
+   show_cam(input)

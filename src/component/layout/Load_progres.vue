@@ -17,7 +17,7 @@
             <cp_task_running text="Import mediapipe solutions" :color="progress > 86 ? 'text-cyan-400' : ''"
                 :icon="BotMessageSquare" :animate="progress > 40 && progress < 86 ? 'animate-spin' : ''">
             </cp_task_running>
-            <cp_task_running text="Finishing" :color="progress >= 99 ? 'text-green-400' : ''" :icon="BugOff"
+            <cp_task_running text="Finishing" :color="progress >= 99 ? 'text-green-400' : ''" :icon="CircleCheck"
                 :animate="progress >= 86 ? 'animate-spin' : ''">
             </cp_task_running>
         </div>

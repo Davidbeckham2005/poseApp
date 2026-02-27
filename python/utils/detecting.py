@@ -40,5 +40,4 @@ def check_distance_between_knee_and_sholder(history_knee,history_shoulder,n=5):
 def check_y_hip_and_shoulder(history_y_hip,history_y_shoulder):
     hip_np = np.mean(history_y_hip)
     shoulder_np = np.mean(history_y_shoulder)
-    print(hip_np, shoulder_np)
     return (hip_np>=shoulder_np)

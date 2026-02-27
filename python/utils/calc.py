@@ -1,5 +1,5 @@
 # tinh goc giu 3 diem, can tinh goc tai tham so thu nhat
-from turtle import distance
+from datetime import datetime
 import numpy as np
 def goc_tai_tham_so_thu_nhat(a,b,c):
     k = np.array([a.x,a.y]) 
@@ -35,3 +35,17 @@ def trungbinh(a,b):
 
 def create_time_video(frame,fps):
     return round(frame/fps,2)
+
+def get_form(accuracy):
+    form = ""
+
+    if accuracy <= 40:
+        form = "Needs Work"
+    elif accuracy<80:
+        form = "Good"
+    else:
+        form = "Excellent"
+    return form
+def calc_time():
+    now = datetime.now()
+    return now.strftime("%d/%m/%Y %H:%M:%S")
