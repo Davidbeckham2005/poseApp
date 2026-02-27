@@ -22,7 +22,7 @@ class exercise_Service:
         self.isDrawing = True
         self.isAnalyst = True   
         self.isCheck_view = True
-        self.isMake_Result = False
+        self.isMake_Result = True   
         self.history_x_sholder = []
         self.history_x_hip = []
         self.origin = 0
