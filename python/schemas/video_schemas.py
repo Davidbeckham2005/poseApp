@@ -8,13 +8,13 @@ class Webcam_Schemas(BaseModel):
     isCheck_view: bool = True
     Analyst_FPS: bool = True
     Analyst_state: bool = True
-    type: str = "dafault"
+    type: str = "default"
     Analyst_count: bool = True
     Analyst_count_good: bool = True
     Analyst_estimate: bool = True
-    path_video: str = "Live"
+   
 class Video_Schemas(Webcam_Schemas):
-    path_video: str
+    path_video: str = "LIVE"
 class Delete_Video_Schemas(BaseModel):
     output_path: str
 

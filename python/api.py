@@ -1,56 +1,22 @@
 from fastapi import FastAPI # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
-from pydantic import BaseModel #type: ignore
 from controller.controller import process, show_cam
 # schemas
 from schemas.video_schemas import Delete_Video_Schemas, Delete_List_video_Schemas, Video_Schemas, Webcam_Schemas
 
+# model
+from model import db_model
+from model.db_model import get_db,engine,Base
 # cau hinh sqlite
 from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy import Boolean, Column, Float, ForeignKey,Integer, String, create_engine, JSON, false
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
-SQLALCHEMY_DATABASE_URL = "sqlite:///../sql.poseApp.db"
-# SQLALCHEMY_DATABASE_URL = "sqlite:///../sql.settingPoseApp.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread":False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False,bind=engine)
-Base = declarative_base()
-# ******************
-class video(Base):
-    __tablename__ = "video_result"
-    id = Column(Integer,primary_key=True, index=True)
-    output_path = Column(String)
-    total = Column(Integer)
-    count_good = Column(Integer)
-    accuracy_good = Column(Float)
-    type = Column(String)
-    size_video = Column(String)
-    form = Column(String)
-    time = Column(String)
-    # Sử dụng kiểu JSON để SQLAlchemy tự động convert dict/list Python cho bạn
-    record_detail = Column(JSON)
-    class Config:
-            orm_mode = True 
-class Setting(Base):
-    __tablename__ = "setting_table"
-    id = Column(Integer,primary_key=True, index=True)
-    isDrawing = Column(String)
-    isAnalyst = Column(String)
-    isCheck_view = Column(String)
-    Analyst_FPS = Column(String)
-    Analyst_state = Column(String)
-    Analyst_count = Column(String)
-    Analyst_count_good = Column(String)
-    Analyst_estimate = Column(String)
+from model.video_model import video
+from model.setting_model import Setting
 
+# khoi tao database tu
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
