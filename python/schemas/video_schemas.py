@@ -1,6 +1,8 @@
+from typing import List
 from pydantic import BaseModel #type: ignore
 
-class webcam_model(BaseModel):
+
+class Webcam_Schemas(BaseModel):
     isDrawing: bool = True
     isAnalyst: bool = True
     isCheck_view: bool = True
@@ -11,3 +13,10 @@ class webcam_model(BaseModel):
     Analyst_count_good: bool = True
     Analyst_estimate: bool = True
     path_video: str = "Live"
+class Video_Schemas(Webcam_Schemas):
+    path_video: str
+class Delete_Video_Schemas(BaseModel):
+    output_path: str
+
+class Delete_List_video_Schemas(BaseModel):
+    output_paths: List[str]

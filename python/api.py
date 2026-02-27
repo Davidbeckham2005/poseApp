@@ -2,10 +2,8 @@ from fastapi import FastAPI # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from pydantic import BaseModel #type: ignore
 from controller.controller import process, show_cam
-# model
-from model.delete_model import VideoDelete,ListVideoDelete
-from model.webcam_model import webcam_model
-from model.video_model import video_model
+# schemas
+from schemas.video_schemas import Delete_Video_Schemas, Delete_List_video_Schemas, Video_Schemas, Webcam_Schemas
 
 # cau hinh sqlite
 from fastapi import FastAPI, Depends, HTTPException
@@ -65,7 +63,7 @@ app.add_middleware(
 )
 
 @app.post("/addVideo/")
-async def add_Video(input: video_model, db: Session = Depends(get_db)):
+async def add_Video(input: Video_Schemas, db: Session = Depends(get_db)):
     update_setting(input,db)
     result = process(input)
     new_video = video(
@@ -85,7 +83,7 @@ async def add_Video(input: video_model, db: Session = Depends(get_db)):
     return new_video
 
 @app.delete("/deleteVideo/")
-async def delete_video(data: VideoDelete,db: Session = Depends(get_db) ):
+async def delete_video(data: Delete_Video_Schemas,db: Session = Depends(get_db) ):
     video_to_delete = db.query(video).filter(video.output_path == data.output_path).first()
     if not video_to_delete:
         raise HTTPException(status_code=404, detail="Video không tồn tại")
@@ -98,7 +96,7 @@ async def delete_video(data: VideoDelete,db: Session = Depends(get_db) ):
 # de;ete list video
 
 @app.delete("/deleteVideos/")
-async def delete_video(data: ListVideoDelete,db: Session = Depends(get_db) ):
+async def delete_video(data: Delete_List_video_Schemas,db: Session = Depends(get_db) ):
     videos = db.query(video).filter(video.output_path.in_(data.output_paths))
     count = videos.count()
     if count == 0:
@@ -109,7 +107,7 @@ async def delete_video(data: ListVideoDelete,db: Session = Depends(get_db) ):
     except Exception as e:
         db.rollback() # Hoàn tác nếu có lỗi xảy ra
         raise HTTPException(status_code=500, detail=f"Lỗi khi xóa: {str(e)}")
-def update_setting(input: video_model, db: Session = Depends(get_db)):
+def update_setting(input: Video_Schemas, db: Session = Depends(get_db)):
     db_setting =  db.query(Setting).filter(Setting.id == 1).first()
     if db_setting:
         db_setting.isDrawing = input.isDrawing
@@ -157,5 +155,5 @@ def get_all_video(db:Session = Depends(get_db)):
     }
 
 @app.post("/show_webcam/")
-def show_webcam(input: webcam_model, db: Session = Depends(get_db)):
+def show_webcam(input: Webcam_Schemas, db: Session = Depends(get_db)):
    show_cam(input)
