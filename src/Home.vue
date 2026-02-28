@@ -5,8 +5,9 @@
         </sidebar>
         <main class="flex-1 flex flex-col overflow-y-auto">
             <Header class="flex items-center justify-between px-6 py-4 border-b border-gray-800"></Header>
-            <div class="py-4 px-4 max-w-6xl mx-auto w-full ">
-                <div v-if="currentTab === `dashboard`" class="flex flex-col sm:flex-row">
+            <div class="py-4 max-w-6xl mx-auto w-full ">
+                <Live v-if="currentTab === `live`"></Live>
+                <div v-else-if="currentTab === `dashboard`" class="flex flex-col sm:flex-row">
                     <VideoResult class="w-full lg:w-3/4" title="Live Analysis" :path_video="video_src"
                         content="Real-time pose detection and form tracking"></VideoResult>
                     <Analyst v-bind="Analysis_value" class="sm:ml-4 w-full lg:w-1/4"></Analyst>
@@ -15,35 +16,8 @@
                 <Settings v-else-if="currentTab === `settings`">
                 </Settings>
                 <History_tab v-else-if="currentTab === `history`">
-
                 </History_tab>
-                <!-- <div class="grid grid-cols-3 gap-6">
-                    <div v-for="i in 3" :key="i"
-                        class="bg-gray-900/40 border border-gray-800 p-5 rounded-xl hover:border-gray-700 transition cursor-pointer">
-                        <div class="bg-gray-800 w-10 h-10 rounded flex items-center justify-center mb-4">
-                            <VideoIcon class="w-5 h-5 text-gray-400" />
-                        </div>
-                        <h4 class="font-medium text-white">Sample Video {{ i }}</h4>
-                        <p class="text-sm text-gray-500 mt-1">{{ ['Squat Exercise', 'Push-up Demo', 'Plank Hold'][i
-                            - 1]
-                        }}</p>
-                    </div>
-                </div>
-                <div class="bg-gray-900/20 border border-gray-800 rounded-xl p-6">
-                    <h4 class="font-semibold text-white mb-4">Upload Guidelines</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-500 rounded-full mr-3"></span>
-                            Ensure the subject is clearly visible in the frame</li>
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-500 rounded-full mr-3"></span>
-                            Good lighting improves pose detection accuracy</li>
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-500 rounded-full mr-3"></span>
-                            Avoid cluttered backgrounds for best results</li>
-                        <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-500 rounded-full mr-3"></span>
-                            Supported exercises: squat, push-up, plank, lunge, etc.</li>
-                    </ul>
-                </div> -->
             </div>
-
         </main>
     </div>
 </template>
@@ -56,16 +30,18 @@ import {
     SettingsIcon,
     PlayCircleIcon as PlayIcon,
     UploadIcon,
+    Radio,
 
 } from 'lucide-vue-next';
 // component
-import Analyst from './component/layout/Analyst.vue';
+import Analyst from './component/layout/Analyst/Analyst.vue';
 import Header from './component/layout/Header.vue';
 import sidebar from './component/layout/sidebar/sidebar.vue';
 import Upload from './component/layout/Upload.vue';
 import VideoResult from './component/layout/VideoResult.vue';
 import Settings from './component/layout/Settings.vue';
 import History_tab from './component/layout/History/History_tab.vue';
+import Live from './component/layout/Live/Live.vue';
 
 import { watch, ref, computed, onMounted } from "vue";
 import { useNavigation } from "./composable/helpers";
@@ -82,6 +58,7 @@ const settingStore = useSetting()
 //     console.log(settingStore.setting)
 // })
 const menuItems = [
+    { name: 'live', label: 'LIVE DEMO', icon: Radio },
     { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
     { name: 'upload', label: 'Upload', icon: UploadIcon },
     // { name: 'analysis', label: 'Analysis', icon: AnalysisIcon },

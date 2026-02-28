@@ -11,10 +11,10 @@ class plankService(exercise_Service):
     up_standard = 60
     good_standard = 80
     bad_standard = 95 
-    def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService):   
+    def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService,data):   
         self.correct_time = 0  
         self.total_time = 0
-        super().__init__(draw,pose,capture)
+        super().__init__(draw,pose,capture,data)
         self.history_origin_plank = []
         self.history_y_hip = []
         self.history_y_shoulder = []

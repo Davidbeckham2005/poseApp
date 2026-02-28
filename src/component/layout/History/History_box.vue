@@ -1,5 +1,6 @@
 <template>
-    <div class="aspect-[4/3] h-32 border-white/20 border rounded-2xl bg-gray-700/50 p-2 pl-5 items-center">
+    <div
+        class="aspect-[4/3] h-32 border-white/20 hover:border-white/50 border rounded-2xl bg-gray-700/50 p-2 pl-5 items-center">
         <div class="flex justify-between pt-1 pb-1">
             <span class="text-gray-500 text-sm">{{ item.first_line }}</span>
             <component :is="item.icon" :class='["text-xs text-cyan-400", item.color_icon]'></component>

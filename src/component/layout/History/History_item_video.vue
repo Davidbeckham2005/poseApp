@@ -1,6 +1,6 @@
 <template>
     <div
-        :class='["bg-gray-700/50  border p-6 rounded-3xl flex items-start gap-4 w-full", { "border-white/20": !isSelected, "border-cyan-400/80": isSelected }]'>
+        :class='["bg-gray-700/50 hover:border-white/50 border p-6 rounded-3xl flex items-start gap-4 w-full", { "border-white/20": !isSelected, "border-cyan-400/80": isSelected }]'>
         <div class="flex gap-3">
             <input type="checkbox" class="w-4 h-4 rounded border-gray-600 bg-transparent"
                 @change="select_handle(video.output_path)" :checked="isSelected">

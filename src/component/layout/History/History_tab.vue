@@ -9,11 +9,11 @@
             <div class="relative w-full">
                 <Search class="absolute mt-3 ml-3"></Search>
                 <input placeholder="Search by exercise name" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-white/20 rounded-xl
-            text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400
+            text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 hover:border-white/50 focus:ring-cyan-400 focus:border-cyan-400
             transition-all" v-model="data_search">
             </div>
             <div @click="isshow_filter = !isshow_filter"
-                :class="['w-34 pl-4 pr-4  border border-white/20 rounded-xl text-gray-300 flex py-3 gap-2 justify-center-safe', { 'bg-cyan-400/75': isshow_filter, 'bg-gray-700/50': !isshow_filter }]">
+                :class="['w-34 pl-4 pr-4  border border-white/20 rounded-xl hover:border-white/50 text-gray-300 flex py-3 gap-2 justify-center-safe', { 'bg-cyan-400/75': isshow_filter, 'bg-gray-700/50': !isshow_filter }]">
                 <Funnel></Funnel> <span>Filters</span>
             </div>
         </div>

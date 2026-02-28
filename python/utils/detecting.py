@@ -15,9 +15,9 @@ def isReadyVisibility(*args):
         if x.visibility < 0.1: 
             return False
     return True
-def update_history(history,value,max_frame=5):
+def update_history(history,value,n=5):
     history.append(value)
-    if(len(history)>max_frame):
+    if(len(history)>n):
         history.pop(0)
 def drawtext(frame,coord,text,color):
     cv2.putText(frame,text,coord,cv2.FONT_HERSHEY_COMPLEX,1,color,2)

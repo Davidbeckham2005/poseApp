@@ -23,14 +23,14 @@ def process(data):
     detector = PoseDetector()
     draw = DrawingService(detector)
     if type == 'squat':
-        service = squatService(draw, detector ,capture)
+        service = squatService(draw, detector ,capture,data)
     if type == 'pushup':
-        service = pushupService(draw, detector, capture)
+        service = pushupService(draw, detector, capture,data)
     if type == 'plank':
-        service = plankService(draw, detector, capture)
+        service = plankService(draw, detector, capture,data)
     if not capture.getCap().isOpened():
         return False
-    service.set_setting(data)
+    
     # cho phep thay doi kich thuoc bang chuot
     cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
     while True:    
@@ -65,13 +65,12 @@ def show_cam(data):
     detector = PoseDetector()
     draw = DrawingService(detector)
     if type == 'squat':
-        service = squatService(draw, detector ,capture)
+        service = squatService(draw, detector ,capture,data)
     if type == 'pushup':
-        service = pushupService(draw, detector, capture)
+        service = pushupService(draw, detector, capture,data)
     if type == 'plank':
-        service = plankService(draw, detector, capture)
+        service = plankService(draw, detector, capture,data)
     
-    service.set_setting(data)
     service.show_camera_not_make_video()
     cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
     while True:    

@@ -1,10 +1,10 @@
 <script setup>
-import Line_under from '../bases/Line_under.vue';
-import Analyst_status from '../layout/Analyst/Analyst_status.vue'
-import Analyst_name from '../layout/Analyst/Analyst_name.vue';
-import Activity_log from '../layout/Analyst/Activity_log.vue';
-import title_content from '../bases/title_content.vue';
-import square_shape from '../bases/square_shape.vue';
+import Line_under from '../../bases/Line_under.vue';
+// import Analyst_status from '../../bases/Analyst/Analyst_status.vue'
+import Analyst_name from './Analyst_name.vue'
+import Activity_log from './Activity_log.vue';
+import title_content from '../../bases/title_content.vue';
+import square_shape from '../../bases/square_shape.vue'
 import {
     Shell,
     CircleCheckBig,

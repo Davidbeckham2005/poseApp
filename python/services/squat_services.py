@@ -10,8 +10,8 @@ class squatService(exercise_Service):
     up_standard = 160
     good_standard = 90
     bad_standard = 30
-    def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService):
-        super().__init__(draw,pose,capture)
+    def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService,data):
+        super().__init__(draw,pose,capture,data)
         self.history_origin_squat = []
         self.history_distance_knee = []
         self.history_distance_shoulder = []
@@ -51,7 +51,6 @@ class squatService(exercise_Service):
         knee_origin_right = round(knee_origin_right,2)
         self.draw.draw_origin_at_intersection(frame,knee_origin_left,knee_origin_right,left_knee_px,right_knee_px,(0,0,255)) 
         origin = (knee_origin_left+knee_origin_right)/2.0
-        
         self.squat_counting(origin,pose_landmark)
     def squat_counting(self, origin,pose_landmark):
         data = self.pose.get_landmark(pose_landmark)
