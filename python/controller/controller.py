@@ -70,7 +70,9 @@ def show_cam(data):
         service = pushupService(draw, detector, capture)
     if type == 'plank':
         service = plankService(draw, detector, capture)
+    
     service.set_setting(data)
+    service.show_camera_not_make_video()
     cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
     while True:    
         ret, frame = capture.read()

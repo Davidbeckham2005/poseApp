@@ -1,6 +1,16 @@
 <script setup>
 import title_content from '../bases/title_content.vue';
-
+import { show_camera } from '../../services/app.service';
+const show_camera_handle = async () => {
+    try {
+        const data = {
+            type: "squat"
+        }
+        await show_camera(data)
+    } catch (error) {
+        console.log(error)
+    }
+}
 const props = defineProps({
     title: String,
     content: String,
@@ -31,7 +41,8 @@ const props = defineProps({
         </div>
         <div class="mt-4 flex justify-between items-center text-slate-400 px-2">
             <p class="text-sm italic">{{ text_video }}</p>
-            <span class="btn btn-error text-xs uppercase tracking-widest text-black font-bold">Live</span>
+            <span class="btn btn-error text-xs uppercase tracking-widest text-black font-bold"
+                @click="show_camera_handle">Live</span>
         </div>
     </div>
 </template>

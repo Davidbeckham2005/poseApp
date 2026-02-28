@@ -1,3 +1,5 @@
+from sqlalchemy import false
+
 from utils.calc import calc_time, goc_tai_tham_so_thu_nhat, convert_to_px,calculating_accuracy, calculating_distance, get_form
 from utils.detecting import check_distance_between_knee_and_sholder, isBalance, isReadyVisibility, drawtext, update_history, check_view
 from services.pose_service import PoseDetector
@@ -94,3 +96,5 @@ class exercise_Service:
         }
         return data
     
+    def show_camera_not_make_video(self):
+        self.isMake_Result = False

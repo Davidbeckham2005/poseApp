@@ -1,4 +1,12 @@
 import { api } from "../api";
+// const ws = new WebSocket("ws://localhost:8000/ws")
+// ws.onopen = () => {
+//     console.log("connected")
+// }
+// ws.onmessage = (e) => {
+//     const data = JSON.parse(e.data)
+//     console.log(data)
+// }
 
 export async function getHello() {
     return await api.get("/hello").data
