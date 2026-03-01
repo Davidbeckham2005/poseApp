@@ -42,7 +42,7 @@ const colorMap = {
         <div class="bg-gray-700/50 p-3 rounded-2xl font-semibold space-y-4">
             <Line_under text="Activity log"></Line_under>
             <Activity_log v-for="record in video_record" :count="record.count" :require="record.require"
-                :color="colorMap[record.estimate]">
+                :time="record.start" :color="colorMap[record.estimate]">
             </Activity_log>
         </div>
     </div>

@@ -11,7 +11,7 @@
         </div>
         <div class="flex space-x-2">
             <div class="flex flex-col font-semibold text-sm mr-2">
-                <span class="">count</span>
+                <span class="">Reps</span>
                 <span class="text-cyan-400 text-sm">{{ count }}</span>
             </div>
             <div class="flex flex-col font-semibold text-sm">

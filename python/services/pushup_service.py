@@ -80,18 +80,21 @@ class pushupService(exercise_Service):
                     self.require = f"Higher than threshold!"
                     self.estimate = "high"
                     self.origin = origin
-
+                self.time_start = self.capture.get_current_time_video(self.current_frame)
                 self.isEstimate = False
                 self.state = "down"
         elif origin>self.up_standard and self.state=="down":
             self.state = "up"
-            
+            self.time_end = self.capture.get_current_time_video(self.current_frame)
             self.isEstimate = True
             record = {
             "count" : self.count_total,
             "estimate" : self.estimate,
             "require" : self.require,
-            "origin" : self.origin         
+            "origin" : self.origin,
+            "end": self.time_end,
+            "start": self.time_start,
+
             }
             self.record_couting.append(record)
             self.estimate="estimate"
