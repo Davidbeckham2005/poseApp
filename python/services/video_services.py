@@ -9,6 +9,7 @@ class VideoService:
     def __init__(self, path: str):
         self.path = Path(path)
         self.cap = cv2.VideoCapture(str(self.path))
+        self.timestamp_ms = int(self.cap.get(cv2.CAP_PROP_POS_MSEC)) / 1000 
         # doan nay cho viec su ly ket qua
         self.fps = int(self.cap.get(cv2.CAP_PROP_FPS))
         if self.fps <=0:
@@ -32,7 +33,7 @@ class VideoService:
         self.is_read_frame = True
      
         # dung cho video
-        # self.timestamp_ms = int(self.cap.get(cv2.CAP_PROP_POS_MSEC)) 
+       
     
     def start(self):
         thread = threading.Thread(target=self.read_frame,args=())
@@ -92,8 +93,7 @@ class VideoService:
     # def get_real_time_mili(self):
     #     return self.real_time_limisecon
     
-    def set_current_time_ms(self):
-        self.current_time_ms = self.cap.get(cv2.CAP_PROP_POS_MSEC)
+    def get_current_time_ms(self):
         return self.current_time_ms
     
     def get_size(self):
@@ -102,3 +102,6 @@ class VideoService:
     
     def get_time_video(self):
         return self.time_video
+    
+    def get_current_time_video(self,frame_count):
+        return round(frame_count/self.fps,1)

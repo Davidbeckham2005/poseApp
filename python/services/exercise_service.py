@@ -18,6 +18,7 @@ class exercise_Service:
         self.capture = capture
         self.record_couting = []
         self.max_frame = 10
+        self.current_frame = 0
         self.type = data.type
         # setting
         self.isMake_Result = True   
@@ -29,11 +30,12 @@ class exercise_Service:
         self.Analyst_count = data.Analyst_count
         self.Analyst_count_good = data.Analyst_count_good
         self.Analyst_estimate = data.Analyst_estimate
-
         self.isEstimate = True
         self.history_x_sholder = []
         self.history_x_hip = []
         self.origin = 0
+        self.time_start = 0
+        self.time_end  = 0
     def check_view(self,pose_landmark):
         result_check_oriantation = self.pose.check_oriantation(pose_landmark)
         update_history(self.history_x_hip,result_check_oriantation['hip_dis'])
@@ -56,6 +58,7 @@ class exercise_Service:
         cv2.line(frame,(0,310),(310,310),(255,0,0),5)
 
     def run_detection(self,frame):
+        self.push_frame()
         result = self.pose.run_process(frame)
         if result.pose_landmarks:
             pose_landmark = result.pose_landmarks[0]
@@ -109,3 +112,6 @@ class exercise_Service:
         return data   
     def show_camera_not_make_video(self):
         self.isMake_Result = False
+
+    def push_frame(self):
+        self.current_frame+=1

@@ -4,7 +4,7 @@ from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
 from services.video_services import VideoService
 from services.exercise_service import exercise_Service
-import cv2
+
 class squatService(exercise_Service):
     down_standard = 120
     up_standard = 160
@@ -53,6 +53,7 @@ class squatService(exercise_Service):
         origin = (knee_origin_left+knee_origin_right)/2.0
         self.squat_counting(origin,pose_landmark)
     def squat_counting(self, origin,pose_landmark):
+       
         data = self.pose.get_landmark(pose_landmark)
         left_knee = data["left_knee"]
         right_knee = data["right_knee"]
@@ -83,16 +84,21 @@ class squatService(exercise_Service):
                     self.require = f"Higher than threshold!"
                     self.estimate = "high"
                 self.isEstimate = False
+                self.time_start = self.capture.get_current_time_video(self.current_frame)
                 self.state = "down"
         elif origin>self.up_standard and self.state=="down":
             self.state = "up"
+            
+            self.time_end = self.capture.get_current_time_video(self.current_frame)
             self.count_total +=1
             # print(f"rep {self.}")
             self.isEstimate = True
             record = {
             "count" : self.count_total,
             "estimate" : self.estimate,
-            "require" : self.require         
+            "require" : self.require,
+            "start" : self.time_start,
+            "end" : self.time_end         
             }
             self.record_couting.append(record)
             self.estimate="estimate"
