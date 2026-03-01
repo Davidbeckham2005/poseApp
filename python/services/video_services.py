@@ -24,7 +24,8 @@ class VideoService:
             self.fourcc,
             self.fps,
             self.shape)
-       
+        self.total_frame = self.cap.get(cv2.CAP_PROP_FRAME_COUNT)
+        self.time_video = round(self.total_frame/self.fps,0)
         self.current_time_ms = 0
 # da luon tang toc do xu ly
         self.q = queue.Queue(maxsize=200)
@@ -98,3 +99,6 @@ class VideoService:
     def get_size(self):
         size = os.path.getsize(self.path)
         return f"{(size/1024**2):.2f}MB"
+    
+    def get_time_video(self):
+        return self.time_video

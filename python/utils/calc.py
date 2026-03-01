@@ -49,3 +49,20 @@ def get_form(accuracy):
 def calc_time():
     now = datetime.now()
     return now.strftime("%d/%m/%Y %H:%M:%S")
+
+
+import cv2
+from pathlib import Path
+from urllib.parse import unquote
+def get_time_video(path):
+    path_video_encode = path
+    path_video = unquote(path_video_encode)
+
+    cap = cv2.VideoCapture(str(path_video))
+    fps = int(cap.get(cv2.CAP_PROP_FPS))
+    if fps <=0:
+        fps=30
+    total_frame = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+    time_video = round(total_frame/fps,0)
+    print(path_video,fps,total_frame)
+    return time_video

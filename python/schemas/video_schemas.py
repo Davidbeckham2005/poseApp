@@ -20,3 +20,6 @@ class Delete_Video_Schemas(BaseModel):
 
 class Delete_List_video_Schemas(BaseModel):
     output_paths: List[str]
+
+class Get_Time(BaseModel):
+    path: str

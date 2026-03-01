@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, Float, ForeignKey,Integer, String, create_engine, JSON, false
-from sqlalchemy.ext.declarative import declarative_base
+from model.db_model import Base
 
-Base = declarative_base()
+
 class video(Base):
     __tablename__ = "video_result"
     id = Column(Integer,primary_key=True, index=True)
@@ -14,3 +14,4 @@ class video(Base):
     form = Column(String)
     time = Column(String)
     record_detail = Column(JSON)
+    time_video = Column(String)

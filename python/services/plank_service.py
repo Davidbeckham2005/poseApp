@@ -1,4 +1,4 @@
-from utils.calc import get_form, goc_tai_tham_so_thu_nhat, trungbinh, calculating_accuracy, calc_time
+from utils.calc import get_form, goc_tai_tham_so_thu_nhat, trungbinh, calculating_accuracy, calc_time, get_time_video
 from utils.detecting import  isBalance, isReadyVisibility, update_history,check_y_hip_and_shoulder, drawtext
 from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
@@ -115,7 +115,8 @@ class plankService(exercise_Service):
             "src_output": self.capture.get_file_name(), 
             "size": self.capture.get_size(),
             "form" : get_form(accuracy),
-            "time" : calc_time()
+            "time" : calc_time(),
+            "time_video" : get_time_video()
 
         }
         return data

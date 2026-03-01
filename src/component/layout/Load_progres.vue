@@ -27,6 +27,10 @@
 <script setup>
 const props = defineProps({
     isLoading: Boolean,
+    time_loading: {
+        type: Number,
+        default: 0,
+    }
 })
 
 import { computed, onMounted, ref, watch } from 'vue';
@@ -35,21 +39,24 @@ import { CircleCheck, Brain, BugOff, BotMessageSquare, Bot } from 'lucide-vue-ne
 
 
 const progress = ref(0)
-const speed_progress = ref(100)
-
-watch(progress, (newVal) => {
-    if (progress.value >= 95) {
-        speed_progress.value = 2000
-    }
-    else if (progress.value > 70) {
-        speed_progress.value = 500
-    } else if (progress.value > 40) {
-        {
-            speed_progress.value = 300
-        }
-    }
+const speed_progress = computed(() => {
+    return props.time_loading * 10
 })
 
+
+
+// watch(progress, (newVal) => {
+//     if (progress.value >= 95) {
+//         speed_progress.value = 2000
+//     }
+//     else if (progress.value > 70) {
+//         speed_progress.value = 500
+//     } else if (progress.value > 40) {
+//         {
+//             speed_progress.value = 300
+//         }
+//     }
+// })
 const startLoading = () => {
 
     if (progress.value <= 97)
@@ -61,10 +68,9 @@ const startLoading = () => {
     else {
         setTimeout(() => {
             progress.value += 1
-        }, 2000)
+        }, 20000)
     }
 }
-
 startLoading()
 // watch(() => props.isLoading, (newVal) => {
 //     if (newVal == false) {

@@ -1,9 +1,13 @@
 from fastapi import FastAPI # type: ignore
 from fastapi.middleware.cors import CORSMiddleware
 from model.db_model import engine,Base
+from model.video_model import video
+from model.setting_model import Setting
+
+Base.metadata.create_all(bind=engine)
+
 from routers import video_router,setting_router,service_router, websocket_router
 # khoi tao database tu dong
-Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 app.add_middleware(

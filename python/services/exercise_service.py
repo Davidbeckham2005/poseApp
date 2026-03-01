@@ -93,7 +93,8 @@ class exercise_Service:
             "src_output": self.capture.get_file_name(), 
             "size" :self.capture.get_size(),
             "form" :get_form(accuracy),
-            "time" : calc_time()
+            "time" : calc_time(),
+            "time_video" : self.capture.get_time_video()
         }
         return data
     def getResult_live(self):

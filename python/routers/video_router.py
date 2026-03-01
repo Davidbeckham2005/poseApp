@@ -1,7 +1,7 @@
 from fastapi import APIRouter # type: ignore
 from controller.controller import process
 # schemas
-from schemas.video_schemas import Delete_Video_Schemas, Delete_List_video_Schemas, Video_Schemas, Webcam_Schemas
+from schemas.video_schemas import Delete_Video_Schemas, Delete_List_video_Schemas, Video_Schemas, Webcam_Schemas, Get_Time
 # cau hinh sqlite
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -12,7 +12,7 @@ from crud.crud_setting import update_setting
 from crud.crud_video import create_video , delete_video, delete_list_video,read_video, read_all_video
 
 router = APIRouter(prefix="/video")
-
+from utils.calc import get_time_video
 @router.post("/add")
 async def add_Video(input: Video_Schemas, db: Session = Depends(get_db)):
     update_setting(input,db)
@@ -35,3 +35,7 @@ def get_video(output_path:str, db: Session = Depends(get_db)):
 @router.get("/get_all")
 def get_all_video(db:Session = Depends(get_db)):
     return read_all_video(db)
+
+@router.post("/get_time")
+def get_time(data:Get_Time):
+    return get_time_video(data.path)

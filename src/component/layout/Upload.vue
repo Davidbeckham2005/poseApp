@@ -35,11 +35,13 @@ const exercises = [
     { name: 'Push-up', value: 'pushup' },
     { name: 'Plank', value: 'plank' },
 ]
+// api 
+import { get_tinme_video } from '../../services/app.service';
 // const select_type = ref(true)
 const exercise_selected = ref()
 // const emit = defineEmits(['analying'])
 import video_wait from "../bases/video_wait.vue";
-
+const time_video_upload = ref()
 async function upload() {
     if (!exercise_selected.value) {
         // select_type.value = false
@@ -70,7 +72,12 @@ async function upload() {
                 "Analyst_estimate": settingStore.setting.Analyst_estimate,
                 "Analyst_state": settingStore.setting.Analyst_state,
             }
+            const data_to_get_time_video = {
+                "path": encodePath
+            }
             isloading.value = true
+            time_video_upload.value = await get_tinme_video(data_to_get_time_video)
+            console.log(time_video_upload.value)
             const res = await addVideo(data)
             while (true) {
                 await videoStore.fetchVideo()
@@ -107,7 +114,7 @@ const value_video_wait = {
                 text_video="Please do not switch tabs during the detection!">
             </VideoResult>
             <div class="w-120 h-4 pt-2">
-                <Load_progres :is-loading="isloading" class=""></Load_progres>
+                <Load_progres :is-loading="isloading" :time_loading="time_video_upload" class=""></Load_progres>
             </div>
         </div>
         <div v-else>

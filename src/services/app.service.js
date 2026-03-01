@@ -26,3 +26,6 @@ export async function delete_videos(data_video) {
 export async function show_camera(data_video) {
     return (await api.post("/service/show_camera", data_video)).data
 }
+export async function get_tinme_video(path) {
+    return (await api.post("/video/get_time", path)).data
+}

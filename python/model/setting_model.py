@@ -1,7 +1,5 @@
 from sqlalchemy import Boolean, Column, Float, ForeignKey,Integer, String, create_engine, JSON, false
-from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
-
+from model.db_model import Base
 class Setting(Base):
     __tablename__ = "setting_table"
     id = Column(Integer,primary_key=True, index=True)

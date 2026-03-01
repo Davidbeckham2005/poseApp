@@ -14,7 +14,8 @@ def create_video(result,db: Session = Depends(get_db)):
     type = result['type'],
     size_video = result['result']['size'],
     form = result['result']['form'],
-    time = result['result']['time']
+    time = result['result']['time'],
+    time_video = result['result']['time_video']
     )
     db.add(new_video)
     db.commit()
