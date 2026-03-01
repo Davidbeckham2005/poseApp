@@ -8,7 +8,7 @@ class Webcam_Schemas(BaseModel):
     isCheck_view: bool = True
     Analyst_FPS: bool = True
     Analyst_state: bool = True
-    type: str = "squat"
+    type: str = "plank"
     Analyst_count: bool = True
     Analyst_count_good: bool = True
     Analyst_estimate: bool = True

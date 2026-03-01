@@ -17,13 +17,13 @@ async def websocket_endpoint(websocket: WebSocket):
     print("client contected!")
     detector = PoseDetector()
     draw = DrawingService(detector)
-    # if type == 'squat':
     data = Webcam_Schemas(Analyst_FPS=False)
-    service = squatService(draw, detector ,None,data)
-    # if type == 'pushup':
-    #     service = pushupService(draw, detector, None,data)
-    # if type == 'plank':
-    #     service = plankService(draw, detector, None,data)
+    if type == 'squat':
+        service = squatService(draw, detector ,None,data)
+    if type == 'pushup':
+        service = pushupService(draw, detector, None,data)
+    if type == 'plank':
+        service = plankService(draw, detector, None,data)
     service.show_camera_not_make_video()
     
     try:

@@ -1,4 +1,4 @@
-from utils.calc import goc_tai_tham_so_thu_nhat, trungbinh, calculating_accuracy
+from utils.calc import get_form, goc_tai_tham_so_thu_nhat, trungbinh, calculating_accuracy, calc_time
 from utils.detecting import  isBalance, isReadyVisibility, update_history,check_y_hip_and_shoulder, drawtext
 from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
@@ -105,13 +105,16 @@ class plankService(exercise_Service):
             # }
             # self.record_couting.append(record)
     def getResult(self):
+        accuracy = calculating_accuracy(self.count_good,self.count_total)
         data = {
             "total" : round(self.total_time,2),
             "good" : round(self.correct_time,2),
-            "accuracy" : calculating_accuracy(self.count_good,self.count_total),
+            "accuracy" : accuracy,
             "record" : self.record_couting,
             "src_output": self.capture.get_file_name(), 
-            "size": self.capture.get_size()
-           
+            "size": self.capture.get_size(),
+            "form" : get_form(accuracy),
+            "time" : calc_time()
+
         }
         return data

@@ -103,8 +103,10 @@ function sendData() {
     if (ws.readyState !== WebSocket.OPEN || !video) {
         return
     }
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    //toi uu hoa gui frame
+    const scale = 640 / video.videoWidth
+    canvas.width = 640;
+    canvas.height = video.videoHeight * scale;
 
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
     canvas.toBlob((blob) => {
@@ -112,7 +114,7 @@ function sendData() {
             console.log(blob)
             ws.send(blob);
         }
-    }, 'image/jpeg', 0.6);
+    }, 'image/jpeg', 0.4);
 }
 const startAnalyst = () => {
     start_analys.value = true
