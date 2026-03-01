@@ -19,6 +19,7 @@ class plankService(exercise_Service):
         self.history_y_hip = []
         self.history_y_shoulder = []
         self.state = "down"
+        
     def get_total_time(self):
         fps = self.capture.getFPS()
         self.total_time = self.count_total/fps

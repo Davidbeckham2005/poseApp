@@ -8,7 +8,8 @@ from services.plank_service import plankService
 
 from services.webcam import WebcamService
 
-import cv2 
+# them luong
+import cv2
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -20,6 +21,7 @@ def process(data):
     type = data.type
     # count_frame = 0
     capture = VideoService(path_video)
+    capture.start()
     detector = PoseDetector()
     draw = DrawingService(detector)
     if type == 'squat':
@@ -31,25 +33,27 @@ def process(data):
     if not capture.getCap().isOpened():
         return False
     
-    # cho phep thay doi kich thuoc bang chuot
-    cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
-    while True:    
-        ret, frame = capture.read()
-        if not ret:
-            break
-        # count_frame+=1
-        # print(f"from control: {count_frame}")
-        frame = cv2.resize(frame,capture.getShape())
-        # frame = cv2.resize(frame,(520,1280))
-        # print(service.capture.set_current_time_ms())
-        service.run_detection(frame)    
-        # cv2.imshow("video",frame)
+    while True:
+        frame = capture.get_frame()
         
-        # wait_time = max(30,int(800/capture.getFPS()))
-        # if cv2.waitKey(wait_time) & 0xFF == ord("q"):
-        #     break
-    capture.writer_release()       
-    capture.release()
+        if frame is None:
+            # Nếu không lấy được frame và luồng đọc đã kết thúc -> Thoát
+            if not capture.is_read_frame:
+                break
+            # Nếu luồng đọc vẫn đang chạy mà chưa có frame -> Chờ một chút
+            continue
+        service.run_detection(frame)
+    # cho phep thay doi kich thuoc bang chuot
+    # cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
+    # while True:    
+    #     ret, frame = capture.read()
+    #     if not ret:
+    #         break  
+        # frame = cv2.resize(frame,capture.getShape())
+        # service.run_detection(frame)
+       
+    # capture.writer_release()       
+    # capture.release()
     cv2.destroyAllWindows()
 
     data = {

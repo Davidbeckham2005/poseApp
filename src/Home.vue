@@ -5,7 +5,7 @@
         </sidebar>
         <main class="flex-1 flex flex-col overflow-y-auto">
             <Header class="flex items-center justify-between px-6 py-4 border-b border-gray-800"></Header>
-            <div class="py-4 max-w-6xl mx-auto w-full ">
+            <div class="py-4 px-4 max-w-6xl mx-auto w-full ">
                 <Live v-if="currentTab === `live`"></Live>
                 <Dashbroad v-else-if="currentTab === `dashboard`"></Dashbroad>
                 <Upload v-else-if="currentTab === `upload`"></Upload>

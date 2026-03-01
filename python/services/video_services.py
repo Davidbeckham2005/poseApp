@@ -1,7 +1,10 @@
+import threading
+import queue
 import cv2
 from pathlib import Path
 from datetime import datetime
-import os
+import os, time
+
 class VideoService:
     def __init__(self, path: str):
         self.path = Path(path)
@@ -23,8 +26,37 @@ class VideoService:
             self.shape)
        
         self.current_time_ms = 0
+# da luon tang toc do xu ly
+        self.q = queue.Queue(maxsize=200)
+        self.is_read_frame = True
+     
         # dung cho video
         # self.timestamp_ms = int(self.cap.get(cv2.CAP_PROP_POS_MSEC)) 
+    
+    def start(self):
+        thread = threading.Thread(target=self.read_frame,args=())
+        thread.daemon = True
+        thread.start()
+        return self
+    def read_frame(self):
+        while True:
+            if not self.is_read_frame:
+                break
+            if not self.q.full():
+                ret, frame = self.read()
+                if not ret:
+                    self.is_read_frame = False
+                    break
+                self.q.put(frame)
+            else:
+                time.sleep(0.01)
+        self.release()
+    def get_frame(self):
+        try:
+            return self.q.get(timeout=1)
+        except queue.Empty:
+            return None
+
     def get_file_name(self):
         return self.fileName
     def getNewPath(self):
@@ -39,7 +71,6 @@ class VideoService:
     def getShape(self):
         return self.shape
     def read(self):
-
         return self.cap.read()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
     def getFPS(self):
         return self.fps
@@ -53,11 +84,12 @@ class VideoService:
         return self.timestamp_ms
     def get_output_path(self):
         return self.output_path
-    def get_real_time_seconds(self):
-        return self.real_time_secons
     
-    def get_real_time_mili(self):
-        return self.real_time_limisecon
+    # def get_real_time_seconds(self):
+    #     return self.real_time_secons
+    
+    # def get_real_time_mili(self):
+    #     return self.real_time_limisecon
     
     def set_current_time_ms(self):
         self.current_time_ms = self.cap.get(cv2.CAP_PROP_POS_MSEC)
