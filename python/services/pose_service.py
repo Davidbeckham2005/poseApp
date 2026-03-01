@@ -1,4 +1,3 @@
-from turtle import right
 import mediapipe as mp
 import cv2
 from mediapipe.tasks import python

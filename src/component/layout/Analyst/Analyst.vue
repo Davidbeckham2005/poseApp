@@ -36,7 +36,7 @@ const colorMap = {
         <div class="flex flex-row space-x-5 justify-center">
             <square_shape :icon=Shell type="Reps count" :value="reps_count" text_color='text-green-500'>
             </square_shape>
-            <square_shape :icon=CircleCheckBig type="Good" :value="accuracy" text_color="text-blue-500">
+            <square_shape :icon=CircleCheckBig type="Accuracy" :value="accuracy" text_color="text-blue-500">
             </square_shape>
         </div>
         <div class="bg-gray-700/50 p-3 rounded-2xl font-semibold space-y-4">

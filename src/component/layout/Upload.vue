@@ -1,9 +1,4 @@
 <script setup>
-import {
-    UploadCloud,
-    VideoIcon
-} from "lucide-vue-next"
-
 // khai bao veevalidate
 import { Form, Field } from 'vee-validate'
 // khai bao cac component
@@ -12,15 +7,14 @@ import VideoResult from "./VideoResult.vue";
 import Load_progres from "./Load_progres.vue";
 import History from "./History/History.vue";
 import cp_Load from "../bases/cp_Load.vue";
-import Title_content_horizontal from "../bases/Title_content_horizontal.vue";
 // khai bao api add video
-import { addVideo, get_video, get_all_video } from "../../services/app.service";
+import { addVideo } from "../../services/app.service";
 
 import { open } from "@tauri-apps/plugin-dialog";
 
 // khai bao cac ham dung chung
 import { useNavigation, get_translate, get_status_upload_video } from "../../composable/helpers";
-const { switch_on_sidebar, currentTab, switch_dashbroad, currentFile } = useNavigation()
+const { switch_dashbroad } = useNavigation()
 
 // cac ham ho tro tu he thong
 import { onMounted, ref } from "vue";
@@ -44,6 +38,8 @@ const exercises = [
 // const select_type = ref(true)
 const exercise_selected = ref()
 // const emit = defineEmits(['analying'])
+import video_wait from "../bases/video_wait.vue";
+
 async function upload() {
     if (!exercise_selected.value) {
         // select_type.value = false
@@ -73,15 +69,11 @@ async function upload() {
                 "Analyst_count_good": settingStore.setting.Analyst_count_good,
                 "Analyst_estimate": settingStore.setting.Analyst_estimate,
                 "Analyst_state": settingStore.setting.Analyst_state,
-                // "is" : fffdkfdkf.isfdffmd => pinia se luu setting, click xong => vấn đề là sau khi updata thì pinia mới có giá trị vậy trước đó ta buộc phải truyèn 
-                //  từ cha sang con??? , đó là vấn đề => nếu setting xong lưu vào database luôn thì điều gì sẽ lưu hả không gì cả, vậy cách
-                // tốt nhất ở đây là truyền truyền truyền , truyền từ content_click => setting => home => update
             }
             isloading.value = true
             const res = await addVideo(data)
             while (true) {
                 await videoStore.fetchVideo()
-
                 // const all_video = await get_all_video()
                 // console.log(res.output_path, all_video)
                 // console.log(res.output_path, videoStore.videos)
@@ -97,7 +89,14 @@ async function upload() {
         isloading.value = false
     }
 }
-
+import { VideoIcon, UploadCloud } from 'lucide-vue-next';
+const value_video_wait = {
+    title: "Drop video file here",
+    content: "Drag and drop your exercise videos here, or click to browse",
+    main_icon: UploadCloud,
+    small_icon: VideoIcon,
+    small_text: "MP4, AVI - Max 500MB",
+}
 </script>
 <template>
     <Transition v-bind="translate_class">
@@ -124,19 +123,7 @@ async function upload() {
                         exercise.name }}</option>
                 </Field>
             </div>
-            <div @click.prevent="upload" class="max-w-6xl border-2 border-dashed border-gray-700 rounded-2xl
-        bg-stone-900/70 p-10 sm:p-20 flex flex-col items-center justify-center text-center cursor-pointer
-        hover:border-cyan-400/60 transition group">
-                <div
-                    class="hidden md:w-30 md:h-30 bg-gray-800 rounded-full sm:flex items-center justify-center mb-6 group-hover:scale-110 transition">
-                    <UploadCloud class="text-cyan-400 w-8 h-8" />
-                </div>
-                <title_content title="Drop video file here"
-                    content="Drag and drop your exercise videos here, or click to browse"></title_content>
-                <div class="flex items-center sm:space-x-4 text-xs text-gray-600">
-                    <VideoIcon class="w-4 h-4 mr-1" /> MP4, AVI - Max 500MB
-                </div>
-            </div>
+            <video_wait v-bind="value_video_wait" @click.prevent="upload"></video_wait>
             <History></History>
         </div>
     </Transition>
