@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 # model
 from model.db_model import get_db
 # crud
-from crud.crud_setting import update_setting, read_setting
+from crud.crud_setting import update_setting
 from crud.crud_video import create_video , delete_video, delete_list_video,read_video, read_all_video
 
 router = APIRouter(prefix="/video")

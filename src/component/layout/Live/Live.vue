@@ -85,7 +85,7 @@ onUnmounted(() => {
     stopCamera()
 })
 
-const ws = new WebSocket("ws://localhost:8000/ws")
+const ws = new WebSocket("ws://localhost:8000/websocket/live")
 ws.onopen = () => {
     console.log("connected")
     sendData()
