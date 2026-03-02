@@ -19,3 +19,8 @@ class Update_User(BaseModel):
     height: int = None
     email: str = None
     day_of_birth: str = None
+
+class Schemas_Update_detail(BaseModel):
+    caloris: float
+    average: float
+    time_work: float

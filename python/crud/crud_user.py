@@ -26,7 +26,7 @@ def get(db: Session = Depends(get_db)):
     user_to_get = db.query(user).filter(user.id == 1).first()
     return user_to_get
 
-def update(data, db: Session):
+def update(data, db: Session = Depends(get_db)) :
     # 1. Tìm user trong database
     db_user = db.query(user).filter(user.id == 1).first()
     
@@ -47,8 +47,31 @@ def update(data, db: Session):
         new_bmi = calculating_BMI(db_user.weight, db_user.height)
         db_user.BMI = new_bmi
         db_user.type_BMI = detect_type_BMI(new_bmi)
-
     db.commit()
     db.refresh(db_user)
-    
     return db_user
+
+def update_detail(data, db: Session = Depends(get_db)):
+    db_user =  db.query(user).filter(user.id == 1).first()
+    if not db_user:
+        print("Không tìm thấy user với ID = 1")
+        return None
+    
+    new_caloris = db_user.total_caloris + data.caloris
+    new_session = db_user.total_session + 1
+    new_average = (db_user.avg_accuracy * db_user.total_session + data.average)/(new_session)
+    new_time_work = db_user.total_time_work + data.caloris
+
+    db_user.total_caloris = new_caloris
+    db_user.total_session = new_session
+    db_user.avg_accuracy = new_average
+    db_user.total_time_work = new_time_work
+
+    try:
+        db.commit()      
+        db.refresh(db_user) 
+        return db_user
+    except Exception as e:
+        db.rollback()   
+        print(f"Lỗi khi update: {e}")
+        return None
