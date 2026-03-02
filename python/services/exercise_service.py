@@ -1,7 +1,7 @@
 from sqlalchemy import false
 
-from utils.calc import calc_time, goc_tai_tham_so_thu_nhat, convert_to_px,calculating_accuracy, calculating_distance, get_form
-from utils.detecting import check_distance_between_knee_and_sholder, isBalance, isReadyVisibility, drawtext, update_history, check_view
+from utils.calc import calc_time,calculating_accuracy, get_form, calculating_caloris
+from utils.detecting import  drawtext, update_history, check_view
 from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
 from services.video_services import VideoService
@@ -20,6 +20,8 @@ class exercise_Service:
         self.max_frame = 10
         self.current_frame = 0
         self.type = data.type
+        self.weight = data.weight
+        self.height = data.height
         # setting
         self.isMake_Result = True   
         self.isDrawing = data.isDrawing
@@ -88,6 +90,7 @@ class exercise_Service:
         pass
     def getResult(self):
         accuracy = calculating_accuracy(self.count_good,self.count_total)
+        time_video = self.capture.get_time_video()
         data = {
             "total" : self.count_total,
             "good" : self.count_good,
@@ -97,7 +100,8 @@ class exercise_Service:
             "size" :self.capture.get_size(),
             "form" :get_form(accuracy),
             "time" : calc_time(),
-            "time_video" : self.capture.get_time_video()
+            "time_video" : time_video,
+            "caloris" : calculating_caloris(time_video,self.weight,accuracy,self.type)
         }
         return data
     def getResult_live(self):

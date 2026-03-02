@@ -66,3 +66,43 @@ def get_time_video(path):
     time_video = round(total_frame/fps,0)
     print(path_video,fps,total_frame)
     return time_video
+
+def calculating_BMI(weight,height):
+    if height is None or weight is None or height <= 0:
+        return 0.0
+    height = height/100
+    return round(weight/(height*height),2)
+
+def detect_type_BMI(BMI):
+    if BMI <= 0:
+        return "Invalid index"
+    
+    if BMI < 18.5:
+        return "Underweight"
+    elif 18.5 <= BMI <= 22.9:
+        return "Normal weight"
+    elif 23.0 <= BMI <= 24.9:
+        return "Overweight (Pre-obese)"
+    elif 25.0 <= BMI <= 29.9:
+        return "Obese Class I"
+    else:
+        return "Obese Class II (Severely obese)"
+    
+def calculating_caloris(time_sec,weight_kg,accuracy,type):
+    Met_value_hight_accuracy = {
+        "pushup" : 5,
+        "squat" : 8,
+        "plank" : 4
+    }
+    MET_value = {
+        "pushup" : 4,
+        "squat" : 4,
+        "plank" : 3.5
+    }
+    if accuracy >=80:
+        MET = Met_value_hight_accuracy
+    else:
+        MET = MET_value
+    time_minutes = time_sec/60
+    caloris = (MET[type]*3.5*weight_kg*time_minutes)/200
+    return round(caloris,1)
