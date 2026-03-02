@@ -45,6 +45,13 @@
 </template>
 
 <script setup>
+import { useUser } from '../../../store/user.store';
+const userStore = useUser()
+onMounted(async () => {
+    console.log("d")
+    await userStore.fetchUser()
+    console.log(userStore.user)
+})
 // componnt
 import Title_content from '../../bases/title_content.vue';
 import History_box from './History_box.vue';
@@ -52,9 +59,11 @@ import History_item_video from './History_item_video.vue';
 import { useVideo } from '../../../store/video.store';
 const videoStore = useVideo()
 import { Video, CircleCheckBig, Shell, Search, ChartNoAxesCombined, Trophy, Funnel } from 'lucide-vue-next';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 // veevalidate
 import { Field } from 'vee-validate';
+
+
 const sort_selected = ref("")
 const List_Video = ref([])
 const append_on_delete_list = (path) => {
@@ -65,32 +74,58 @@ const append_on_delete_list = (path) => {
         List_Video.value.splice(index, 1)
     }
 }
+
 const sorts = {
     Date: { value: false },
     Reps: { value: false },
     Accuracy: { value: false },
 }
-const items = {
-    video: { icon: Video, first_line: 'Total Sessions', middle_value: '12', last_line: '8 this week', color_icon: 'text-cyan-400', green_line: "" },
-    video2: { icon: CircleCheckBig, first_line: 'Completed', middle_value: '12', last_line: '83% success rate', color_icon: 'text-green-400', green_line: "text-green-400" },
-    video3: { icon: Shell, first_line: 'Avg Accuracy', middle_value: '22%', last_line: '+5% last week', color_icon: 'text-purple-400', green_line: "text-green-400" },
-    video4: { icon: ChartNoAxesCombined, first_line: 'Total Reps', middle_value: '12', last_line: 'Across all workouts', color_icon: 'text-blue-400', green_line: "" },
-    video5: { icon: Trophy, first_line: 'Best Score', middle_value: '12%', last_line: 'Personal record', color_icon: 'text-yellow-400', green_line: "" },
-}
-// filter
+
+const items = computed(() => {
+    return {
+        total_video: {
+            icon: Video,
+            first_line: 'Total Sessions',
+            middle_value: userStore.user?.total_session || 0,
+            last_line: '8 this week',
+            color_icon: 'text-cyan-400', green_line: ""
+        },
+        total_compelte: {
+            icon: CircleCheckBig,
+            first_line: 'Total reps',
+            middle_value: userStore.user?.total_reps_count || 0,
+            last_line: userStore.user?.avg_accuracy + "% success rate" || 0,
+            color_icon: 'text-green-400',
+            green_line: "text-green-400"
+        },
+        total_time_work: {
+            icon: Shell,
+            first_line: 'Avg Accuracy',
+            middle_value: userStore.user?.avg_accuracy + "%" || 0,
+            last_line: '+5% last week',
+            color_icon: 'text-purple-400',
+            green_line: "text-green-400"
+        },
+        avg_accuracy: {
+            icon: ChartNoAxesCombined,
+            first_line: 'Workout Time',
+            middle_value: userStore.user?.total_time_work + " Minutes" || 0,
+            last_line: 'Across all workouts',
+            color_icon: 'text-blue-400',
+            green_line: ""
+        },
+        total_caloris: {
+            icon: Trophy,
+            first_line: 'Calories Burned',
+            middle_value: userStore.user?.total_caloris + " Calo" || 0,
+            last_line: 'Personal record',
+            color_icon: 'text-yellow-400',
+            green_line: ""
+        },
+    }
+})
+
 const isshow_filter = ref(false)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

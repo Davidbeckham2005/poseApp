@@ -15,3 +15,4 @@ class video(Base):
     time = Column(String)
     record_detail = Column(JSON)
     time_video = Column(String)
+    calory = Column(Float)

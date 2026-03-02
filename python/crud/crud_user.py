@@ -14,6 +14,7 @@ def create(data, db: Session = Depends(get_db)):
         total_time_work  = data.total_time_work,
         avg_accuracy  = data.avg_accuracy,
         total_caloris  = data.total_caloris,
+        total_reps_count = data.total_reps_count,
         BMI = calculating_BMI(data.weight, data.height),
         type_BMI = detect_type_BMI(calculating_BMI(data.weight, data.height))
     )
@@ -24,7 +25,9 @@ def create(data, db: Session = Depends(get_db)):
 
 def get(db: Session = Depends(get_db)):
     user_to_get = db.query(user).filter(user.id == 1).first()
-    return user_to_get
+    return {
+        "user" :user_to_get
+    }
 
 def update(data, db: Session = Depends(get_db)) :
     # 1. Tìm user trong database
@@ -60,13 +63,13 @@ def update_detail(data, db: Session = Depends(get_db)):
     new_caloris = db_user.total_caloris + data.caloris
     new_session = db_user.total_session + 1
     new_average = (db_user.avg_accuracy * db_user.total_session + data.average)/(new_session)
-    new_time_work = db_user.total_time_work + data.caloris
-
-    db_user.total_caloris = new_caloris
+    new_time_work = db_user.total_time_work*60 + data.caloris
+    new_reps_count = db_user.total_reps_count + data.reps
+    db_user.total_caloris = round(new_caloris,0)
     db_user.total_session = new_session
-    db_user.avg_accuracy = new_average
-    db_user.total_time_work = new_time_work
-
+    db_user.avg_accuracy = round(new_average,1)
+    db_user.total_time_work = round(new_time_work/60,2)
+    db_user.total_reps_count = new_reps_count
     try:
         db.commit()      
         db.refresh(db_user) 

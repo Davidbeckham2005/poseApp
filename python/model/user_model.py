@@ -8,11 +8,12 @@ class user(Base):
     weight = Column(Float)
     height = Column(Integer)
     email = Column(String)
-    date = Column(String)
+    
     BMI = column(float)
     type_BMI = Column(String)
     # tap luyen
-    total_session = Column(Float)
+    total_reps_count = Column(Integer)
+    total_session = Column(Integer)
     total_time_work = Column(Float)
     avg_accuracy = Column(Float)
     total_caloris = Column(Float)

@@ -3,7 +3,8 @@ from model.db_model import get_db
 from sqlalchemy.orm import Session
 from fastapi import  Depends, HTTPException, status
 from model.video_model import video
-
+from crud.crud_user import update_detail
+from schemas.user_schemas import Schemas_Update_detail
 def create_video(result,db: Session = Depends(get_db)):
     new_video = video(
     output_path = result["result"]["src_output"],
@@ -15,8 +16,17 @@ def create_video(result,db: Session = Depends(get_db)):
     size_video = result['result']['size'],
     form = result['result']['form'],
     time = result['result']['time'],
-    time_video = result['result']['time_video']
+    time_video = result['result']['time_video'],
+    calory = result['result']['calory']
     )
+    data_detail = Schemas_Update_detail(
+        caloris = result['result']['calory'],
+        average = result["result"]["accuracy"],
+        time_work = result['result']['time_video'],
+        reps = result["result"]["total"]
+    )
+    
+    update_detail(data_detail,db)
     db.add(new_video)
     db.commit()
     db.refresh(new_video)

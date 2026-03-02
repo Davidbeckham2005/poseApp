@@ -101,7 +101,7 @@ class exercise_Service:
             "form" :get_form(accuracy),
             "time" : calc_time(),
             "time_video" : time_video,
-            "caloris" : calculating_caloris(time_video,self.weight,accuracy,self.type)
+            "calory" : calculating_caloris(time_video,self.weight,accuracy,self.type)
         }
         return data
     def getResult_live(self):

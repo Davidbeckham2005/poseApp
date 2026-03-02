@@ -50,4 +50,5 @@ switch_on_sidebar("upload")
 const setActive = (item) => {
     switch_on_sidebar(item.name)
 }
+
 </script>

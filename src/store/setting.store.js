@@ -15,7 +15,7 @@ export const useSetting = defineStore('setting', () => {
     const fetchSetting = async () => {
         try {
             const res = await get_setting()
-            setting.value = res
+            if (!res) setting.value = res
         } catch (error) {
             console.log(error)
         }

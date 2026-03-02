@@ -29,3 +29,9 @@ export async function show_camera(data_video) {
 export async function get_tinme_video(path) {
     return (await api.post("/video/get_time", path)).data
 }
+export async function get_user() {
+    return (await api.get("/user/get")).data
+}
+export async function update_user(path) {
+    return (await api.post("/user/update", path)).data
+}

@@ -11,7 +11,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 defineProps({
     item: Object,
+})
+const caloris = computed(() => {
+
 })
 </script>

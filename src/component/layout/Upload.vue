@@ -17,7 +17,7 @@ import { useNavigation, get_translate, get_status_upload_video } from "../../com
 const { switch_dashbroad } = useNavigation()
 
 // cac ham ho tro tu he thong
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { convertFileSrc } from "@tauri-apps/api/core";
 
 // khai bao pinia
@@ -25,7 +25,10 @@ import { useVideo } from "../../store/video.store";
 const videoStore = useVideo()
 import { useSetting } from "../../store/setting.store";
 const settingStore = useSetting()
+import { useUser } from '../../store/user.store';
+const userStore = useUser()
 // khai bao bien
+
 const src_video = ref()
 const isloading = get_status_upload_video()
 const translate_class = get_translate()
@@ -71,13 +74,16 @@ async function upload() {
                 "Analyst_count_good": settingStore.setting.Analyst_count_good,
                 "Analyst_estimate": settingStore.setting.Analyst_estimate,
                 "Analyst_state": settingStore.setting.Analyst_state,
+                "weight": userStore.user.weight,
+                "height": userStore.user.height
             }
             const data_to_get_time_video = {
                 "path": encodePath
             }
             isloading.value = true
             time_video_upload.value = await get_tinme_video(data_to_get_time_video)
-            console.log(time_video_upload.value)
+            // console.log(time_video_upload.value)
+            console.log(data)
             const res = await addVideo(data)
             while (true) {
                 await videoStore.fetchVideo()
@@ -97,6 +103,7 @@ async function upload() {
     }
 }
 import { VideoIcon, UploadCloud } from 'lucide-vue-next';
+import { compute } from 'three/tsl';
 const value_video_wait = {
     title: "Drop video file here",
     content: "Drag and drop your exercise videos here, or click to browse",
