@@ -1,4 +1,3 @@
-from sqlalchemy import false
 
 from utils.calc import calc_time,calculating_accuracy, get_form, calculating_caloris
 from utils.detecting import  drawtext, update_history, check_view

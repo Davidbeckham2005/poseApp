@@ -48,9 +48,8 @@
 import { useUser } from '../../../store/user.store';
 const userStore = useUser()
 onMounted(async () => {
-    console.log("d")
     await userStore.fetchUser()
-    console.log(userStore.user)
+    // console.log(userStore.user)
 })
 // componnt
 import Title_content from '../../bases/title_content.vue';

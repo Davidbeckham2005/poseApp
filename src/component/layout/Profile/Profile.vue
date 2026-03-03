@@ -25,7 +25,12 @@ const stats = computed(() => {
 })
 import { open } from "@tauri-apps/plugin-dialog";
 import { convertFileSrc } from "@tauri-apps/api/core";
+
+// component
 import show_profile_value from './show_profile_value.vue';
+import Profile_overview from './Profile_overview.vue';
+import Profile_setting from './Profile_setting.vue';
+import Profile_btn from './Profile_btn.vue';
 const avatar = ref()
 async function change_avatar() {
     try {
@@ -41,6 +46,12 @@ async function change_avatar() {
         console.log(error)
     }
 }
+const current_tab = ref('Overview')
+const profile_tab = ['Overview', 'Achievements', 'Setting']
+const switch_tab = (tab) => {
+    current_tab.value = tab
+}
+
 </script>
 
 <template>
@@ -59,19 +70,18 @@ async function change_avatar() {
                     </button>
                 </div>
 
+
                 <div class="flex-1">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h1 class="text-3xl font-bold tracking-tight text-white">{{ user.name }}</h1>
+                            <h1 class="text-3xl font-bold tracking-tight text-white">{{ userStore.user.name }}</h1>
                             <div class="flex gap-4 mt-1 text-slate-400 text-sm">
-                                <span class="flex items-center gap-1"> {{ user.email }}</span>
-                                <span class="flex items-center gap-1"> Joined {{ user.joined }}</span>
+                                <span class="flex items-center gap-1"> {{ userStore.user.email }}</span>
+                                <span class="flex items-center gap-1"> Joined {{ userStore.user.joined }}</span>
                             </div>
                         </div>
-                        <button
-                            class="bg-cyan-600/10 border border-cyan-500/50 text-cyan-400 px-4 py-2 rounded-xl hover:bg-cyan-500 hover:text-white transition-all text-sm font-semibold">
-                            Edit Profile
-                        </button>
+                        <Profile_btn @click="switch_tab('Setting')" text="Edit profile"></Profile_btn>
+
                     </div>
 
                     <div class="mt-6">
@@ -88,6 +98,7 @@ async function change_avatar() {
                         </p>
                     </div>
                 </div>
+
             </div>
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -103,6 +114,18 @@ async function change_avatar() {
                     <p class="text-xs text-orange-300/70">Keep it up! You're on fire!</p>
                 </div>
             </div> -->
+        </div>
+        <div>
+            <div class="grid grid-2 lg:grid-cols-8">
+                <div class="uppercase font-bold mt-8  pb-3  text-center"
+                    :class="current_tab == tab ? 'text-cyan-400 border-b border-cyan-400' : 'border-b-gray-700/30 hover:border-cyan-400 border-b '"
+                    v-for="tab in profile_tab" @click="switch_tab(tab)">{{
+                        tab
+                    }}
+                </div>
+            </div>
+            <Profile_overview v-if="current_tab == 'Overview'" :stats="stats"></Profile_overview>
+            <Profile_setting v-else-if="current_tab == 'Setting'" :user="userStore.user"></Profile_setting>
         </div>
     </div>
 </template>

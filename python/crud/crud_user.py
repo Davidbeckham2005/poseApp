@@ -1,12 +1,15 @@
+from datetime import date
+
 from model.db_model import get_db
-from sqlalchemy.orm import Session
-from fastapi import  Depends
+from sqlalchemy.orm import Session # type: ignore
+from fastapi import  Depends # type: ignore
 from model.user_model import user
 from utils.calc import calculating_BMI, detect_type_BMI
 def create(data, db: Session = Depends(get_db)):
     new_user = user(
         name = data.name,
         day_of_birth = data.day_of_birth,
+        joined = data.joined,
         height = data.height,
         weight = data.weight,
         email= data.email,
@@ -15,6 +18,7 @@ def create(data, db: Session = Depends(get_db)):
         avg_accuracy  = data.avg_accuracy,
         total_caloris  = data.total_caloris,
         total_reps_count = data.total_reps_count,
+        avatar = data.avatar,
         BMI = calculating_BMI(data.weight, data.height),
         type_BMI = detect_type_BMI(calculating_BMI(data.weight, data.height))
     )

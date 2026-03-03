@@ -1,5 +1,5 @@
-from utils.calc import calculating_caloris
+from datetime import datetime
 
-caloris = calculating_caloris(60,70,60,"plank")
+now = datetime.now()
+print(now.strftime("%Y-%m-%d"))
 
-print(caloris)

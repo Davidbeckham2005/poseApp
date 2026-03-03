@@ -1,25 +1,27 @@
-from pydantic import BaseModel
+from pydantic import BaseModel  # type: ignore
 from datetime import date
+from utils.calc import cal_now_date
+# SQLite sẽ hiểu ngày tháng nếu bạn lưu dưới dạng chuỗi: YYYY-MM-DD.
 class Create_User(BaseModel):
     name : str
-    age : str = None
+    day_of_birth : date = None
     weight: float = 0
     height: int = 0
     email: str = None
-    day_of_birth: str = None
+    joined:date = cal_now_date()
+    avatar: str = None
     total_session:  int = 0
     total_time_work :float = 0
     avg_accuracy :float = 0
     total_caloris :float = 0
-    total_reps_count : int = 0
-    # tap luyen
+    total_reps_count: int = 0
 class Update_User(BaseModel):
     name: str = None
-    age: str = None
+    joined: date = None
     weight: float = None
     height: int = None
     email: str = None
-    day_of_birth: str = None
+    day_of_birth: date = None
 
 class Schemas_Update_detail(BaseModel):
     caloris: float

@@ -2,8 +2,8 @@ from fastapi import APIRouter # type: ignore
 # schemas
 from schemas.user_schemas import Create_User, Update_User, Schemas_Update_detail
 # cau hinh sqlite
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import FastAPI, Depends, HTTPException  # type: ignore
+from sqlalchemy.orm import Session  # type: ignore
 # model
 from model.db_model import get_db
 # crud

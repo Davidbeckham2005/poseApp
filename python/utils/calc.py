@@ -106,3 +106,7 @@ def calculating_caloris(time_sec,weight_kg,accuracy,type):
     time_minutes = time_sec/60
     caloris = (MET[type]*3.5*weight_kg*time_minutes)/200
     return round(caloris,1)
+
+def cal_now_date():
+    return datetime.now()
+   
