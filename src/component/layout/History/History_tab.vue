@@ -1,7 +1,7 @@
 <template>
     <div>
         <Title_content title="Analysis History" content="View past workout sessions and progress"></Title_content>
-        <div class="sm:flex space-x-5 mb-5">
+        <div class="grid grid-cols-2 lg:grid-cols-6 gap-2 lg:gap-0 mb-5">
             <History_box v-for="(item, key) in items" :key="key" :item="item">
             </History_box>
         </div>
@@ -88,7 +88,7 @@ const items = computed(() => {
             first_line: 'Total Sessions',
             middle_value: userStore.user?.total_session || 0,
             last_line: '8 this week',
-            color_icon: 'text-cyan-400', green_line: ""
+            color_icon: 'text-cyan-400',
         },
         total_compelte: {
             icon: CircleCheckBig,
@@ -96,7 +96,7 @@ const items = computed(() => {
             middle_value: userStore.user?.total_reps_count || 0,
             last_line: userStore.user?.avg_accuracy + "% success rate" || 0,
             color_icon: 'text-green-400',
-            green_line: "text-green-400"
+
         },
         total_time_work: {
             icon: Shell,
@@ -104,7 +104,7 @@ const items = computed(() => {
             middle_value: userStore.user?.avg_accuracy + "%" || 0,
             last_line: '+5% last week',
             color_icon: 'text-purple-400',
-            green_line: "text-green-400"
+
         },
         avg_accuracy: {
             icon: ChartNoAxesCombined,
@@ -112,7 +112,7 @@ const items = computed(() => {
             middle_value: userStore.user?.total_time_work + " Minutes" || 0,
             last_line: 'Across all workouts',
             color_icon: 'text-blue-400',
-            green_line: ""
+
         },
         total_caloris: {
             icon: Trophy,
@@ -120,7 +120,7 @@ const items = computed(() => {
             middle_value: userStore.user?.total_caloris + " Calo" || 0,
             last_line: 'Personal record',
             color_icon: 'text-yellow-400',
-            green_line: ""
+
         },
     }
 })

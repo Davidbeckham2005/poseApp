@@ -7,6 +7,7 @@
             <Header class="flex items-center justify-between px-6 py-4 border-b border-gray-800"></Header>
             <div class="py-4 px-4 max-w-6xl mx-auto w-full ">
                 <Live v-if="currentTab === `live`"></Live>
+                <Profile v-if="currentTab === `profile`"></Profile>
                 <Dashbroad v-else-if="currentTab === `dashboard`"></Dashbroad>
                 <Upload v-else-if="currentTab === `upload`"></Upload>
                 <Settings v-else-if="currentTab === `settings`"></Settings>
@@ -23,7 +24,7 @@ import {
     SettingsIcon,
     UploadIcon,
     Radio,
-
+    UserRound,
 } from 'lucide-vue-next';
 // component
 import Header from './component/layout/Header.vue';
@@ -34,13 +35,15 @@ import History_tab from './component/layout/History/History_tab.vue';
 import Live from './component/layout/Live/Live.vue';
 import Dashbroad from './component/layout/Dashbroad/dashbroad.vue';
 import { useNavigation } from "./composable/helpers";
+import Profile from './component/layout/Profile/Profile.vue';
+
 const { switch_on_sidebar, currentTab } = useNavigation()
 
 const menuItems = [
     { name: 'live', label: 'LIVE DEMO', icon: Radio },
     { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
+    { name: 'profile', label: 'Profile', icon: UserRound },
     { name: 'upload', label: 'Upload', icon: UploadIcon },
-    // { name: 'analysis', label: 'Analysis', icon: AnalysisIcon },
     { name: 'history', label: 'History', icon: HistoryIcon },
     { name: 'settings', label: 'Settings', icon: SettingsIcon },
 

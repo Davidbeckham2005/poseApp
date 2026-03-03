@@ -103,7 +103,6 @@ async function upload() {
     }
 }
 import { VideoIcon, UploadCloud } from 'lucide-vue-next';
-import { compute } from 'three/tsl';
 const value_video_wait = {
     title: "Drop video file here",
     content: "Drag and drop your exercise videos here, or click to browse",
