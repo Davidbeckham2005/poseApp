@@ -14,7 +14,7 @@ class Create_User(BaseModel):
     total_time_work :float = 0
     avg_accuracy :float = 0
     total_caloris :float = 0
-    total_reps_count: int = 0
+    total_reps_count: float = 0
 class Update_User(BaseModel):
     name: str = None
     joined: date = None
@@ -27,4 +27,4 @@ class Schemas_Update_detail(BaseModel):
     caloris: float
     average: float
     time_work: float
-    reps: int
+    reps: float

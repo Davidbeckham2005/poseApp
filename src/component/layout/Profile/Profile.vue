@@ -31,6 +31,8 @@ import show_profile_value from './show_profile_value.vue';
 import Profile_overview from './Profile_overview.vue';
 import Profile_setting from './Profile_setting.vue';
 import Profile_btn from './Profile_btn.vue';
+import Achievement from './Achievement.vue';
+import History from '../History/History.vue';
 const avatar = ref()
 async function change_avatar() {
     try {
@@ -47,7 +49,7 @@ async function change_avatar() {
     }
 }
 const current_tab = ref('Overview')
-const profile_tab = ['Overview', 'Achievements', 'Setting']
+const profile_tab = ['Overview', 'Achievement', 'Setting']
 const switch_tab = (tab) => {
     current_tab.value = tab
 }
@@ -126,6 +128,8 @@ const switch_tab = (tab) => {
             </div>
             <Profile_overview v-if="current_tab == 'Overview'" :stats="stats"></Profile_overview>
             <Profile_setting v-else-if="current_tab == 'Setting'" :user="userStore.user"></Profile_setting>
+            <History v-else-if="current_tab == 'Achievement'">
+            </History>
         </div>
     </div>
 </template>

@@ -8,6 +8,7 @@
                     <button @click="startCamera" class="rounded-lg btn btn-error">start</button>
                     <button @click="stopCamera" class="rounded-lg btn btn-active">stop</button>
                     <button @click="startAnalyst" class="rounded-lg btn btn-info">start Analyst</button>
+                    <button @click="stopAnalyst" class="rounded-lg btn btn-info">stop Analyst</button>
                 </div>
             </div>
         </div>
@@ -44,8 +45,9 @@
 
 import { ref, onUnmounted, onMounted } from 'vue'
 const videoRef = ref(null)
-const start_analys = ref(false)
+const start_analyst = ref(false)
 let stream = null
+const isProcessing = ref(false)
 const startCamera = async () => {
     try {
         if (stream) stopCamera()
@@ -71,6 +73,7 @@ const stopCamera = () => {
             videoRef.value.srcObject = null
         }
         stream = null
+        start_analyst.value = false
     }
     return
 }
@@ -88,14 +91,23 @@ onUnmounted(() => {
 const ws = new WebSocket("ws://localhost:8000/websocket/live")
 ws.onopen = () => {
     console.log("connected")
-    sendData()
+
 }
 ws.onmessage = (e) => {
     const data = JSON.parse(e.data)
-    console.log(data)
-    if (start_analys.value)
-        sendData()
+    isProcessing.value = false
 }
+function loop() {
+    console.log(start_analyst.value)
+    if (!start_analyst.value) return
+    if (!isProcessing.value) {
+        isProcessing.value = true
+        sendData()
+    } else {
+    }
+    requestAnimationFrame(loop)
+}
+
 const canvas = document.createElement('canvas')
 const ctx = canvas.getContext('2d')
 function sendData() {
@@ -111,14 +123,16 @@ function sendData() {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
     canvas.toBlob((blob) => {
         if (blob && ws.readyState === WebSocket.OPEN) {
-            console.log(blob)
+            // console.log(blob)
             ws.send(blob);
         }
     }, 'image/jpeg', 0.4);
 }
 const startAnalyst = () => {
-    start_analys.value = true
-
-    sendData()
+    start_analyst.value = true
+    loop()
+}
+const stopAnalyst = () => {
+    start_analyst.value = false
 }
 </script>

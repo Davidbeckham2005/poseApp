@@ -6,7 +6,7 @@ from services.exercise_service import exercise_Service
 from services.pushup_service import pushupService
 from services.plank_service import plankService
 
-from services.webcam import WebcamService
+# from services.webcam import WebcamService
 
 # them luong
 import cv2
@@ -35,7 +35,7 @@ def process(data):
     
     while True:
         frame = capture.get_frame()
-        
+
         if frame is None:
             # Nếu không lấy được frame và luồng đọc đã kết thúc -> Thoát
             if not capture.is_read_frame:
@@ -63,31 +63,31 @@ def process(data):
     }
     return data
 
-def show_cam(data):
-    type = data.type
-    capture = WebcamService()
-    detector = PoseDetector()
-    draw = DrawingService(detector)
-    if type == 'squat':
-        service = squatService(draw, detector ,capture,data)
-    if type == 'pushup':
-        service = pushupService(draw, detector, capture,data)
-    if type == 'plank':
-        service = plankService(draw, detector, capture,data)
+# def show_cam(data):
+#     type = data.type
+#     capture = WebcamService()
+#     detector = PoseDetector()
+#     draw = DrawingService(detector)
+#     if type == 'squat':
+#         service = squatService(draw, detector ,capture,data)
+#     if type == 'pushup':
+#         service = pushupService(draw, detector, capture,data)
+#     if type == 'plank':
+#         service = plankService(draw, detector, capture,data)
     
-    service.show_camera_not_make_video()
-    cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
-    while True:    
-        ret, frame = capture.read()
-        if not ret:
-            break
+#     service.show_camera_not_make_video()
+#     cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
+#     while True:    
+#         ret, frame = capture.read()
+#         if not ret:
+#             break
 
-        # wait_time = max(30,int(800/capture.getFPS()))
-        wait_time = 1
-        frame = cv2.flip(frame,1)
-        service.run_detection(frame)    
-        cv2.imshow("video",frame)
-        if cv2.waitKey(wait_time) & 0xFF == ord("q"):
-            break
-    capture.release()
-    cv2.destroyAllWindows()
+#         # wait_time = max(30,int(800/capture.getFPS()))
+#         wait_time = 1
+#         frame = cv2.flip(frame,1)
+#         service.run_detection(frame)    
+#         cv2.imshow("video",frame)
+#         if cv2.waitKey(wait_time) & 0xFF == ord("q"):
+#             break
+#     capture.release()
+#     cv2.destroyAllWindows()

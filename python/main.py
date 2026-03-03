@@ -22,5 +22,5 @@ app.add_middleware(
 app.include_router(websocket_router.router)
 app.include_router(video_router.router)
 app.include_router(setting_router.router)
-app.include_router(service_router.router)
+# app.include_router(service_router.router)
 app.include_router(user_router.router)

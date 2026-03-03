@@ -1,5 +1,5 @@
-from datetime import datetime
+from utils.calc import cal_now_date, calc_time
 
-now = datetime.now()
-print(now.strftime("%Y-%m-%d"))
+date = calc_time()
 
+print(date)

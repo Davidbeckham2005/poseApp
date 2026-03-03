@@ -1,4 +1,3 @@
-from controller.controller import process, show_cam
 from model.db_model import get_db
 from sqlalchemy.orm import Session
 from fastapi import  Depends
