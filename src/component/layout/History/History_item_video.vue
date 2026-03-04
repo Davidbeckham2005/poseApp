@@ -19,7 +19,7 @@
                 <title_content :title="video.type" :content="video.size_video"></title_content>
                 <div class="flex items-center gap-2">
                     <button
-                        :class='["bg-gray-700/50 px-4 py-1.5 rounded-lg flex items-center gap-2 text-xl font-semibold", { "text-green-400": video.accuracy_good >= 80, "text-orange-400": video.accuracy_good < 80 && video.accuracy_good >= 50, "text-red-400": video.accuracy_good < 50 }]'>
+                        :class='["bg-gray-700/50 px-4 py-1.5 rounded-lg flex items-center gap-2 text-xl font-semibold", { "text-green-400": video.accuracy_good >= 80, "text-cyan-400": video.accuracy_good < 80 && video.accuracy_good >= 50, "text-red-400": video.accuracy_good < 50 }]'>
                         <CircleCheck></CircleCheck> <span> {{ video.accuracy_good + '%' }} </span>
                     </button>
                     <button @click.prevent="isOpen = !isOpen"

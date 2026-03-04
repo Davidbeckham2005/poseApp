@@ -9,7 +9,7 @@ export const useUser = defineStore('user', () => {
         try {
             const res = await get_user()
             user.value = res.user
-            console.log(user.value)
+            // console.log(user.value)
         } catch (error) {
             console.log(error)
         }

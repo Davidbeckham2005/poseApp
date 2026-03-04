@@ -17,7 +17,7 @@ const user = ref({
 
 const stats = computed(() => {
     return [
-        { label: 'Total Sessions', value: userStore.user.total_session, icon: 'activity', color: 'text-cyan-400' },
+        { label: 'Total Sessions', value: userStore.user.total_session, icon: 'activity', color: 'text-orange-400' },
         { label: 'Workout Time', value: userStore.user.total_time_work + "M", icon: 'clock', color: 'text-purple-400' },
         { label: 'Calories Burned', value: userStore.user.total_caloris, icon: 'zap', color: 'text-orange-400' },
         { label: 'Avg Accuracy', value: userStore.user.avg_accuracy + "%", icon: 'target', color: 'text-emerald-400' },
@@ -63,11 +63,12 @@ const switch_tab = (tab) => {
                 <div class="relative group">
                     <img :src="avatar" alt="Profile" 1
                         class="w-28 h-28 rounded-2xl object-cover border-2 border-slate-700" />
-                    <div class="absolute -top-3 -right-3 bg-cyan-400 text-black font-bold px-2 py-1 rounded-lg text-sm">
+                    <div
+                        class="absolute -top-3 -right-3 bg-orange-400 text-black font-bold px-2 py-1 rounded-lg text-sm">
                         LVL {{ user.level }}
                     </div>
                     <button @click="change_avatar"
-                        class="absolute -bottom-2 -right-2 bg-cyan-400 p-2 rounded-full hover:bg-cyan-500 transition-colors text-black">
+                        class="absolute -bottom-2 -right-2 bg-orange-400 p-2 rounded-full hover:bg-orange-500 transition-colors text-black">
                         <Camera></Camera>
                     </button>
                 </div>
@@ -92,7 +93,7 @@ const switch_tab = (tab) => {
                             <span class="text-white">{{ user.xp }} / {{ user.nextLevelXp }} XP</span>
                         </div>
                         <div class="w-full h-3  rounded-full overflow-hidden">
-                            <div class="h-full bg-cyan-400"
+                            <div class="h-full bg-orange-400"
                                 :style="{ width: (user.xp / user.nextLevelXp) * 100 + '%' }"></div>
                         </div>
                         <p class="text-[11px] text-slate-500 mt-2 uppercase tracking-wider">
@@ -120,7 +121,7 @@ const switch_tab = (tab) => {
         <div>
             <div class="grid grid-2 lg:grid-cols-8">
                 <div class="uppercase font-bold mt-8  pb-3  text-center"
-                    :class="current_tab == tab ? 'text-cyan-400 border-b border-cyan-400' : 'border-b-gray-700/30 hover:border-cyan-400 border-b '"
+                    :class="current_tab == tab ? 'text-orange-400 border-b border-orange-400' : 'border-b-gray-700/30 hover:border-orange-400 border-b '"
                     v-for="tab in profile_tab" @click="switch_tab(tab)">{{
                         tab
                     }}

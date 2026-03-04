@@ -27,7 +27,7 @@ async def websocket_endpoint(websocket: WebSocket):
     # service = squatService(draw,detector,None,data)
     service.show_camera_not_make_video()
     capture = websocket_service()
-    capture.start()
+    capture.start(data=None)
     # count = 0
     try:
         while True:

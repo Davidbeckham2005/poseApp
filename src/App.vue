@@ -1,6 +1,6 @@
 <script setup>
-import Home from './Home.vue';
-import Trainer from './component/Trainer/Trainer.vue';
+// import Home from './Home.vue';
+// import Trainer from './component/Trainer/Trainer.vue';
 import { useUser } from './store/user.store';
 import { useVideo } from './store/video.store';
 import { useSetting } from './store/setting.store';
@@ -16,8 +16,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <router-view>
-    <Home v-if="userStore.user"></Home>
-    <!-- <Trainer></Trainer> -->
-  </router-view>
+  <router-view />
+  <!-- <Home v-if="userStore.user"></Home> -->
+  <!-- <Trainer></Trainer> -->
+  <!-- </router-view> -->
 </template>

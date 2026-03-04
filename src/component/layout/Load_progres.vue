@@ -1,20 +1,20 @@
 <template>
     <div class="w-full rounded-full h-3">
-        <div :class="['h-2 bg-cyan-500 rounded-full shadow-sm transition-all duration-700']"
+        <div :class="['h-2 bg-orange-500 rounded-full shadow-sm transition-all duration-700']"
             :style="{ width: progress + '%' }"></div>
         <div class="flex justify-between">
             <span class="text-sm text-gray-400">Progressing</span>
-            <span class="text-cyan-400 text-sm">{{ progress }}%</span>
+            <span class="text-orange-400 text-sm">{{ progress }}%</span>
         </div>
         <div class="mt-2 space-y-2  p-2 bg-gray-800/50 border border-slate-800 shadow-2xl rounded-2xl">
             <cp_task_running text="Uploading video" :color="progress > 10 ? 'text-green-400' : ' '" :icon="CircleCheck"
                 :animate="progress < 10 ? 'animate-spin' : ''">
 
             </cp_task_running>
-            <cp_task_running text=" Analyzing frames" :color="progress > 40 ? 'text-cyan-400' : ''" :icon="Brain"
+            <cp_task_running text=" Analyzing frames" :color="progress > 40 ? 'text-orange-400' : ''" :icon="Brain"
                 :animate="progress < 40 && progress > 10 ? 'animate-spin' : ''">
             </cp_task_running>
-            <cp_task_running text="Import mediapipe solutions" :color="progress > 86 ? 'text-cyan-400' : ''"
+            <cp_task_running text="Import mediapipe solutions" :color="progress > 86 ? 'text-orange-400' : ''"
                 :icon="BotMessageSquare" :animate="progress > 40 && progress < 86 ? 'animate-spin' : ''">
             </cp_task_running>
             <cp_task_running text="Finishing" :color="progress >= 99 ? 'text-green-400' : ''" :icon="CircleCheck"

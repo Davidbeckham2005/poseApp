@@ -18,7 +18,7 @@
                 <span>Score</span>
                 <span :class="{
                     'text-green-400': accuracy_good >= 80,
-                    'text-orange-400': accuracy_good <= 79 && accuracy_good >= 50,
+                    'text-cyan-400': accuracy_good <= 79 && accuracy_good >= 50,
                     'text-red-400': accuracy_good <= 49
                 }">{{ accuracy_good }}%</span>
             </div>

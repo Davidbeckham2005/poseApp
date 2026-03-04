@@ -96,6 +96,7 @@ ws.onopen = () => {
 ws.onmessage = (e) => {
     const data = JSON.parse(e.data)
     isProcessing.value = false
+    console.log(data)
 }
 function loop() {
     console.log(start_analyst.value)

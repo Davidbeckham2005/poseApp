@@ -3,7 +3,7 @@
         <title_content :title="title_setting" :content="content_setting" size_title="text-sm">
         </title_content>
         <input type="checkbox" :checked="checked_btn" @click="emit('set_active', key_value, checked_btn)"
-            class="toggle toggle-lg mb-10 text-cyan-400"></input>
+            class="toggle toggle-lg mb-10 text-orange-400"></input>
     </div>
 </template>
 

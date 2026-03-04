@@ -16,7 +16,7 @@ const { switch_on_sidebar } = useNavigation()
         <div class="flex items-center space-x-3">
             <cp_button :icon="Bell"></cp_button>
             <cp_button :icon="SunIcon"></cp_button>
-            <cp_button :icon="User" @click="switch_on_sidebar('profile')" class="text-cyan-500/70"></cp_button>
+            <cp_button :icon="User" @click="switch_on_sidebar('profile')" class="text-orange-500/70"></cp_button>
         </div>
     </header>
 </template>

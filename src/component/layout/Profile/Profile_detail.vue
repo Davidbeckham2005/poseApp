@@ -3,7 +3,7 @@
         class="flex items-center justify-between p-4 bg-[#1a1a1e] hover:bg-[#252529] rounded-xl transition-all border border-white/5 cursor-pointer group">
         <div class="flex items-center gap-4">
             <div
-                class="p-3 bg-slate-900 rounded-lg border border-cyan-500/30 text-cyan-400 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                class="p-3 bg-slate-900 rounded-lg border border-orange-500/30 text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2" />

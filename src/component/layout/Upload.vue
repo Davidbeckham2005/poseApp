@@ -130,7 +130,7 @@ const value_video_wait = {
                 <title_content title="Exercise Type" content="Pre-select exercise for optimized detection" class="ml-2">
                 </title_content>
                 <Field name="type" as="select" v-model="exercise_selected"
-                    :class="['w-full rounded-2xl bg-gray-700/80 h-10 pl-2 pr-2 border border-red-400 hover:border hover:border-cyan-400', { 'border-red-400': !exercise_selected, 'border-0': exercise_selected }]">
+                    :class="['w-full rounded-2xl bg-gray-700/80 h-10 pl-2 pr-2 border border-red-400 hover:border hover:border-orange-400', { 'border-red-400': !exercise_selected, 'border-0': exercise_selected }]">
                     <option value="" disabled class="text-white">-- Select Exercise --</option>
                     <option v-for="exercise in exercises" :value="exercise.value" class="group">{{
                         exercise.name }}</option>
