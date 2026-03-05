@@ -34,7 +34,7 @@ export function useNavigation() {
     return { switch_on_sidebar, currentTab, switch_dashbroad, currentFile }
 }
 export function get_translate() {
-    return {
+    const from_under = {
         enterActiveClass: "transition duration-1000 ease-out",
         enterFromClass: "transform translate-y-10 opacity-0",
         enterToClass: "transform translate-y-0 opacity-100",
@@ -42,6 +42,34 @@ export function get_translate() {
         leaveFromClass: "transform translate-y-0 opacity-100",
         leaveToClass: "transform translate-y-10 opacity-0",
         mode: "out-in"
+
+    }
+    const from_left = {
+        enterActiveClass: "transition-all duration-700 ease-out",
+        enterFromClass: "-translate-x-full opacity-0",
+        enterToClass: "translate-x-0 opacity-100",
+        leaveActiveClass: "transition-all duration-500 ease-in",
+        leaveFromClass: "translate-x-0 opacity-100",
+        leaveToClass: "-translate-x-full opacity-0",
+        mode: "out-in"
+    }
+    const only_from_left = {
+        leaveActiveClass: "transition-all duration-300 ease-in",
+        leaveFromClass: "translate-x-0 opacity-100",
+        leaveToClass: "-translate-x-full opacity-0",
+        mode: "out-in"
+    }
+    const from_top = {
+        enterActiveClass: "transition-all duration-700 ease-out",
+        enterFromClass: "-translate-y-full opacity-0",
+        enterToClass: "translate-y-0 opacity-100",
+        leaveActiveClass: "transition-all duration-600 ease-in-out",
+        leaveFromClass: "translate-y-0 opacity-100",
+        leaveToClass: "-translate-y-full opacity-0"
+    }
+
+    return {
+        from_under, from_left, from_top, only_from_left
     }
 }
 export function get_status_upload_video() {

@@ -1,21 +1,15 @@
 <template>
     <div class="flex h-screen bg-[#0a0a0c] text-gray-300 font-sans">
-        <Transition enter-active-class="transition-all duration-700 ease-out"
-            leave-active-class="transition-all duration-600 ease-in-out" enter-from-class="-translate-x-full opacity-0"
-            enter-to-class="translate-x-0 opacity-100" leave-from-class="translate-x-0 opacity-100"
-            leave-to-class="-translate-x-full opacity-0">
-            <sidebar v-if="!get_state_game" class="w-36 md:w-70 border-r border-gray-800 flex flex-col bg-black"
-                :menu-items="menuItems" :current-tab="currentTab" @active-menu="setActive" />
-        </Transition>
-        <main class="flex-1 flex flex-col overflow-y-auto">
-            <Transition enter-active-class="transition-all duration-700 ease-out"
-                leave-active-class="transition-all duration-600 ease-in-out"
-                enter-from-class="-translate-y-full opacity-0" enter-to-class="translate-y-0 opacity-100"
-                leave-from-class="translate-y-0 opacity-100" leave-to-class="-translate-y-full opacity-0">
 
-                <Header v-if="!get_state_game"
-                    class="flex items-center justify-between px-6 py-4 border-b border-gray-800"></Header>
-            </Transition>
+        <sidebar v-if="!get_state_game" class="w-36 md:w-70 border-r border-gray-800 flex flex-col bg-black"
+            :menu-items="menuItems" :current-tab="currentTab" @active-menu="setActive" />
+
+        <main class="flex-1 flex flex-col overflow-y-auto">
+
+
+            <Header v-if="!get_state_game" class="flex items-center justify-between px-6 py-4 border-b border-gray-800">
+            </Header>
+
             <div class="py-4 px-2 max-w-6xl mx-auto w-full ">
                 <Live v-if="currentTab === `live`"></Live>
                 <pose_advanture v-else-if="currentTab == 'game'"></pose_advanture>
@@ -30,6 +24,7 @@
 </template>
 
 <script setup>
+
 import {
     LayoutDashboardIcon as DashboardIcon,
     HistoryIcon,

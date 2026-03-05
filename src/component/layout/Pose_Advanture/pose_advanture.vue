@@ -1,14 +1,10 @@
 <template>
-    <pose_advanture_lobby v-if="current_layout == 'lobby'"></pose_advanture_lobby>
-    <!-- <pose_advanture_menu v-else-if="current_layout == 'menu'"></pose_advanture_menu> -->
-    <!-- <pose_advanture_menu></pose_advanture_menu> -->
+    <lobby v-if="current_layout == 'lobby'"></lobby>
 </template>
 
 <script setup>
 // cac component
-import pose_advanture_lobby from './pose_advanture_lobby.vue';
-import pose_advanture_menu from './pose_advanture_menu.vue';
-
+import lobby from './lobby.vue';
 import { useNavigation } from '../../../composable/help_game';
 
 

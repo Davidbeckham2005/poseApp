@@ -31,7 +31,7 @@ const userStore = useUser()
 
 const src_video = ref()
 const isloading = get_status_upload_video()
-const translate_class = get_translate()
+const { to_y } = get_translate()
 // list cac bai tap 
 const exercises = [
     { name: 'Squat', value: 'squat' },
@@ -112,7 +112,7 @@ const value_video_wait = {
 }
 </script>
 <template>
-    <Transition v-bind="translate_class">
+    <Transition v-bind="to_y">
         <div v-if="isloading" class="flex flex-col items-center animate-fade-in duration-1000 pb-3">
             <cp_Load speed="3s"></cp_Load>
             <VideoResult :path_video="src_video" title="Review" content="Review your video first!" size_video="w-80"

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../Home.vue";
-import Menu from "../component/layout/Pose_Advanture/pose_advanture_menu.vue"
+import Menu from "../component/layout/Pose_Advanture/menu.vue"
 const routes = [
     {
         path: "/",
