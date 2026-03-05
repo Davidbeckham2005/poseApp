@@ -84,12 +84,12 @@ class squatService(exercise_Service):
                     self.require = f"Higher than threshold!"
                     self.estimate = "high"
                 self.isEstimate = False
-                self.time_start = self.capture.get_current_time_video(self.current_frame)
+                # self.time_start = self.capture.get_current_time_video(self.current_frame)
                 self.state = "down"
         elif origin>self.up_standard and self.state=="down":
             self.state = "up"
             
-            self.time_end = self.capture.get_current_time_video(self.current_frame)
+            # self.time_end = self.capture.get_current_time_video(self.current_frame)
             self.count_total +=1
             # print(f"rep {self.}")
             self.isEstimate = True

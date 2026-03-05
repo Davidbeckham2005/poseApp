@@ -17,11 +17,9 @@ class websocket_service:
 # da luon tang toc do xu ly
         self.q = queue.Queue(maxsize=200)
         self.is_read_frame = True
-     
-        # dung cho video
-       
-    
     def start(self,data):
+        if data is None: 
+            return
         thread = threading.Thread(target=self.read_frame(data),args=())
         thread.daemon = True
         thread.start()
@@ -42,18 +40,4 @@ class websocket_service:
         except queue.Empty:
             return None
 
-
-    # def get_file_name(self):
-    #     return self.fileName
-    # def getNewPath(self):
-    #     return fr"C:\Users\dinhh\Desktop\nienluan\PoseApp\src\assets\videos\{self.fileName}.mp4"
-    
-    # def create_file_name(self):
-    #     now = datetime.now().strftime("%Y%m%d_%H%M%S")
-    #     return now
-    # def makeResult(self,frame):
-    #     self.output.write(frame)  
-    # def writer_release(self):       
-    #     self.output.release()
-   
-    
+  

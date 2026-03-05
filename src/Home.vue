@@ -61,7 +61,7 @@ const { switch_on_sidebar, currentTab } = useNavigation()
 const menuItems = [
     { name: 'game', label: 'POSE ADVANTURE', icon: Swords },
     { name: 'live', label: 'LIVE DEMO', icon: Radio },
-    { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
+    // { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
     { name: 'profile', label: 'Profile', icon: UserRound },
     { name: 'upload', label: 'Upload', icon: UploadIcon },
     { name: 'history', label: 'History', icon: HistoryIcon },
