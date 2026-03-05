@@ -89,7 +89,7 @@ const { only_from_left } = get_translate()
             ]"></div>
         </div>
         <Transition v-bind="only_from_left">
-            <div class=" w-full max-w-2xl min-h-96 rounded-3xl p-12 text-center border border-white/10 overflow-hidden"
+            <div class=" w-full max-w-2xl relative min-h-96 rounded-3xl p-12 text-center border border-white/10 overflow-hidden"
                 :key="currentStep" :class="Content[currentStep - 1].background">
                 <div class="flex flex-col items-center">
                     <div class="bg-white/10 p-4 rounded-2xl mb-6">

@@ -54,13 +54,13 @@ import { computed, watch } from 'vue';
 const { switch_on_sidebar, currentTab } = useNavigation()
 
 const menuItems = [
-    { name: 'game', label: 'POSE ADVANTURE', icon: Swords },
+    { name: 'game', label: 'FITNESS ADVENTURE', icon: Swords },
     { name: 'live', label: 'LIVE DEMO', icon: Radio },
     // { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
-    { name: 'profile', label: 'Profile', icon: UserRound },
-    { name: 'upload', label: 'Upload', icon: UploadIcon },
-    { name: 'history', label: 'History', icon: HistoryIcon },
-    { name: 'settings', label: 'Settings', icon: SettingsIcon },
+    { name: 'profile', label: 'Trang cá nhân', icon: UserRound },
+    { name: 'upload', label: 'Kiểm tra tập luyện', icon: UploadIcon },
+    { name: 'history', label: 'lịch sử', icon: HistoryIcon },
+    { name: 'settings', label: 'Cài đặt', icon: SettingsIcon },
 
 ];
 

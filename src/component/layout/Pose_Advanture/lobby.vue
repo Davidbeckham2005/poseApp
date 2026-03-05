@@ -21,10 +21,12 @@
                 </h1>
 
                 <div class="space-y-2">
-                    <p class="text-xl font-bold text-gray-200 uppercase tracking-widest">Exercise Your Way to Victory!
+                    <p class="text-xl font-bold text-gray-200 uppercase tracking-widest">Bước vào đấu trường và giành
+                        chiến thắng!
                     </p>
                     <p class="text-gray-400 max-w-md mx-auto leading-relaxed">
-                        Battle enemies, complete quests, and level up by doing real exercises
+                        Chiến đấu với quái vật, hoàn thành nhiệm vụ và tăng cấp bằng chính những bài tập thực tế của
+                        bạn.
                     </p>
                 </div>
             </header>
@@ -42,7 +44,7 @@
                     </div>
                     <div>
                         <p class="text-2xl font-black">Level 1</p>
-                        <p class="text-[10px] uppercase tracking-tighter text-gray-500 font-bold">Your Rank</p>
+                        <p class="text-[10px] uppercase tracking-tighter text-gray-500 font-bold">Rank của bạn</p>
                     </div>
                 </div>
 
@@ -53,7 +55,7 @@
                     </div>
                     <div>
                         <p class="text-2xl font-black">0</p>
-                        <p class="text-[10px] uppercase tracking-tighter text-gray-500 font-bold">Gold Coins</p>
+                        <p class="text-[10px] uppercase tracking-tighter text-gray-500 font-bold">Thành tích</p>
                     </div>
                 </div>
 
@@ -64,7 +66,7 @@
                     </div>
                     <div>
                         <p class="text-2xl font-black">0</p>
-                        <p class="text-[10px] uppercase tracking-tighter text-gray-500 font-bold">Experience</p>
+                        <p class="text-[10px] uppercase tracking-tighter text-gray-500 font-bold">Kinh nghiệm</p>
                     </div>
                 </div>
             </div>
@@ -72,7 +74,7 @@
             <button
                 class="group relative px-12 py-5 bg-gradient-to-r from-orange-500 to-blue-600 rounded-2xl font-black text-xl flex items-center gap-3 mx-auto transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] active:scale-95">
                 <Play class="w-6 h-6 fill-white" />
-                START ADVENTURE
+                Bắt đầu ngay
             </button>
         </div>
     </div>

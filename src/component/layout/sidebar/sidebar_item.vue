@@ -14,7 +14,7 @@ const isLoading = get_status_upload_video()
         isActive ? 'bg-orange-400 text-black' : 'hover:bg-gray-800/50']"
         @click.prevent=" !isLoading && emit('select', item)">
         <component :is="item.icon" class="w-5 h-5"></component>
-        <span class="font-medium">{{ item.label }}</span>
+        <span class="font-medium uppercase">{{ item.label }}</span>
     </a>
 
 </template>

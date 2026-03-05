@@ -13,8 +13,8 @@ const emit = defineEmits(['activeMenu'])
     <aside class="justify-between p-6">
         <div>
             <div class="mb-10">
-                <h1 class="text-sm md:text-2xl font-bold text-orange-400">PoseApp</h1>
-                <p class="text-xs text-gray-500 uppercase tracking-widest mt-1">Exercise Analysis</p>
+                <h1 class="text-sm md:text-2xl font-bold text-orange-400">PosApp</h1>
+                <p class="text-xs text-gray-500 uppercase tracking-widest mt-1">Phân tích động tác tập luyện</p>
             </div>
             <sidebar_item class="space-y-2" v-for="item in menuItems" :item="item" :is-active="currentTab === item.name"
                 @select="emit('activeMenu', item)">

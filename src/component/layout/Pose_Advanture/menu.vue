@@ -4,30 +4,7 @@
         <div class="min-h-screen relative bg-[#0a0a0a] text-white p-6">
             <Back_btn></Back_btn>
 
-            <div
-                class="relative w-full max-w-5xl mx-auto bg-gradient-to-b from-indigo-600 to-purple-700 rounded-[2.5rem] p-10 text-center mb-8 overflow-hidden shadow-2xl">
-                <div
-                    class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
-                </div>
-
-                <div class="relative z-10 flex flex-col items-center">
-                    <Swords :size="48" class="mb-4 text-white/80" />
-                    <h1 class="text-5xl font-black mb-2 tracking-tight">Fitness Battle Arena</h1>
-                    <p class="text-indigo-100 text-lg mb-8 opacity-80">Transform Your Body. Defeat Monsters.</p>
-
-                    <div class="flex gap-4 w-full max-w-xl">
-                        <div v-for="stat in stats" :key="stat.label"
-                            class="flex-1 bg-white/10 backdrop-blur-md border border-white/10 p-4 rounded-3xl flex flex-col items-center shadow-lg">
-                            <div class="flex items-center gap-2 mb-1">
-                                <component :is="stat.icon" :size="16" :class="stat.color" />
-                                <span class="text-xs uppercase font-bold tracking-widest text-white/60">{{
-                                    stat.label }}</span>
-                            </div>
-                            <span class="text-2xl font-black">{{ stat.value }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <menu_banner></menu_banner>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl mx-auto">
                 <div v-for="card in menuCards" :key="card.title"
@@ -63,6 +40,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import menu_banner from './menu_banner.vue'
 import Back_btn from '../../bases/Back_btn.vue'
 import tutorial from '../tutorial/tutorial.vue'
 const is_tutorial = ref(true)
@@ -92,25 +70,25 @@ const menuCards = [
         icon: Swords,
         bg: 'bg-gradient-to-br from-blue-500 to-cyan-400'
     },
-    {
-        title: 'Boss Mode',
-        desc: 'Face powerful boss monsters',
-        icon: Skull,
-        bg: 'bg-gradient-to-br from-red-500 to-gray-500',
-        tag: 'HARD'
-    },
-    {
-        title: 'Daily Quests',
-        desc: 'Complete challenges for rewards',
-        icon: Target,
-        bg: 'bg-gradient-to-br from-purple-500 to-pink-500',
-        tag: '0/3'
-    },
-    {
-        title: 'Character',
-        desc: 'View your transformation journey',
-        icon: User,
-        bg: 'bg-gradient-to-br from-green-500 to-emerald-400'
-    },
+    // {
+    //     title: 'Boss Mode',
+    //     desc: 'Face powerful boss monsters',
+    //     icon: Skull,
+    //     bg: 'bg-gradient-to-br from-red-500 to-gray-500',
+    //     tag: 'HARD'
+    // },
+    // {
+    //     title: 'Daily Quests',
+    //     desc: 'Complete challenges for rewards',
+    //     icon: Target,
+    //     bg: 'bg-gradient-to-br from-purple-500 to-pink-500',
+    //     tag: '0/3'
+    // },
+    // {
+    //     title: 'Character',
+    //     desc: 'View your transformation journey',
+    //     icon: User,
+    //     bg: 'bg-gradient-to-br from-green-500 to-emerald-400'
+    // },
 ];
 </script>
