@@ -10,7 +10,7 @@ class exercise_Service:
         self.count_total = 0
         self.count_good = 0
         self.require = ""
-        self.estimate = "estimate. . ."
+        self.estimate = ""
         self.state = "up"
         self.pose = pose
         self.draw = draw
@@ -34,9 +34,13 @@ class exercise_Service:
         self.isEstimate = True
         self.history_x_sholder = []
         self.history_x_hip = []
-        self.origin = 0
         self.time_start = 0
         self.time_end  = 0
+        self.data_on_rep = {
+            "total" : 0,
+            "good" : 0,
+            "estimate": "..."
+        }
     def check_view(self,pose_landmark):
         result_check_oriantation = self.pose.check_oriantation(pose_landmark)
         update_history(self.history_x_hip,result_check_oriantation['hip_dis'])
@@ -103,18 +107,13 @@ class exercise_Service:
             "calory" : calculating_caloris(time_video,self.weight,accuracy,self.type)
         }
         return data
-    def getResult_live(self):
-        accuracy = calculating_accuracy(self.count_good,self.count_total)
-        data = {
-            "total" : self.count_total,
-            "good" : self.count_good,
-            "accuracy" : accuracy,
-            "record" : self.record_couting,
-            "form" :get_form(accuracy),
-         }
-        return data   
+    def get_result_webcam(self):
+        return
     def show_camera_not_make_video(self):
         self.isMake_Result = False
 
     def push_frame(self):
         self.current_frame+=1
+
+    def get_data_live(self):
+        return self.data_on_rep

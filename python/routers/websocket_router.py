@@ -41,7 +41,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 service.run_detection(frame)   
                 cv2.imshow("Kiem tra frame", frame)
                 cv2.waitKey(1) # Phải có dòng này nó mới hiện ảnh
-                output = service.getResult_live()
+                output = service.get_data_live()
                 await websocket.send_text(json.dumps(output))
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     cv2.destroyWindow("Kiem tra frame")

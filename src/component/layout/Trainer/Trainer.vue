@@ -16,7 +16,7 @@ onMounted(() => {
         renderer: "svg",
         loop: true,
         autoplay: true,
-        path: "/tutorial/pushup_tutorial.json"
+        path: "/Monster/Pochita.json"
     })
 })
 </script>

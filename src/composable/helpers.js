@@ -76,3 +76,12 @@ export function get_status_upload_video() {
     return is_upload_video
 }
 
+
+export function calculating() {
+    const persen = (value, total) => {
+        return value / total * 100
+    }
+    return {
+        persen
+    }
+}

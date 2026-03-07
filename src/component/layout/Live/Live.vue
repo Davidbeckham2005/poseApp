@@ -10,9 +10,12 @@
                     <button @click="startAnalyst" class="rounded-lg btn btn-info">start Analyst</button>
                     <button @click="stopAnalyst" class="rounded-lg btn btn-info">stop Analyst</button>
                 </div>
+                <!-- <button class="btn btn-info" @click="emit('result', { total: 0, good: 0, estimate: '' })"></button>
+                <button class="btn btn-info" @click="emit('result', { total: 3, good: 2, estimate: 'good' })"></button>
+                <button class="btn btn-accent" @click="emit('result', { total: 4, good: 3, estimate: 'bad' })"></button> -->
             </div>
         </div>
-        <div class="w-40 border border-amber-300 rounded-3xl"></div>
+        <!-- <div class="w-40 border border-amber-300 rounded-3xl"></div> -->
     </div>
     <!-- <div class="grid grid-cols-3 gap-6 space-y-2">
         <div v-for="i in 3" :key="i"
@@ -42,8 +45,9 @@
 </template>
 
 <script setup>
+const emit = defineEmits(['result'])
+import { ref, onUnmounted, onMounted, toRaw } from 'vue'
 
-import { ref, onUnmounted, onMounted } from 'vue'
 const videoRef = ref(null)
 const start_analyst = ref(false)
 let stream = null
@@ -93,13 +97,21 @@ ws.onopen = () => {
     console.log("connected")
 
 }
+const old_data = ref('')
 ws.onmessage = (e) => {
+    // console.log(e)
+    const newData = e.data
     const data = JSON.parse(e.data)
     isProcessing.value = false
-    console.log(data)
+    if (newData != old_data.value) {
+        console.log(data)
+        emit('result', data)
+    }
+    old_data.value = newData
+
 }
 function loop() {
-    console.log(start_analyst.value)
+    // console.log(start_analyst.value)
     if (!start_analyst.value) return
     if (!isProcessing.value) {
         isProcessing.value = true
