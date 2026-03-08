@@ -6,7 +6,7 @@ from services.video_services import VideoService
 from services.exercise_service import exercise_Service
 
 class squatService(exercise_Service):
-    down_standard = 140
+    down_standard = 150
     up_standard = 160
     good_standard = 90
     bad_standard = 30
@@ -46,8 +46,10 @@ class squatService(exercise_Service):
         self.squat_counting(origin,pose_landmark)
     def squat_counting(self, origin,pose_landmark):
         update_history(self.history_origin_squat,origin)
+        balance = isBalance(self.history_origin_squat)
         if origin<self.down_standard:
-            if isBalance(self.history_origin_squat) and self.isEstimate:
+            # print(self.history_origin_squat)
+            if balance and self.isEstimate:
                 self.evaluate_form(origin)
                 # self.time_start = self.capture.get_current_time_video(self.current_frame)
                 self.isEstimate = False

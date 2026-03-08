@@ -43,14 +43,14 @@ def process(data):
             # Nếu luồng đọc vẫn đang chạy mà chưa có frame -> Chờ một chút
             continue
         service.run_detection(frame)
-    # cho phep thay doi kich thuoc bang chuot
+    # # cho phep thay doi kich thuoc bang chuot
     # cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
     # while True:    
     #     ret, frame = capture.read()
     #     if not ret:
     #         break  
-        # frame = cv2.resize(frame,capture.getShape())
-        # service.run_detection(frame)
+    #     frame = cv2.resize(frame,capture.getShape())
+    #     service.run_detection(frame)
        
     # capture.writer_release()       
     # capture.release()
@@ -63,31 +63,3 @@ def process(data):
     }
     return data
 
-# def show_cam(data):
-#     type = data.type
-#     capture = WebcamService()
-#     detector = PoseDetector()
-#     draw = DrawingService(detector)
-#     if type == 'squat':
-#         service = squatService(draw, detector ,capture,data)
-#     if type == 'pushup':
-#         service = pushupService(draw, detector, capture,data)
-#     if type == 'plank':
-#         service = plankService(draw, detector, capture,data)
-    
-#     service.show_camera_not_make_video()
-#     cv2.namedWindow("video", cv2.WINDOW_NORMAL) 
-#     while True:    
-#         ret, frame = capture.read()
-#         if not ret:
-#             break
-
-#         # wait_time = max(30,int(800/capture.getFPS()))
-#         wait_time = 1
-#         frame = cv2.flip(frame,1)
-#         service.run_detection(frame)    
-#         cv2.imshow("video",frame)
-#         if cv2.waitKey(wait_time) & 0xFF == ord("q"):
-#             break
-#     capture.release()
-#     cv2.destroyAllWindows()

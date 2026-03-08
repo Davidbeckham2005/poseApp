@@ -5,19 +5,24 @@ from services.webcam import websocket_service
 from services.squat_services import squatService
 from services.pose_service import PoseDetector
 from schemas.video_schemas import Webcam_Schemas
-from fastapi import APIRouter,WebSocket# type: ignore
-
+from fastapi import APIRouter,WebSocket, WebSocketDisconnect# type: ignore
+import numpy as np
 import cv2, json
+import asyncio
 router = APIRouter(prefix="/websocket")
 
 @router.websocket("/live")
-async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint(websocket: WebSocket,exercise_type:str = 'default'):
     await websocket.accept()
-    exercise_type = 'squat'
-    print("client contected!")
+
+
+
+
+
+    print("client contected! exercise: ",exercise_type)
     detector = PoseDetector()
     draw = DrawingService(detector)
-    data = Webcam_Schemas(Analyst_FPS=False)
+    data = Webcam_Schemas(Analyst_FPS=False,type=exercise_type)
     capture = websocket_service()
     capture.start(data=None)
     if exercise_type == 'squat':
@@ -26,12 +31,25 @@ async def websocket_endpoint(websocket: WebSocket):
         service = pushupService(draw, detector, capture,data)
     if exercise_type == 'plank':
         service = plankService(draw, detector, capture,data)
-    # service = squatService(draw,detector,None,data)
+    else:
+        # Trường hợp default hoặc lỗi type
+        await websocket.close()
+        return
     service.show_camera_not_make_video()
     count = 0
+    # window_name = f"Backend Stream: {exercise_type}"
+    # cv2.namedWindow(window_name, cv2.WINDOW_NORMAL) 
+    # black_screen = np.zeros((480, 640, 3), dtype=np.uint8)
+    # cv2.putText(black_screen, "Waiting for frontend stream...", (100, 240), 
+    #             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+    # cv2.imshow(window_name, black_screen)
+    # cv2.waitKey(1)
     try:
         while True:
-            data = await websocket.receive_bytes()
+            try:
+                data = await websocket.receive_bytes()
+            except(WebSocketDisconnect, asyncio.CancelledError, asyncio.TimeoutError):
+                break
             capture.read_frame(data)
             frame = capture.get_frame()
             if frame is not None:
@@ -39,17 +57,17 @@ async def websocket_endpoint(websocket: WebSocket):
                 count+=1
                 frame = cv2.flip(frame,1)
                 service.run_detection(frame)   
-                cv2.imshow("Kiem tra frame", frame)
-                cv2.waitKey(1) # Phải có dòng này nó mới hiện ảnh
+                # cv2.imshow(window_name, frame)
+                # cv2.waitKey(1)
                 output = service.get_data_live()
                 await websocket.send_text(json.dumps(output))
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    cv2.destroyWindow("Kiem tra frame")
-           
+    except WebSocketDisconnect:
+        # Bắt lỗi 1005/1000 ở đây để nó không in ra "Exception in ASGI"
+        print(f"INFO: Connection closed by client for {exercise_type}")           
     except Exception as e:
         print(e)
     finally:
-        cv2.destroyAllWindows()
+        # cv2.destroyWindow(window_name)
         cv2.waitKey(1)
         if not websocket.client_state.name == 'DISCONNECTED':
             await websocket.close()

@@ -11,8 +11,8 @@
             </Header>
 
             <div class="py-4 px-2 max-w-6xl mx-auto w-full ">
-                <Live v-if="currentTab === `live`"></Live>
-                <pose_advanture v-else-if="currentTab == 'game'"></pose_advanture>
+                <!-- <Live v-if="currentTab === `live`"></Live> -->
+                <pose_advanture v-if="currentTab == 'game'"></pose_advanture>
                 <Profile v-if="currentTab === `profile`"></Profile>
                 <Dashbroad v-else-if="currentTab === `dashboard`"></Dashbroad>
                 <Upload v-else-if="currentTab === `upload`"></Upload>
@@ -55,7 +55,7 @@ const { switch_on_sidebar, currentTab } = useNavigation()
 
 const menuItems = [
     { name: 'game', label: 'FITNESS ADVENTURE', icon: Swords },
-    { name: 'live', label: 'LIVE DEMO', icon: Radio },
+    // { name: 'live', label: 'LIVE DEMO', icon: Radio },
     // { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
     { name: 'profile', label: 'Trang cá nhân', icon: UserRound },
     { name: 'upload', label: 'Kiểm tra tập luyện', icon: UploadIcon },

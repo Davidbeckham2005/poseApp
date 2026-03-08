@@ -77,9 +77,9 @@ class exercise_Service:
             #         drawtext(frame,(10,50),"View: Vertical",(0,0,255))
             if self.isDrawing:
                 self.draw.draw_skeleton(frame,pose_landmark)
+            self.run_estimate(pose_landmark,frame)
             if self.isMake_Result:
                 self.capture.makeResult(frame)  
-            self.run_estimate(pose_landmark,frame)
     # def set_setting(self,input):
     #     self.isDrawing = input.isDrawing
     #     self.isAnalyst = input.isAnalyst

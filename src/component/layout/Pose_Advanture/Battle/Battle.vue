@@ -1,8 +1,8 @@
 <template>
     <div class="min-h-screen bg-slate-900 text-white pt-3">
-        <div class="bg-[#1a1a1a] max-w-6xl m-auto rounded-2xl p-6 mb-6 border border-gray-800 grid grid-cols-4">
+        <div class="bg-[#1a1a1a]/30 max-w-6xl m-auto rounded-2xl p-6 mb-6 border border-gray-800 grid grid-cols-4">
             <menu_btn class="text-white"></menu_btn>
-            <div class="flex-1 px-4">
+            <!-- <div class="flex-1 px-4">
                 <div class="flex justify-between text-xs font-bold mb-2">
                     <span>❤️ HP</span>
                     <span>{{ stats.hp }}/{{ stats.maxHp }}</span>
@@ -10,7 +10,7 @@
                 <div class="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
                     <div class="h-full bg-pink-600 rounded-full" :style="{ width: '94%' }"></div>
                 </div>
-            </div>
+            </div> -->
             <button class="btn btn-accent" @click="handleHit"></button>
         </div>
 
@@ -36,21 +36,31 @@
         </div> -->
 
 
-        <div class="max-w-6xl m-auto grid grid-cols-12 gap-6 ">
-
+        <div class="max-w-6xl m-auto grid grid-cols-12 mb-6 gap-6 ">
             <div class="col-span-5 rounded-3xl border relative border-gray-800 flex flex-col overflow-hidden" :class="{
                 'bg-green-500/30': hpPercentage >= 75,
                 'bg-orange-400/30': hpPercentage < 75 && hpPercentage >= 25,
                 'bg-red-600/70 animate-pulse': hpPercentage <= 25 && hpPercentage > 0,
-                'animate-shake': show_damage,
+                'animate-shake border-red-500/70 border-4': show_damage,
                 'animate-death': monster.currentHp == 0
-
             }">
-
-                <div class="p-6 text-center">
+                <!-- <div class="p-6 text-center">
                     <h2 class="text-2xl font-bold tracking-tight">{{ monster.name }}</h2>
                     <p class="text-gray-500 text-sm font-medium">Level {{ monster.level }} · ATK {{ monster.atk }}
                     </p>
+                </div> -->
+
+                <div class="w-[70%] max-w-6xl m-auto">
+                    <div class="flex justify-between items-end">
+                        <span class="text-sm font-bold text-red-500">LV. {{ monster.level }}</span>
+                        <h2 class="text-xl font-black tracking-tighter">{{ monster.name }}</h2>
+                        <span class="text-sm text-gray-400">{{ monster.currentHp }}/{{ monster.maxHp }}</span>
+                    </div>
+
+                    <div class="max-w-3xl w-full h-6 bg-gray-700 rounded-full border-2 border-gray-600 p-0.5">
+                        <div class="h-full bg-gradient-to-r from-orange-500 to-red-600 rounded-full"
+                            :style="{ width: (monster.currentHp / monster.maxHp * 100) + '%' }"></div>
+                    </div>
                 </div>
                 <Trainer>
                 </Trainer>
@@ -58,14 +68,13 @@
                     class="absolute inset-0 flex items-center justify-center mt-10 pointer-events-none">
                     <span
                         class="text-4xl font-medium text-white animate-bounce drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                        -{{ damage }}
+                        -{{ finnal_damage }}
                     </span>
                 </div>
             </div>
             <div
-                class="col-span-7 bg-[#0a0a0a] rounded-3xl border border-gray-800 flex flex-col items-center justify-center p-12 relative">
-                <Live @result="result_handle"></Live>
-                <div class="h-3 w-10 border border-white/20">{{ result }} </div>
+                class="col-span-7 bg-[#0a0a0a] rounded-3xl border border-gray-800 flex flex-col px-10 justify-center relative">
+                <Live @result="result_handle" :exercise_type="current_exercise_type"></Live>
                 <!-- <div class="text-center max-w-sm">
                 <div class="mb-4 flex justify-center">
                     <div class="w-16 h-16 rounded-full border-4 border-red-500 flex items-center justify-center">
@@ -96,47 +105,15 @@
                 </button>
             </div> -->
             </div>
-
         </div>
-        <!-- <Trainer></Trainer>-->
-
-        <!-- <div class="min-h-screen bg-slate-900 text-white flex flex-col items-center p-4 font-sans overflow-hidden"> -->
-
-        <div class="w-full max-w-5xl m-auto mt-4 grid grid-cols-6">
-            <div class="flex justify-between items-end mb-2">
-                <span class="text-sm font-bold text-red-500">LV. {{ monster.level }}</span>
-                <h2 class="text-xl font-black tracking-tighter">{{ monster.name }}</h2>
-                <span class="text-sm text-gray-400">{{ monster.currentHp }}/{{ monster.maxHp }}</span>
-            </div>
-
-            <div
-                class="w-full h-6 bg-gray-700 rounded-full border-2 border-gray-600 p-0.5 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-                <div class="h-full bg-gradient-to-r from-orange-500 to-red-600 rounded-full transition-all duration-300 ease-out"
-                    :style="{ width: (monster.currentHp / monster.maxHp * 100) + '%' }"></div>
-            </div>
-        </div>
-
-        <!-- <div class="flex-1 w-full flex items-center justify-center relative">
-            <transition-group name="damage">
-                <div v-for="d in damageHistory" :key="d.id"
-                    class="absolute text-3xl font-black text-yellow-400 z-10 italic pointer-events-none">
-                    -{{ d.value }}
-                </div>
-            </transition-group>
-
-            <div
-                :class="['relative transition-transform', monster.currentHp <= 0 ? 'grayscale scale-75 opacity-50' : monster.animation]">
-                <div
-                    class="w-64 h-64 bg-gradient-to-b from-transparent to-red-900/20 rounded-full absolute -bottom-10 blur-2xl">
-                </div>
-            </div>
-    </div> -->
+        <ExerciseSelector @send_current_exercise="handle_current_exercise_type"></ExerciseSelector>
     </div>
 
 
 
 </template>
 <script setup>
+import ExerciseSelector from './ExerciseSelector.vue';
 import Live from '../../Live/Live.vue';
 import menu_btn from '../../../bases/menu_btn.vue';
 import Trainer from '../../Trainer/Trainer.vue';
@@ -145,21 +122,23 @@ import { calculating, get_translate } from '../../../../composable/helpers';
 const { from_left } = get_translate()
 const { persen } = calculating()
 // State của Quái vật
-const oldValue = ref(0)
+const old_total = ref(0)
+const old_good = ref(0)
 const result = ref()
 const result_handle = (e) => {
-    if (oldValue.value == e.total) {
-        return;
+    if (e.total != old_total.value) {
+        if (e.good != old_good.value) {
+            old_good.value = e.good
+            finnal_damage.value = 100
+        }
+        handleHit()
     }
-    result.value = e
-    oldValue.value = e.total
-    // console.log(e, typeof (e.total))
+    old_total.value = e.total
 }
-watch(result, (newValue) => {
-    if (newValue.estimate == 'good') {
-
-    }
-})
+const current_exercise_type = ref()
+const handle_current_exercise_type = (exercise_type) => {
+    current_exercise_type.value = exercise_type
+}
 const monster = ref({
     name: 'Rock Golem',
     level: 4,
@@ -186,11 +165,12 @@ const stats = ref({
 
 // Tính toán phần trăm máu
 const hpPercentage = computed(() => (persen(monster.value.currentHp, monster.value.maxHp)));
-const damage = 30
+const normal_damage = 30
+const finnal_damage = ref(normal_damage)
 const show_damage = ref(false)
 const handleHit = async () => {
     if (monster.value.currentHp > 0) {
-        monster.value.currentHp -= damage;
+        monster.value.currentHp -= finnal_damage.value;
         show_damage.value = true
         await new Promise(r => setTimeout(r, 500))
         show_damage.value = false
@@ -199,6 +179,7 @@ const handleHit = async () => {
             monster.value.currentHp = 0
         }
     }
+    finnal_damage.value = normal_damage
 };
 </script>
 

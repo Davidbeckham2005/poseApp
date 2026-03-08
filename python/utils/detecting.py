@@ -2,7 +2,7 @@
 # tra ve true nghia la on dinh roi
 import cv2
 import numpy as np
-def isBalance(history,eps=2,n=3):
+def isBalance(history,eps=2 ,n=4):
     if len(history) < n:
         return False  
     for i in range (1,n):
