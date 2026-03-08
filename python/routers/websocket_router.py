@@ -20,6 +20,7 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str = 'squat'):
     data = Webcam_Schemas(Analyst_FPS=False,type=exercise_type)
     capture = websocket_service()
     capture.start(data=None)
+    print("exercise_type:", exercise_type)
     if exercise_type == 'squat':
         service = squatService(draw, detector ,capture,data)
     elif exercise_type == 'pushup':

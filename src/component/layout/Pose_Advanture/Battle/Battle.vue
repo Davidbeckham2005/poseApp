@@ -54,7 +54,8 @@
                     <div class="flex justify-between items-end">
                         <span class="text-sm font-bold text-red-500">LV. {{ monster.level }}</span>
                         <h2 class="text-xl font-black tracking-tighter">{{ monster.name }}</h2>
-                        <span class="text-sm text-gray-400">{{ monster.currentHp }}/{{ monster.maxHp }}</span>
+                        <span class="text-sm text-gray-400">HP {{ monster.currentHp }}/{{ monster.maxHp
+                            }}</span>
                     </div>
 
                     <div class="max-w-3xl w-full h-6 bg-gray-700 rounded-full border-2 border-gray-600 p-0.5">
@@ -74,7 +75,8 @@
             </div>
             <div
                 class="col-span-7 bg-[#0a0a0a] rounded-3xl border border-gray-800 flex flex-col px-10 justify-center relative">
-                <Live @result="result_handle" :exercise_type="current_exercise_type"></Live>
+                <Live @result="result_handle" :exercise_type="current_exercise_type" @send_stream="handle_send_stream">
+                </Live>
                 <!-- <div class="text-center max-w-sm">
                 <div class="mb-4 flex justify-center">
                     <div class="w-16 h-16 rounded-full border-4 border-red-500 flex items-center justify-center">
@@ -106,7 +108,7 @@
             </div> -->
             </div>
         </div>
-        <ExerciseSelector @send_current_exercise="handle_current_exercise_type"></ExerciseSelector>
+        <ExerciseSelector @send_current_exercise="handle_current_exercise_type" :is_start="is_start"></ExerciseSelector>
     </div>
 
 
@@ -121,6 +123,7 @@ import { ref, computed, watch } from 'vue';
 import { calculating, get_translate } from '../../../../composable/helpers';
 const { from_left } = get_translate()
 const { persen } = calculating()
+const is_start = ref(false)
 // State của Quái vật
 const old_total = ref(0)
 const old_good = ref(0)
@@ -135,9 +138,17 @@ const result_handle = (e) => {
     }
     old_total.value = e.total
 }
+const handle_send_stream = (e) => {
+    if (e) {
+        is_start.value = true
+    } else {
+        is_start.value = false
+    }
+
+}
 const current_exercise_type = ref()
-const handle_current_exercise_type = (exercise_type) => {
-    current_exercise_type.value = exercise_type
+const handle_current_exercise_type = (attact) => {
+    current_exercise_type.value = attact.id
 }
 const monster = ref({
     name: 'Rock Golem',

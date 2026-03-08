@@ -54,6 +54,7 @@ const attacks = ref([
 
 const current_exercise = ref('')
 import { useRouter } from 'vue-router';
+import { bool } from 'three/tsl';
 const router = useRouter()
 const handle_menu = () => {
   router.push({ name: 'menu' })
@@ -63,6 +64,10 @@ const openHelp = () => {
   console.log('Opening help...');
 };
 const emit = defineEmits(['send_current_exercise'])
+const props = defineProps({
+  is_start: Boolean
+})
+console.log(props.is_start)
 </script>
 
 <template>
@@ -71,10 +76,12 @@ const emit = defineEmits(['send_current_exercise'])
       <h2 class="text-xl font-medium uppercase mb-2">Chọn kỹ năng</h2>
     </div>
     <div class="grid grid-cols-2 lg:grid-cols-5 space-x-2">
-      <div v-for="attack in attacks" :key="attack.name"
-        @click="emit('send_current_exercise', attack.id), current_exercise = attack.id"
-        class="p-2 group relative flex flex-col items-center justify-center rounded-2xl transition-all duration-150 hover:scale-[1.02] active:scale-95 active:translate-y-0.5"
-        :class="[attack.bgColor, attack.borderColor]">
+      <button :disabled="is_start" v-for="attack in attacks" :key="attack.name"
+        @click="emit('send_current_exercise', attack), current_exercise = attack.id"
+        class="p-2 group relative flex flex-col items-center justify-center rounded-2xl transition-all duration-150"
+        :class="[attack.bgColor, attack.borderColor, is_start && current_exercise !== attack.id
+          ? 'opacity-40 grayscale brightness-50 scale-95 pointer-events-none'
+          : 'hover:scale-[1.02] active:scale-95 active:translate-y-0.5',]">
         <component :is="attack.icon" class=" text-6xl md:text-5xl lg:text-6xl">
         </component>
 
@@ -98,7 +105,7 @@ const emit = defineEmits(['send_current_exercise'])
 
         <div v-if="current_exercise === attack.id" class="absolute inset-0 rounded-3xl bg-black/20 ring-4 ring-white">
         </div>
-      </div>
+      </button>
     </div>
 
     <div class="flex items-center justify-center">

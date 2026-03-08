@@ -19,7 +19,7 @@
 
             <div>
                 <div class="space-x-3">
-                    <button :disabled="!exercise_type || stream" @click="startCamera"
+                    <button :disabled="!exercise_type || stream" @click="handle_start"
                         class="rounded-lg btn btn-error">start</button>
                     <button :disabled="!exercise_type || !stream" @click="stopCamera"
                         class="rounded-lg btn btn-active">stop</button>
@@ -70,7 +70,7 @@
 
 
 
-const emit = defineEmits(['result'])
+const emit = defineEmits(['result', 'send_stream'])
 const props = defineProps({ exercise_type: String })
 import { ref, onUnmounted, onMounted, toRaw, watch } from 'vue'
 
@@ -80,6 +80,10 @@ let stream = ref(null)
 let ws = null
 const isProcessing = ref(false)
 const old_data = ref('')
+const handle_start = async () => {
+    await startCamera()
+    emit('send_stream', stream.value)
+}
 watch(() => props.exercise_type, (newValue) => {
     console.log(newValue)
     if (newValue) {
@@ -125,6 +129,7 @@ const startCamera = async () => {
 }
 const stopCamera = () => {
     start_analyst.value = false
+    clearInterval(tipsInterval)
     if (stream.value) {
         stream.value.getTracks().forEach(track => track.stop())
         if (videoRef.value) {
