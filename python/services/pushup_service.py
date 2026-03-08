@@ -38,10 +38,10 @@ class pushupService(exercise_Service):
         if not isReadyVisibility(left_elbow,right_elbow,left_shoulder,right_shoulder,left_wrist,right_wrist):
             return
         
-        self.draw.draw_line(frame,left_shoulder_px,left_elbow_px,(0,255,0))
-        self.draw.draw_line(frame,right_shoulder_px,right_elbow_px,(0,255,0))
-        self.draw.draw_line(frame,left_wrist_px,left_elbow_px,(0,255,0))
-        self.draw.draw_line(frame,right_wrist_px,right_elbow_px,(0,255,0))
+            # self.draw.draw_line(frame,left_shoulder_px,left_elbow_px,(0,255,0))
+            # self.draw.draw_line(frame,right_shoulder_px,right_elbow_px,(0,255,0))
+            # self.draw.draw_line(frame,left_wrist_px,left_elbow_px,(0,255,0))
+            # self.draw.draw_line(frame,right_wrist_px,right_elbow_px,(0,255,0))
 
         left_elbow_origin = goc_tai_tham_so_thu_nhat(left_elbow,left_shoulder,left_wrist)
         right_elbow_origin = goc_tai_tham_so_thu_nhat(right_elbow,right_shoulder,right_wrist)
@@ -49,8 +49,8 @@ class pushupService(exercise_Service):
         origin = round((left_elbow_origin+right_elbow_origin/2),2)
         # cv2.circle(frame, point_px, 8, (255, 255, 255), cv2.FILLED)
         # cv2.circle(frame, point_px, 10, (0, 255, 0), 2)
-        cv2.putText(frame,str(left_elbow_origin),(left_elbow_px[0]-10,left_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
-        cv2.putText(frame,str(right_elbow_origin),(right_elbow_px[0]-10,right_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
+        cv2.putText(frame,str(left_elbow_origin),(left_elbow_px[0]-10,left_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),10)
+        cv2.putText(frame,str(right_elbow_origin),(right_elbow_px[0]-10,right_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),10)
         # self.draw.draw_origin_at_intersection(frame,left_elbow_origin,right_elbow_origin,left_elbow_px,right_elbow_px,(0,0,255))
         
         # shoulder_y = trungbinh(left_shoulder.y, right_shoulder.y)

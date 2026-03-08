@@ -12,13 +12,8 @@ import asyncio
 router = APIRouter(prefix="/websocket")
 
 @router.websocket("/live")
-async def websocket_endpoint(websocket: WebSocket,exercise_type:str = 'default'):
+async def websocket_endpoint(websocket: WebSocket,exercise_type:str = 'squat'):
     await websocket.accept()
-
-
-
-
-
     print("client contected! exercise: ",exercise_type)
     detector = PoseDetector()
     draw = DrawingService(detector)
@@ -27,9 +22,9 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str = 'default')
     capture.start(data=None)
     if exercise_type == 'squat':
         service = squatService(draw, detector ,capture,data)
-    if exercise_type == 'pushup':
+    elif exercise_type == 'pushup':
         service = pushupService(draw, detector, capture,data)
-    if exercise_type == 'plank':
+    elif exercise_type == 'plank':
         service = plankService(draw, detector, capture,data)
     else:
         # Trường hợp default hoặc lỗi type
@@ -47,7 +42,7 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str = 'default')
     try:
         while True:
             try:
-                data = await websocket.receive_bytes()
+                data = await asyncio.wait_for(websocket.receive_bytes(), timeout=10)
             except(WebSocketDisconnect, asyncio.CancelledError, asyncio.TimeoutError):
                 break
             capture.read_frame(data)
