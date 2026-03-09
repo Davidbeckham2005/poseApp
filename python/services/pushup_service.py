@@ -34,7 +34,7 @@ class pushupService(exercise_Service):
         right_elbow_px=data_px["right_elbow_px"]
         left_wrist_px=data_px["left_wrist_px"]
         right_wrist_px=data_px["right_wrist_px"]
-        print(left_elbow_px)
+        # print(left_elbow_px)
         if not isReadyVisibility(left_elbow,right_elbow,left_shoulder,right_shoulder,left_wrist,right_wrist):
             return
         
@@ -60,7 +60,6 @@ class pushupService(exercise_Service):
         # update_history(self.history_y_hip,hip_y)
         # update_history(self.history_y_shoulder,shoulder_y)
         if origin < self.down_standard:
-            print(origin)
             if isBalance(self.history_origin_pushup) and self.isEstimate:
                 self.evaluate_form(origin)
                 # self.time_start = self.capture.get_current_time_video(self.current_frame)

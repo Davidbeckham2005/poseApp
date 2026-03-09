@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col">
         <div
-            class="relative w-full flex flex-col items-center p-4 rounded-3xl justify-between overflow-hidden bg-black border border-slate-800 shadow-2xl h-auto">
+            class="relative w-full flex flex-col items-center p-4 rounded-3xl justify-between overflow-hidden bg-black border border-white/20 shadow-2xl">
             <video ref="videoRef" autoplay playsinline class="w-full -scale-x-100 rounded-3xl mb-2"></video>
             <div v-if="statusMessage || countdown"
                 class="absolute inset-0 flex items-center justify-center bg-black/40 pointer-events-none">
@@ -19,15 +19,14 @@
 
             <div>
                 <div class="space-x-3">
-                    <button :disabled="!exercise_type || stream" @click="handle_start"
+                    <button :disabled="!exercise_type || stream" @click="startCamera"
                         class="rounded-lg btn btn-error">start</button>
-                    <button :disabled="!exercise_type || !stream" @click="stopCamera"
+                    <button :disabled="start_analyst || !stream?.active" @click="stopCamera"
                         class="rounded-lg btn btn-active">stop</button>
-                    <button :disabled="!exercise_type || !stream || start_analyst" @click="startAnalyst"
+                    <button :disabled="start_analyst || !stream?.active" @click="handle_analyst"
                         class="rounded-lg btn btn-info">start
-                        Analyst</button>
-                    <button :disabled="!exercise_type || !stream || !start_analyst" @click="stopAnalyst"
-                        class="rounded-lg btn btn-info">stop
+                        Analyst </button>
+                    <button :disabled="!start_analyst" @click="stopAnalyst" class="rounded-lg btn btn-info">stop
                         Analyst</button>
                 </div>
                 <!-- <button class="btn btn-info" @click="emit('result', { total: 0, good: 0, estimate: '' })"></button>
@@ -35,83 +34,49 @@
                 <button class="btn btn-accent" @click="emit('result', { total: 4, good: 3, estimate: 'bad' })"></button> -->
             </div>
         </div>
-        <p class="text-lg font-medium text-center text-white uppercase tracking-widest">
+        <p v-if="start_analyst" class="text-lg font-medium text-center text-white uppercase tracking-widest">
             {{ tutorial_message }}
         </p>
         <!-- <div class="w-40 border border-amber-300 rounded-3xl"></div> -->
     </div>
-    <!-- <div class="grid grid-cols-3 gap-6 space-y-2">
-            <div v-for="i in 3" :key="i"
-                class="bg-gray-900/40 border border-gray-800 p-5 rounded-xl hover:border-gray-700 transition cursor-pointer">
-                <div class="bg-gray-800 w-10 h-10 rounded flex items-center justify-center mb-4">
-                    <VideoIcon class="w-5 h-5 text-gray-400" />
-                </div>
-                <h4 class="font-medium text-white">Sample Video {{ i }}</h4>
-                <p class="text-sm text-gray-500 mt-1">{{ ['Squat Exercise', 'Push-up Demo', 'Plank Hold'][i
-                    - 1]
-                }}</p>
-            </div>
-        </div> -->
-    <!-- <div class="bg-gray-900/20 border border-gray-800 rounded-xl p-6">
-        <h4 class="font-semibold text-white mb-4">Upload Guidelines</h4>
-        <ul class="space-y-2 text-sm text-gray-400">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-500 rounded-full mr-3"></span>
-                Ensure the subject is clearly visible in the frame</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-500 rounded-full mr-3"></span>
-                Good lighting improves pose detection accuracy</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-500 rounded-full mr-3"></span>
-                Avoid cluttered backgrounds for best results</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-500 rounded-full mr-3"></span>
-                Supported exercises: squat, push-up, plank, lunge, etc.</li>
-        </ul>
-    </div> -->
 </template>
 <script setup>
-
-
-
-const emit = defineEmits(['result', 'send_stream'])
+const emit = defineEmits(['result', 'is_analyst'])
 const props = defineProps({ exercise_type: String })
 import { ref, onUnmounted, onMounted, toRaw, watch } from 'vue'
 
 const videoRef = ref(null)
 const start_analyst = ref(false)
+const old_data = ref('')
+const current_exercise = ref()
+
+
 let stream = ref(null)
 let ws = null
-const isProcessing = ref(false)
-const old_data = ref('')
-const handle_start = async () => {
-    await startCamera()
-    emit('send_stream', stream.value)
-}
-watch(() => props.exercise_type, (newValue) => {
-    console.log(newValue)
-    if (newValue) {
-        if (ws) {
-            ws.close()
-            ws = null
-        }
-        isProcessing.value = false
-        ws = new WebSocket(`ws://localhost:8000/websocket/live?exercise_type=${props.exercise_type}`)
-        ws.onopen = () => {
-            console.log("connected with exercise: ", props.exercise_type)
-        }
-        ws.onmessage = (e) => {
-            const newData = e.data
-            const data = JSON.parse(e.data)
-            isProcessing.value = false
-            if (newData != old_data.value) {
-                emit('result', data)
-            }
-            old_data.value = newData
-        }
-        loop()
 
-    }
+watch(() => props.exercise_type, (newValue) => {
+    current_exercise.value = newValue
 })
+const connect = () => {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.close()
+    }
+    ws = new WebSocket(`ws://localhost:8000/websocket/live?exercise_type=${current_exercise.value}`)
+    ws.onopen = () => {
+        console.log("connected with exercise: ", current_exercise.value)
+    }
+    ws.onmessage = (e) => {
+        const newData = e.data
+        const data = JSON.parse(e.data)
+        if (newData != old_data.value) {
+            emit('result', data)
+        }
+        old_data.value = newData
+    }
+}
+
 const startCamera = async () => {
     try {
-        // if (stream.value) stopCamera()
         stream.value = await navigator.mediaDevices.getUserMedia(
             {
                 video: {
@@ -128,15 +93,12 @@ const startCamera = async () => {
     }
 }
 const stopCamera = () => {
-    start_analyst.value = false
-    clearInterval(tipsInterval)
     if (stream.value) {
         stream.value.getTracks().forEach(track => track.stop())
         if (videoRef.value) {
             videoRef.value.srcObject = null
         }
         stream.value = null
-        ws.close()
     }
     return
 }
@@ -149,45 +111,43 @@ const handle_keydown = (even) => {
 onMounted(() => window.addEventListener('keydown', handle_keydown))
 onUnmounted(() => {
     window.removeEventListener('keydown', handle_keydown)
-    stopCamera()
+    if (stream) stopCamera()
     if (ws && ws.readyState !== WebSocket.CLOSED) {
         console.log("Closed websocket")
         ws.close()
     }
 })
 
-
-
 function loop() {
-    // console.log(start_analyst.value)
     if (!start_analyst.value) return
-    if (!isProcessing.value) {
-        isProcessing.value = true
-        sendData()
-    }
+    sendData()
     requestAnimationFrame(loop)
 }
-
 const canvas = document.createElement('canvas')
 const ctx = canvas.getContext('2d')
-function sendData() {
+
+// ham send data
+const sendData = () => {
     const video = videoRef.value
+    console.log(ws.readyState)
+    // vi sao ws ready state o day la connectting nghia la 0, nhung co ve nhu ko senddata  phai la 1 thi moi send duoc dung k oke
     if (ws.readyState !== WebSocket.OPEN || !video) {
         return
     }
-    //toi uu hoa gui frame
     const scale = 640 / video.videoWidth
     canvas.width = 640;
     canvas.height = video.videoHeight * scale;
 
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
     canvas.toBlob((blob) => {
-        if (blob && ws.readyState === WebSocket.OPEN) {
-            // console.log(blob)
-            ws.send(blob);
+        if (!blob || ws.readyState !== WebSocket.OPEN) {
+            return
         }
+        ws.send(blob)
     }, 'image/jpeg', 0.4);
 }
+
+
 // message and countdown
 const statusMessage = ref('') // Lưu dòng chữ thông báo
 const countdown = ref(null)   // Lưu số giây đếm ngược (3, 2, 1)
@@ -195,6 +155,7 @@ const tutorial_message = ref('')
 // Hàm hỗ trợ delay (đợi)
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const startAnalyst = async () => {
+    connect()
     startRepare()
     start_analyst.value = true
     loop()
@@ -202,7 +163,12 @@ const startAnalyst = async () => {
 }
 const stopAnalyst = () => {
     start_analyst.value = false
-    // ws.close()
+    emit('is_analyst', start_analyst.value)
+    ws.close()
+}
+const handle_analyst = () => {
+    startAnalyst()
+    emit('is_analyst', start_analyst.value)
 }
 const exercise_tips = {
     squat: [
@@ -250,6 +216,7 @@ const startRepare = async () => {
     statusMessage.value = ""
 }
 const startRotationTips = (type) => {
+    if (!start_analyst.value) return
     // Xóa interval cũ nếu có
     if (tipsInterval) clearInterval(tipsInterval)
 

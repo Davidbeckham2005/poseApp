@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-slate-900 text-white pt-3">
-        <div class="bg-[#1a1a1a]/30 max-w-6xl m-auto rounded-2xl p-6 mb-6 border border-gray-800 grid grid-cols-4">
+        <div class="bg-gray-700/50 max-w-6xl m-auto rounded-2xl p-6 mb-6 border border-gray-800 grid grid-cols-4">
             <menu_btn class="text-white"></menu_btn>
             <!-- <div class="flex-1 px-4">
                 <div class="flex justify-between text-xs font-bold mb-2">
@@ -36,46 +36,49 @@
         </div> -->
 
 
-        <div class="max-w-6xl m-auto grid grid-cols-12 mb-6 gap-6 ">
-            <div class="col-span-5 rounded-3xl border relative border-gray-800 flex flex-col overflow-hidden" :class="{
-                'bg-green-500/30': hpPercentage >= 75,
-                'bg-orange-400/30': hpPercentage < 75 && hpPercentage >= 25,
-                'bg-red-600/70 animate-pulse': hpPercentage <= 25 && hpPercentage > 0,
-                'animate-shake border-red-500/70 border-4': show_damage,
-                'animate-death': monster.currentHp == 0
-            }">
+        <div class="max-w-6xl m-auto grid grid-cols-12 mb-4 gap-4">
+            <div class="col-span-5 rounded-3xl border relative border-red-800  flex flex-col overflow-hidden p-5">
                 <!-- <div class="p-6 text-center">
                     <h2 class="text-2xl font-bold tracking-tight">{{ monster.name }}</h2>
                     <p class="text-gray-500 text-sm font-medium">Level {{ monster.level }} · ATK {{ monster.atk }}
                     </p>
                 </div> -->
 
-                <div class="w-[70%] max-w-6xl m-auto">
-                    <div class="flex justify-between items-end">
-                        <span class="text-sm font-bold text-red-500">LV. {{ monster.level }}</span>
-                        <h2 class="text-xl font-black tracking-tighter">{{ monster.name }}</h2>
-                        <span class="text-sm text-gray-400">HP {{ monster.currentHp }}/{{ monster.maxHp
-                            }}</span>
-                    </div>
+                <div class="rounded-3xl" :class="{
+                    'bg-green-500/30': hpPercentage >= 75,
+                    'bg-orange-400/30': hpPercentage < 75 && hpPercentage >= 25,
+                    'bg-red-600/70 animate-pulse': hpPercentage <= 25 && hpPercentage > 0,
+                    'animate-shake border-red-500/70 border-2': show_damage,
+                    'animate-death': monster.currentHp == 0
+                }">
+                    <div class="w-[70%] max-w-6xl m-auto">
+                        <div class="flex justify-between items-end">
+                            <span class="text-sm font-bold text-red-500">LV. {{ monster.level }}</span>
+                            <h2 class="text-xl font-black tracking-tighter">{{ monster.name }}</h2>
+                            <span class="text-sm text-gray-400">HP {{ monster.currentHp }}/{{ monster.maxHp
+                                }}</span>
+                        </div>
 
-                    <div class="max-w-3xl w-full h-6 bg-gray-700 rounded-full border-2 border-gray-600 p-0.5">
-                        <div class="h-full bg-gradient-to-r from-orange-500 to-red-600 rounded-full"
-                            :style="{ width: (monster.currentHp / monster.maxHp * 100) + '%' }"></div>
+                        <div class="max-w-3xl w-full h-6 bg-gray-700 rounded-full border-2 border-gray-600 p-0.5">
+                            <div class="h-full bg-gradient-to-r from-orange-500 to-red-600 rounded-full"
+                                :style="{ width: (monster.currentHp / monster.maxHp * 100) + '%' }"></div>
+                        </div>
                     </div>
-                </div>
-                <Trainer>
-                </Trainer>
-                <div v-if="show_damage"
-                    class="absolute inset-0 flex items-center justify-center mt-10 pointer-events-none">
-                    <span
-                        class="text-4xl font-medium text-white animate-bounce drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                        -{{ finnal_damage }}
-                    </span>
+                    <Trainer>
+                    </Trainer>
+                    <div v-if="show_damage"
+                        class="absolute inset-0 flex items-center justify-center mt-10 pointer-events-none">
+                        <span
+                            class="text-4xl font-medium text-white animate-bounce drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                            -{{ finnal_damage }}
+                        </span>
+                    </div>
                 </div>
             </div>
             <div
-                class="col-span-7 bg-[#0a0a0a] rounded-3xl border border-gray-800 flex flex-col px-10 justify-center relative">
-                <Live @result="result_handle" :exercise_type="current_exercise_type" @send_stream="handle_send_stream">
+                class="col-span-7 bg-[#0a0a0a] rounded-3xl flex flex-col px-10 justify-center relative border border-white/20">
+                <Live @result="result_handle" :exercise_type="current_exercise_type?.id"
+                    @is_analyst="handle_send_analyst">
                 </Live>
                 <!-- <div class="text-center max-w-sm">
                 <div class="mb-4 flex justify-center">
@@ -108,7 +111,8 @@
             </div> -->
             </div>
         </div>
-        <ExerciseSelector @send_current_exercise="handle_current_exercise_type" :is_start="is_start"></ExerciseSelector>
+        <ExerciseSelector @send_current_exercise="handle_current_exercise_type" :start_analyst="is_start">
+        </ExerciseSelector>
     </div>
 
 
@@ -121,34 +125,28 @@ import menu_btn from '../../../bases/menu_btn.vue';
 import Trainer from '../../Trainer/Trainer.vue';
 import { ref, computed, watch } from 'vue';
 import { calculating, get_translate } from '../../../../composable/helpers';
-const { from_left } = get_translate()
 const { persen } = calculating()
 const is_start = ref(false)
 // State của Quái vật
 const old_total = ref(0)
 const old_good = ref(0)
-const result = ref()
 const result_handle = (e) => {
     if (e.total != old_total.value) {
         if (e.good != old_good.value) {
             old_good.value = e.good
-            finnal_damage.value = 100
+            finnal_damage.value = normal_damage.value * 1.2
         }
         handleHit()
     }
     old_total.value = e.total
 }
-const handle_send_stream = (e) => {
-    if (e) {
-        is_start.value = true
-    } else {
-        is_start.value = false
-    }
-
+const handle_send_analyst = (e) => {
+    console.log("in battle", e)
+    is_start.value = e
 }
 const current_exercise_type = ref()
 const handle_current_exercise_type = (attact) => {
-    current_exercise_type.value = attact.id
+    current_exercise_type.value = attact
 }
 const monster = ref({
     name: 'Rock Golem',
@@ -176,10 +174,11 @@ const stats = ref({
 
 // Tính toán phần trăm máu
 const hpPercentage = computed(() => (persen(monster.value.currentHp, monster.value.maxHp)));
-const normal_damage = 30
-const finnal_damage = ref(normal_damage)
+const normal_damage = computed(() => (current_exercise_type.value?.damage || 0))
+const finnal_damage = ref(normal_damage.value)
 const show_damage = ref(false)
 const handleHit = async () => {
+
     if (monster.value.currentHp > 0) {
         monster.value.currentHp -= finnal_damage.value;
         show_damage.value = true
@@ -190,7 +189,7 @@ const handleHit = async () => {
             monster.value.currentHp = 0
         }
     }
-    finnal_damage.value = normal_damage
+    finnal_damage.value = normal_damage.value
 };
 </script>
 
