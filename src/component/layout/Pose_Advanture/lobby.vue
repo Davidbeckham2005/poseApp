@@ -84,6 +84,8 @@
 import { Crown, Trophy, Zap, Star, Play } from 'lucide-vue-next';
 import { state_game, useNavigation } from '../../../composable/help_game';
 import { useRouter } from 'vue-router';
+import { useAudio } from '../../../composable/audio';
+const { speak } = useAudio()
 const router = useRouter()
 const { set_state_game, get_state_game } = state_game()
 const { swich_current_layout } = useNavigation()
@@ -98,8 +100,9 @@ const switch_state_game = async () => {
 
 }
 const start_game = async () => {
+
     set_state_game(true)
-    await new Promise(r => setTimeout(r, 390))
+    // await new Promise(r => setTimeout(r, 390))
     router.push({ name: 'menu' })
     set_state_game(false)
 

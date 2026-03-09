@@ -14,7 +14,7 @@ const routes = [
         name: 'menu'
     },
     {
-        path: "/game/battle/:id",
+        path: "/game/battle/:monster",
         component: Battle,
         name: 'battle'
     }

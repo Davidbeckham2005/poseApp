@@ -116,6 +116,7 @@ onUnmounted(() => {
         console.log("Closed websocket")
         ws.close()
     }
+    clearInterval(tipsInterval)
 })
 
 function loop() {

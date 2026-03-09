@@ -17,3 +17,14 @@ const current_layout = computed(() => {
     return get_current_layout()
 })
 </script>
+<!-- <template>
+    <div>
+
+    </div>
+</template>
+
+<script setup>
+
+</script>
+
+<style lang="scss" scoped></style> -->

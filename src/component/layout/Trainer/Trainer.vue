@@ -7,7 +7,7 @@
 <script setup>
 import { onMounted, ref } from "vue"
 import lottie from "lottie-web"
-
+const props = defineProps({ path_json: String })
 const animationContainer = ref(null)
 
 onMounted(() => {
@@ -16,7 +16,8 @@ onMounted(() => {
         renderer: "svg",
         loop: true,
         autoplay: true,
-        path: "/Monster/Pochita.json"
+        path: `${props.path_json}.json`
+        // path: `/Monster/${props.path_json}.json`
     })
 })
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex h-screen bg-[#0a0a0c] text-gray-300 font-sans">
+    <div @click.once="unclock" class="flex h-screen bg-[#0a0a0c] text-gray-300 font-sans">
 
         <sidebar v-if="!get_state_game" class="w-36 md:w-70 border-r border-gray-800 flex flex-col bg-black"
             :menu-items="menuItems" :current-tab="currentTab" @active-menu="setActive" />
@@ -37,7 +37,9 @@ import {
 // game
 import { state_game } from './composable/help_game';
 const { get_state_game } = state_game()
-
+const unclock = () => {
+    unlockAudio()
+}
 // console.log(get_state_game())
 // component
 import Header from './component/layout/Header.vue';
@@ -45,12 +47,13 @@ import sidebar from './component/layout/sidebar/sidebar.vue';
 import Upload from './component/layout/Upload.vue';
 import Settings from './component/layout/Settings.vue';
 import History_tab from './component/layout/History/History_tab.vue';
-import Live from './component/layout/Live/Live.vue';
 import Dashbroad from './component/layout/Dashbroad/dashbroad.vue';
 import { useNavigation } from "./composable/helpers";
 import Profile from './component/layout/Profile/Profile.vue';
 import pose_advanture from './component/layout/Pose_Advanture/pose_advanture.vue';
-import { computed, watch } from 'vue';
+// import lobby from './component/layout/Pose_Advanture/Warmup.vue'
+import { useAudio } from './composable/audio';
+const { unlockAudio, speak } = useAudio()
 const { switch_on_sidebar, currentTab } = useNavigation()
 
 const menuItems = [

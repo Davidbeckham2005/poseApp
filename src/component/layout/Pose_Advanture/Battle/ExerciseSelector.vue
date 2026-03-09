@@ -1,11 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-import { BicepsFlexed, Zap } from 'lucide-vue-next'
 const attacks = ref([
   {
     id: 'pushup',
     name: 'Push-up',
-    damage: 25,
+    damage: 100,
     bgColor: 'bg-gradient-to-br from-blue-400 to-blue-600',
     borderColor: 'border-blue-700'
   },
@@ -64,7 +63,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="relative max-w-6xl space-y-3 w-full m-auto bg-gray-700/50 rounded-2xl p-4 border border-white/20">
+  <div class="relative max-w-6xl space-y-3 w-full m-auto bg-gray-700/30 rounded-2xl p-4 border border-white/20">
     <div class="mb-2">
       <h2 class="text-xl font-medium uppercase mb-2">Chọn kỹ năng</h2>
     </div>
