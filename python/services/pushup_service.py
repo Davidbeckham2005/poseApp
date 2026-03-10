@@ -6,10 +6,10 @@ from services.video_services import VideoService
 from services.exercise_service import exercise_Service
 import cv2
 class pushupService(exercise_Service):
-    down_standard = 110
+    down_standard = 130
     up_standard = 160
     good_standard = 90  
-    bad_standard = 32
+    bad_standard = 60
     def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService,data):    
         super().__init__(draw,pose,capture,data)
         self.history_origin_pushup = []
@@ -38,27 +38,17 @@ class pushupService(exercise_Service):
         if not isReadyVisibility(left_elbow,right_elbow,left_shoulder,right_shoulder,left_wrist,right_wrist):
             return
         
-            # self.draw.draw_line(frame,left_shoulder_px,left_elbow_px,(0,255,0))
-            # self.draw.draw_line(frame,right_shoulder_px,right_elbow_px,(0,255,0))
-            # self.draw.draw_line(frame,left_wrist_px,left_elbow_px,(0,255,0))
-            # self.draw.draw_line(frame,right_wrist_px,right_elbow_px,(0,255,0))
 
-        left_elbow_origin = goc_tai_tham_so_thu_nhat(left_elbow,left_shoulder,left_wrist)
-        right_elbow_origin = goc_tai_tham_so_thu_nhat(right_elbow,right_shoulder,right_wrist)
+        # left_elbow_origin = goc_tai_tham_so_thu_nhat(left_elbow,left_shoulder,left_wrist)
+        # right_elbow_origin = goc_tai_tham_so_thu_nhat(right_elbow,right_shoulder,right_wrist)
         
-        origin = round((left_elbow_origin+right_elbow_origin/2),2)
-        # cv2.circle(frame, point_px, 8, (255, 255, 255), cv2.FILLED)
-        # cv2.circle(frame, point_px, 10, (0, 255, 0), 2)
-        cv2.putText(frame,str(left_elbow_origin),(left_elbow_px[0]-10,left_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),10)
-        cv2.putText(frame,str(right_elbow_origin),(right_elbow_px[0]-10,right_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),10)
-        # self.draw.draw_origin_at_intersection(frame,left_elbow_origin,right_elbow_origin,left_elbow_px,right_elbow_px,(0,0,255))
-        
-        # shoulder_y = trungbinh(left_shoulder.y, right_shoulder.y)
-        # hip_y = trungbinh(left_hip.y,right_hip.y)
+        origin = self.choose_arm(right_elbow,right_shoulder,right_wrist,left_elbow,left_shoulder,left_wrist)
+       
+        cv2.putText(frame,str(origin),(left_elbow_px[0]-10,left_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
+        cv2.putText(frame,str(origin),(right_elbow_px[0]-10,right_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
+      
 
         update_history(self.history_origin_pushup,origin)
-        # update_history(self.history_y_hip,hip_y)
-        # update_history(self.history_y_shoulder,shoulder_y)
         if origin < self.down_standard:
             if isBalance(self.history_origin_pushup) and self.isEstimate:
                 self.evaluate_form(origin)
@@ -100,3 +90,15 @@ class pushupService(exercise_Service):
             self.estimate = "high"
             self.origin = origin
         
+    def check_visibility(self,a,b,c):
+        return a.visibility+b.visibility+c.visibility
+    
+    def choose_arm(self,right_elbow,right_shoulder,right_wrist,left_elbow,left_shoulder,left_wrist):
+        left_score = self.check_visibility(left_elbow,left_shoulder,left_wrist)
+        right_score = self.check_visibility(right_elbow,right_shoulder,right_wrist)
+        if(left_score<right_score):
+            right_elbow_origin = goc_tai_tham_so_thu_nhat(right_elbow,right_shoulder,right_wrist)
+            return right_elbow_origin
+        else:
+            left_elbow_origin = goc_tai_tham_so_thu_nhat(left_elbow,left_shoulder,left_wrist)
+            return left_elbow_origin

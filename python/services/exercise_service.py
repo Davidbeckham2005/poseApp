@@ -63,10 +63,12 @@ class exercise_Service:
         cv2.line(frame,(0,310),(310,310),(255,0,0),5)
 
     def run_detection(self,frame):
+       
         self.push_frame()
         result = self.pose.run_process(frame)
         if result.pose_landmarks:
             pose_landmark = result.pose_landmarks[0]
+            self.run_estimate(pose_landmark,frame)
             drawtext(frame,(10,50),f"Exercise: {self.type}",(0,0,255))
             if self.isAnalyst:
                 self.show_analyst(frame)
@@ -79,16 +81,8 @@ class exercise_Service:
                 self.draw.draw_skeleton(frame,pose_landmark)
             if self.isMake_Result:
                 self.capture.makeResult(frame)  
-            self.run_estimate(pose_landmark,frame)
-    # def set_setting(self,input):
-    #     self.isDrawing = input.isDrawing
-    #     self.isAnalyst = input.isAnalyst
-    #     self.isCheck_view = input.isCheck_view
-    #     self.Analyst_FPS = input.Analyst_FPS
-    #     self.Analyst_state = input.Analyst_state
-    #     self.Analyst_count = input.Analyst_count
-    #     self.Analyst_count_good = input.Analyst_count_good
-    #     self.Analyst_estimate = input.Analyst_estimate
+           
+  
     def run_estimate(self,pose_landmark,frame):
         pass
     def getResult(self):
