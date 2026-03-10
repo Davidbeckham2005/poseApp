@@ -9,6 +9,9 @@ class DrawingService:
             (11, 23), (12, 24), (23, 24),                   # Thân
             (23, 25), (25, 27), (24, 26), (26, 28)          # Chân (Quan trọng cho Squat)
         ]
+        self.CONNECTIONS_leg = [
+            (23, 25), (25, 27), (24, 26), (26, 28)          # Chân (Quan trọng cho Squat)
+        ]
       
     def draw_skeleton(self,frame,pose_landmarks):
         h, w, _ = frame.shape
@@ -17,7 +20,7 @@ class DrawingService:
             landmarks_px.append((int(lm.x * w), int(lm.y * h)))
 
         # 2. Vẽ các đường nối (Connections)
-        for connection in self.CONNECTIONS:
+        for connection in self.CONNECTIONS_leg:
             start_idx, end_idx = connection
             pt1 = landmarks_px[start_idx]
             pt2 = landmarks_px[end_idx]

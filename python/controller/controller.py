@@ -2,13 +2,9 @@ from services.video_services import VideoService
 from services.squat_services import squatService
 from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
-from services.exercise_service import exercise_Service
 from services.pushup_service import pushupService
 from services.plank_service import plankService
-
-# from services.webcam import WebcamService
-
-# them luong
+from services.lungue_service import lungService
 import cv2
 from pathlib import Path
 from urllib.parse import unquote
@@ -30,6 +26,9 @@ def process(data):
         service = pushupService(draw, detector, capture,data)
     if type == 'plank':
         service = plankService(draw, detector, capture,data)
+    if type =='lungue':
+        service = lungService(draw, detector, capture,data)
+
     if not capture.getCap().isOpened():
         return False
     

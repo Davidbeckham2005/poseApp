@@ -14,6 +14,7 @@ class Webcam_Schemas(BaseModel):
     Analyst_estimate: bool = True
     weight : float = None   
     height : float = None
+    isMake_Result : bool = True
    
 class Video_Schemas(Webcam_Schemas):
     path_video: str = "LIVE"

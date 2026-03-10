@@ -9,7 +9,7 @@ class pushupService(exercise_Service):
     down_standard = 130
     up_standard = 160
     good_standard = 90  
-    bad_standard = 60
+    bad_standard = 32
     def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService,data):    
         super().__init__(draw,pose,capture,data)
         self.history_origin_pushup = []

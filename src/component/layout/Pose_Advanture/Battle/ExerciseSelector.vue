@@ -4,15 +4,22 @@ const attacks = ref([
   {
     id: 'pushup',
     name: 'Push-up',
-    damage: 100,
+    damage: 50,
     bgColor: 'bg-gradient-to-br from-blue-400 to-blue-600',
     borderColor: 'border-blue-700'
   },
   {
     id: 'squat',
     name: 'Squat',
-    damage: 20,
+    damage: 30,
     bgColor: 'bg-gradient-to-br from-purple-400 to-fuchsia-600',
+    borderColor: 'border-purple-700'
+  },
+  {
+    id: 'lungue',
+    name: 'Lungue',
+    damage: 30,
+    bgColor: 'bg-gradient-to-br from-purple-400 to-cyan-600',
     borderColor: 'border-purple-700'
   },
   // {

@@ -22,7 +22,7 @@ class exercise_Service:
         self.weight = data.weight
         self.height = data.height
         # setting
-        self.isMake_Result = True   
+        self.isMake_Result = data.isMake_Result   
         self.isDrawing = data.isDrawing
         self.isAnalyst = data.isAnalyst
         self.isCheck_view = data.isCheck_view

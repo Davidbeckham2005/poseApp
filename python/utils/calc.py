@@ -92,12 +92,14 @@ def calculating_caloris(time_sec,weight_kg,accuracy,type):
     Met_value_hight_accuracy = {
         "pushup" : 5,
         "squat" : 8,
-        "plank" : 4
+        "plank" : 4,
+        "lungue": 9,
     }
     MET_value = {
         "pushup" : 4,
         "squat" : 4,
-        "plank" : 3.5
+        "plank" : 3.5,
+        "lungue": 4
     }
     if accuracy >=80:
         MET = Met_value_hight_accuracy

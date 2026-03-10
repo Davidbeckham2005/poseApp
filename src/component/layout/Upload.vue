@@ -37,6 +37,7 @@ const exercises = [
     { name: 'Squat', value: 'squat' },
     { name: 'Push-up', value: 'pushup' },
     { name: 'Plank', value: 'plank' },
+    { name: 'Lungue', value: 'lungue' }
 ]
 // api 
 import { get_tinme_video } from '../../services/app.service';
@@ -74,6 +75,7 @@ async function upload() {
                 "Analyst_count_good": settingStore.setting.Analyst_count_good,
                 "Analyst_estimate": settingStore.setting.Analyst_estimate,
                 "Analyst_state": settingStore.setting.Analyst_state,
+                "isMake_Result": settingStore.setting.isMake_Result,
                 "weight": userStore.user.weight,
                 "height": userStore.user.height
             }

@@ -39,7 +39,6 @@ const active = (key_value, checked_btn) => {
         settingStore.setting['Analyst_estimate'] = !checked_btn
         settingStore.setting['Analyst_count'] = !checked_btn
         settingStore.setting['Analyst_count_good'] = !checked_btn
-
     }
     else
         settingStore.setting[key_value] = !checked_btn

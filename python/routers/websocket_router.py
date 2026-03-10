@@ -3,7 +3,7 @@ import threading
 from services.drawing_service import DrawingService
 from services.pushup_service import pushupService
 from services.plank_service import plankService
-# from services.webcam import websocket_service
+from services.lungue_service import lungService
 from services.webcam import FrameBuffer,ResultBuffer
 from services.squat_services import squatService
 from services.pose_service import PoseDetector
@@ -32,6 +32,8 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
         service = pushupService(draw, detector, None,data)
     elif exercise_type == 'plank':
         service = plankService(draw, detector, None,data)
+    elif exercise_type == 'lungue':
+        service = lungService(draw, detector, None,data)
     else:
         print("đóng nối kết do không có bài tập đó!")
         await websocket.close()

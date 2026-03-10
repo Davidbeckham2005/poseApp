@@ -15,16 +15,17 @@
                     <div class="rounded-3xl" :class="{
                         [monster.bg]: hpPercentage >= 75,
                         'bg-orange-400/30': hpPercentage < 75 && hpPercentage >= 25,
-                            'bg-red-600/70 animate-pulse': hpPercentage <= 25 && hpPercentage > 0,
-                                'animate-shake border-red-500/70 border-2': show_damage,
-                                    'animate-death': monster.currentHp == 0
+                        'bg-red-600/70 animate-pulse': hpPercentage <= 25 && hpPercentage > 0,
+                        'animate-shake border-red-500/70 border-2': show_damage,
+                        'animate-death': monster.currentHp == 0
                     }">
                         <div class="w-[70%] max-w-6xl m-auto">
-                            <div class="flex justify-between items-end">
+                            <div class="flex justify-between items-end mb-0.5">
                                 <!-- <span class="text-sm font-bold text-red-500">LV. {{ monster.level }}</span> -->
                                 <h2 class="text-xl font-black tracking-tighter">{{ monster.name }}</h2>
-                                <span class="text-sm text-gray-400">HP {{ monster.currentHp }}/{{ monster.maxHp
-                                }}</span>
+                                <span class="px-3 py-1 rounded-full text-[10px] font-black bg-yellow-400 text-black">HP
+                                    {{ monster.currentHp }}/{{ monster.maxHp
+                                    }}</span>
                             </div>
 
                             <div class="max-w-3xl w-full h-6 bg-gray-700 rounded-full border-2 border-gray-600 p-0.5">
