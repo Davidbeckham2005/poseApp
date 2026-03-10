@@ -51,7 +51,10 @@ onMounted(() => {
 // const run_battle_handle = () => {
 
 // }
-onUnmounted(() => clearInterval(timer))
+onUnmounted(() => {
+    clearInterval(timer)
+    speechSynthesis.cancel()
+})
 </script>
 
 <template>
@@ -98,13 +101,6 @@ onUnmounted(() => clearInterval(timer))
                 <SkipForward :size="18" />
                 Bỏ qua
             </button>
-            <!-- <button @click="run_battle_handle"
-                class="w-full flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 transition rounded-xl py-2">
-                <SkipForward :size="18" />
-                Bỏ qua khởi động
-            </button> -->
-
         </div>
-
     </div>
 </template>

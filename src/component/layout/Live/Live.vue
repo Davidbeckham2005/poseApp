@@ -1,5 +1,6 @@
 <template>
     <div class="flex flex-col">
+        <div>{{ old_data }} - {{ activity_log }}</div>
         <div
             class="relative w-full flex flex-col items-center p-4 rounded-3xl justify-between overflow-hidden bg-black border border-white/20 shadow-2xl">
             <video ref="videoRef" autoplay playsinline class="w-full -scale-x-100 rounded-3xl mb-2"></video>
@@ -34,26 +35,34 @@
                 <button class="btn btn-accent" @click="emit('result', { total: 4, good: 3, estimate: 'bad' })"></button> -->
             </div>
         </div>
-        <p v-if="start_analyst" class="text-lg font-medium text-center text-white uppercase tracking-widest">
-            {{ tutorial_message }}
-        </p>
+        <div v-if="start_analyst"
+            class="w-full max-w-2xl mt-6 bg-orange-950/30 border border-orange-900/50 rounded-2xl p-4 flex items-start gap-3">
+            <Lightbulb class="text-yellow-400 shrink-0" :size="20" />
+            <p class="text-orange-200 text-sm">
+                {{ tutorial_message }}
+            </p>
+        </div>
         <!-- <div class="w-40 border border-amber-300 rounded-3xl"></div> -->
     </div>
 </template>
 <script setup>
-const emit = defineEmits(['result', 'is_analyst'])
-const props = defineProps({ exercise_type: String })
-import { ref, onUnmounted, onMounted, toRaw, watch } from 'vue'
-
+const emit = defineEmits(['result', 'is_analyst', 'finish'])
+const props = defineProps({ exercise_type: String, currentHp: Number })
+import { ref, onUnmounted, onMounted, watch } from 'vue'
+import { Lightbulb } from 'lucide-vue-next'
 const videoRef = ref(null)
 const start_analyst = ref(false)
 const old_data = ref('')
 const current_exercise = ref()
-
-
+const activity_log = ref()
 let stream = ref(null)
 let ws = null
-
+watch(() => props.currentHp, (newValue) => {
+    if (newValue <= 0) {
+        stopAnalyst()
+        emit('finish')
+    }
+})
 watch(() => props.exercise_type, (newValue) => {
     current_exercise.value = newValue
 })
@@ -66,9 +75,12 @@ const connect = () => {
         console.log("connected with exercise: ", current_exercise.value)
     }
     ws.onmessage = (e) => {
+        if (!e.data) return
         const newData = e.data
-        const data = JSON.parse(e.data)
         if (newData != old_data.value) {
+            const data = JSON.parse(e.data)
+            if (!data) return
+            console.log(data, e.data)
             emit('result', data)
         }
         old_data.value = newData
@@ -192,9 +204,21 @@ const exercise_tips = {
         "Gồng chặt cơ bụng và cơ mông",
         "Mắt nhìn xuống sàn, đừng ngước lên",
         "Cố gắng giữ vững tư thế, đừng rung lắc"
+    ],
+    lungue: [
+        "Giữ lưng thẳng, mắt nhìn về phía trước",
+        "Bước chân đủ dài để tạo góc 90° ở đầu gối",
+        "Đầu gối chân trước không vượt quá mũi chân",
+        "Hạ người xuống từ từ, giữ thăng bằng cơ thể",
+        "Dùng lực chân trước để đẩy người trở lại vị trí ban đầu"
     ]
 }
-
+watch(start_analyst, () => {
+    if (!start_analyst.value) {
+        speechSynthesis.cancel()
+        clearInterval(tipsInterval)
+    }
+})
 let tipsInterval = null
 const startRepare = async () => {
     statusMessage.value = "Đang khởi động hệ thống AI..."
@@ -216,6 +240,8 @@ const startRepare = async () => {
     await delay(2000)
     statusMessage.value = ""
 }
+import { useAudio } from '../../../composable/audio'
+const { speak } = useAudio()
 const startRotationTips = (type) => {
     if (!start_analyst.value) return
     // Xóa interval cũ nếu có
@@ -231,6 +257,7 @@ const startRotationTips = (type) => {
     // Cứ mỗi 6 giây đổi một câu khác
     tipsInterval = setInterval(() => {
         index = (index + 1) % tips.length
+        speak(tips[index])
         tutorial_message.value = tips[index]
     }, 6000)
 }
