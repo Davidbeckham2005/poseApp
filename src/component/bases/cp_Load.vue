@@ -10,6 +10,4 @@ defineProps({
         default: 'w-12 h-12'
     }
 })
-
 </script>
-<style lang="scss" scoped></style>

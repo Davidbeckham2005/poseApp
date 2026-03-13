@@ -85,7 +85,7 @@ const { only_from_left } = get_translate()
         <div class="flex gap-2 mb-8">
             <div v-for="i in totalSteps" :key="i" :class="[
                 'h-2.5 rounded-full transition-all duration-300',
-                currentStep === i ? 'w-8 bg-orange-400' : 'w-2.5 bg-gray-600'
+                currentStep === i ? 'w-8 dark:bg-orange-400' : 'w-2.5 bg-gray-600'
             ]"></div>
         </div>
         <Transition v-bind="only_from_left">
@@ -105,7 +105,7 @@ const { only_from_left } = get_translate()
             </div>
         </Transition>
         <div
-            class="w-full max-w-2xl mt-6 bg-orange-950/30 border border-orange-900/50 rounded-2xl p-4 flex items-start gap-3">
+            class="w-full max-w-2xl mt-6 dark:bg-orange-950/30 border border-orange-900/50 rounded-2xl p-4 flex items-start gap-3">
             <Lightbulb class="text-yellow-400 shrink-0" :size="20" />
             <p class="text-orange-200 text-sm">
                 {{ Content[currentStep - 1].tip }}
@@ -126,7 +126,7 @@ const { only_from_left } = get_translate()
 
             <button @click="currentStep === 7 ? handle_skip() : nextStep()"
                 :class="{ 'bg-gradient-to-br from-red-500 to-orange-700 text-white': currentStep === 7 }"
-                class="flex items-center gap-2 px-10 py-3 rounded-2xl bg-orange-400 text-black font-bold hover:bg-orange-300 transition-all shadow-lg shadow-orange-500/20">
+                class="flex items-center gap-2 px-10 py-3 rounded-2xl dark:bg-orange-400 text-black font-bold hover:dark:bg-orange-300 transition-all shadow-lg shadow-orange-500/20">
                 {{ currentStep === 7 ? 'Bắt đầu ngay' : 'Tiếp theo' }}
                 <ChevronRight :size="20" />
             </button>

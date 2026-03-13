@@ -38,7 +38,7 @@
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-0 lg:gap-4 mt-2">
                 <div>
-                    <p class="text-gray-500 text-xs uppercase tracking-wider">Accuracy</p>
+                    <p class="text-gray-500 text-xs uppercase tracking-wider">Phần trăm chính xác</p>
                     <p class="text-lg font-semibold">{{ video.accuracy_good + "%" }}</p>
                 </div>
                 <div>
@@ -46,7 +46,7 @@
                     <p class="text-lg font-semibold">{{ video.count_good }}</p>
                 </div>
                 <div>
-                    <p class="text-gray-500 text-xs uppercase tracking-wider">Form</p>
+                    <p class="text-gray-500 text-xs uppercase tracking-wider">Đánh giá</p>
                     <p class="text-lg font-semibold">{{ video.form }}</p>
                 </div>
             </div>

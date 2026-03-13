@@ -68,7 +68,7 @@ class pushupService(exercise_Service):
             self.data_on_rep = {
                 "total" : self.count_total,
                 "estimate" : self.estimate,
-                "good" : self.count_good
+                "good" : self.count_good,
             }
             self.record_couting.append(record)
             self.estimate="estimate"

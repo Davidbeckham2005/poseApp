@@ -43,8 +43,8 @@ class squatService(exercise_Service):
         # ve goc
         self.draw.draw_origin_at_intersection(frame,knee_origin_left,knee_origin_right,left_knee_px,right_knee_px,(0,0,255)) 
         origin = (knee_origin_left+knee_origin_right)/2.0
-        self.squat_counting(origin,pose_landmark)
-    def squat_counting(self, origin,pose_landmark):
+        self.squat_counting(origin,data)
+    def squat_counting(self, origin,data):
         update_history(self.history_origin_squat,origin)
         balance = isBalance(self.history_origin_squat)
         if origin<self.down_standard:
@@ -62,7 +62,7 @@ class squatService(exercise_Service):
             self.data_on_rep = {
                 "total" : self.count_total,
                 "estimate" : self.estimate,
-                "good" : self.count_good
+                "good" : self.count_good,
             }
             record = {
             "count" : self.count_total,

@@ -1,6 +1,6 @@
 <template>
     <div class="w-full rounded-full h-3">
-        <div :class="['h-2 bg-orange-500 rounded-full shadow-sm transition-all duration-700']"
+        <div :class="['h-2 dark:bg-orange-500 rounded-full shadow-sm transition-all duration-700']"
             :style="{ width: progress + '%' }"></div>
         <div class="flex justify-between">
             <span class="text-sm text-gray-400">Progressing</span>

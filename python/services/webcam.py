@@ -48,15 +48,14 @@ class FrameBuffer:
 
 
     def set_frame(self, data):
-        nparr = np.frombuffer(data, np.uint8)
-        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        if frame is not None:
-            with self.lock:
-                self.frame = frame
+        with self.lock:
+            self.frame = data
 
     def get_frame(self):
         with self.lock:
-            return self.frame
+            frame = self.frame
+            self.frame = None
+            return frame
 
 
 class ResultBuffer:
@@ -66,7 +65,9 @@ class ResultBuffer:
 
     def get(self):
         with self.lock:
-            return self.data
+            data = self.data
+            self.data = None
+            return data
         
     def set(self,data):
         with self.lock:

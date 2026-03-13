@@ -3,16 +3,16 @@
         <menu_btn class="text-white"></menu_btn>
         <Warmup v-if="get_state_warmup()"></Warmup>
         <div v-else>
-            <div class="max-w-6xl m-auto grid grid-cols-12 mb-4 gap-4">
-                <div class="col-span-5 rounded-3xl border relative border-red-800  flex flex-col overflow-hidden p-5">
+            <div class="max-w-7xl m-auto flex flex-col md:grid md:grid-cols-12 mb-4 gap-4">
+                <div class="col-span-4 rounded-3xl border relative border-red-800 flex flex-col overflow-hidden p-5">
                     <div class="rounded-3xl" :class="{
                         [monster.bg]: hpPercentage >= 75,
-                        'bg-orange-400/30': hpPercentage < 75 && hpPercentage >= 25,
+                        'dark:bg-orange-400/30': hpPercentage < 75 && hpPercentage >= 25,
                         'bg-red-600/70 animate-pulse': hpPercentage <= 25 && hpPercentage > 0,
                         'animate-shake border-red-500/70 border-2': show_damage,
                         'animate-death': monster.currentHp == 0
                     }">
-                        <div class="w-[70%] max-w-6xl m-auto">
+                        <div class="w-[70%] w-full m-auto p-3">
                             <div class="flex justify-between items-end mb-0.5">
                                 <h2 class="text-xl font-black tracking-tighter">{{ monster.name }}</h2>
                                 <span class="px-3 py-1 rounded-full text-[10px] font-black bg-yellow-400 text-black">HP
@@ -37,11 +37,18 @@
                     </div>
                 </div>
                 <div
-                    class="col-span-7 bg-[#0a0a0a] rounded-3xl flex flex-col px-10 justify-center relative border border-white/20">
+                    class="col-span-8 bg-[#0a0a0a] rounded-3xl flex flex-col md:px-10 justify-center relative border border-white/20">
                     <Live @result="result_handle" :exercise_type="current_exercise_type?.id"
                         :currentHp="monster.currentHp" @is_analyst="handle_send_analyst" @finish="finish_handle">
                     </Live>
                 </div>
+                <!-- <div
+                    class="col-span-3 rounded-3xl border relative border-cyan-800 flex flex-col bg-white overflow-hidden p-5">
+                    <exercise_tutorial :prop_current_exercise_tutorial="current_exercise_tutorial"></exercise_tutorial>
+                    <div class="text-black">
+                        <span>fdjj</span>
+                    </div>
+                </div> -->
             </div>
             <ExerciseSelector @send_current_exercise="handle_current_exercise_type" :start_analyst="is_start">
             </ExerciseSelector>
@@ -68,17 +75,6 @@
                         <span>Tổng số reps</span>
                         <span class="font-semibold text-yellow-400">{{ old_total }}</span>
                     </div>
-
-                    <!-- <div class="flex justify-between bg-gray-800 rounded-lg px-4 py-3">
-                        <span>Calories</span>
-                        <span class="font-semibold text-orange-400">{{ calories }}</span>
-                    </div> -->
-
-                    <!-- <div class="flex justify-between bg-gray-800 rounded-lg px-4 py-3">
-                        <span>Duration</span>
-                        <span class="font-semibold text-blue-400">{{ duration }}s</span>
-                    </div> -->
-
                 </div>
 
                 <!-- Buttons -->
@@ -93,24 +89,22 @@
                         class="flex-1 bg-gray-700 hover:bg-gray-600 transition rounded-lg py-3">
                         Trở lại Menu
                     </button>
-
                 </div>
-
             </div>
         </div>
     </div>
 </template>
 <script setup>
-import ExerciseSelector from './ExerciseSelector.vue';
-import Live from '../../Live/Live.vue';
-import menu_btn from '../../../bases/menu_btn.vue';
-import Trainer from '../../Trainer/Trainer.vue';
+import ExerciseSelector from './ExerciseSelector.vue'
+import Live from '../Live/Live.vue';
+import menu_btn from '../../bases/menu_btn.vue'
+import Warmup from './Warmup.vue';
+import Trainer from '../Trainer/Trainer.vue';
 import { ref, computed, watch } from 'vue';
-import { calculating, get_translate } from '../../../../composable/helpers';
-import Warmup from '../Warmup.vue';
-import { Use_is_warmup } from '../../../../composable/help_game';
+import { calculating, get_translate } from '../../../composable/helpers';
+import { Use_is_warmup } from '../../../composable/help_game';
 const { get_state_warmup } = Use_is_warmup()
-import { useMonster } from '../../../../composable/help_game';
+import { useMonster } from '../../../composable/help_game';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 const win = ref(true)
@@ -120,7 +114,6 @@ const finish_handle = () => {
 }
 const { get_monster } = useMonster()
 const { persen } = calculating()
-console.log(get_state_warmup())
 const is_start = ref(false)
 // State của Quái vật
 const old_total = ref(0)
@@ -136,25 +129,16 @@ const result_handle = (e) => {
     old_total.value = e.total
 }
 const handle_send_analyst = (e) => {
-    console.log("in battle", e)
     is_start.value = e
 }
-
+const current_exercise_tutorial = ref()
 const current_exercise_type = ref()
-const handle_current_exercise_type = (attact) => {
+const handle_current_exercise_type = (attact, tutorial) => {
     current_exercise_type.value = attact
+    current_exercise_tutorial.value = tutorial
+    console.log(current_exercise_tutorial.value)
 }
-
-
 const monster = computed(() => get_monster())
-const stats = ref({
-    hp: 94,
-    maxHp: 100,
-    stamina: 100,
-    maxStamina: 100,
-    combo: 0
-});
-
 watch(monster.value.currentHp, (newValue) => {
     if (newValue) {
         alert("victory!")

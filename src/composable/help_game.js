@@ -3,7 +3,7 @@ import { useRoute, useRouter } from "vue-router";
 const current_layout = ref('lobby')
 const is_run_game = ref(false)
 const is_tutorial = ref(true)
-const is_warmup = ref(true)
+const is_warmup = ref(false)
 export function useNavigation() {
     const get_current_layout = () => {
         return current_layout.value
@@ -45,8 +45,8 @@ const monsters = ref({
         name: 'Dragon',
         level: 4,
         atk: 6,
-        currentHp: 200,
-        maxHp: 200,
+        currentHp: 20000,
+        maxHp: 20000,
         path: '/Monster/dragon',
         bg: 'bg-gradient-to-br from-blue-500 to-cyan-400'
     },
@@ -77,6 +77,35 @@ const monsters = ref({
         maxHp: 200,
         path: '/Monster/Pochita',
         bg: 'bg-gradient-to-br from-pink-500 to-cyan-400'
+    },
+    // slime: {
+    //     name: 'Slime',
+    //     level: 4,
+    //     atk: 6,
+    //     currentHp: 200,
+    //     maxHp: 200,
+    //     path: '/Monster/slime',
+    //     bg: 'bg-gradient-to-br from-red-500 to-blue-400'
+
+    // },
+    wolf: {
+        name: 'Wolf',
+        level: 4,
+        atk: 6,
+        currentHp: 200,
+        maxHp: 200,
+        path: '/Monster/wolf',
+        bg: 'bg-gradient-to-br from-amber-500 to-orange-400'
+
+    },
+    gost1: {
+        name: 'Gost',
+        level: 4,
+        atk: 6,
+        currentHp: 200,
+        maxHp: 200,
+        path: '/Monster/gost1',
+        bg: 'bg-gradient-to-br from-black to-orange-400'
 
     },
 });

@@ -7,7 +7,7 @@ defineProps({
 
 <template>
     <div class="flex justify-between">
-        <h2 class="text-lg font-semibold text-white">{{ title }}</h2>
+        <h2 class="text-lg font-semibold text-black dark:text-white">{{ title }}</h2>
         <p class="text-gray-500 mb-4 text-sm">{{ content }}</p>
     </div>
 </template>

@@ -1,5 +1,6 @@
 <template>
-    <div class="flex flex-row justify-between hover:bg-gray-700/80 p-2 rounded-2xl" @click="show_result(output_path)">
+    <div class="flex flex-row justify-between dark:hover:bg-gray-700/80 hover:bg-cyan-400/20 p-2 rounded-2xl"
+        @click="show_result(output_path)">
         <div class="flex flex-row space-x-2">
             <div class="rounded-md flex px-3 items-center bg-stone-900/70">
                 <FileCheckCornerIcon class="h-6 w-6"></FileCheckCornerIcon>

@@ -4,13 +4,15 @@ import { Timer, Activity, SkipForward } from "lucide-vue-next"
 import { useAudio } from "../../../composable/audio"
 const { unlockAudio } = useAudio()
 import { Use_is_warmup } from "../../../composable/help_game"
+import Trainer from "../Trainer/Trainer.vue"
+
 const { get_state_warmup, set_state_warmup } = Use_is_warmup()
 const { speak } = useAudio()
 const warmups = [
-    { name: "Xoay cổ tay", time: 5, speak_voice: "xoay cổ tay" },
-    { name: "Xoay vai", time: 20, speak_voice: "xoay vai" },
-    { name: "Squat nhẹ", time: 30, speak_voice: "sờ quáp nhẹ" },
-    { name: "Jump tại chỗ", time: 20, speak_voice: "dăm tại chổ" }
+    { name: "Dãn vai", time: 10, speak_voice: "Dãn vai", path: "/tutorial/Shoulder Stretch" },
+    { name: "Dũi chân", time: 20, speak_voice: "Dũi chân", path: "/tutorial/Single Leg Hip Rotation" },
+    { name: "Squat nhẹ", time: 30, speak_voice: "sờ quáp nhẹ", path: "/tutorial/Squat Reach" },
+    { name: "Jump tại chỗ", time: 20, speak_voice: "dăm tại chổ", path: "/tutorial/Jumping Jack" }
 ]
 
 const step = ref(0)
@@ -47,10 +49,7 @@ onMounted(() => {
         }
     }, 1000)
 })
-// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-// const run_battle_handle = () => {
 
-// }
 onUnmounted(() => {
     clearInterval(timer)
     speechSynthesis.cancel()
@@ -61,23 +60,18 @@ onUnmounted(() => {
     <div @click.once="unlockAudio" class="flex items-center justify-center bg-gray-900 text-white">
 
         <div class="w-[420px] bg-gray-800 rounded-2xl p-8 shadow-xl space-y-6">
-
-            <!-- title -->
+            <Trainer :path_json="warmups[step].path" :key="step"></Trainer>
             <div class="text-center space-y-2">
-                <Activity class="mx-auto text-orange-400" :size="40" />
-                <h1 class="text-2xl font-bold">Warm Up</h1>
+                <!-- <Activity class="mx-auto text-orange-400" :size="40" /> -->
+                <h1 class="text-2xl font-bold">Khởi động - {{ current.name }}</h1>
                 <p class="text-gray-400 text-sm">
                     Chuẩn bị cơ thể trước trận chiến
                 </p>
             </div>
 
             <!-- exercise -->
-            <div class="text-center space-y-2">
-                <h2 class="text-xl font-semibold">
-                    {{ current.name }}
-                </h2>
-
-                <div class="flex items-center justify-center gap-2 text-orange-400">
+            <div class="text-center">
+                <div class="flex items-center justify-center text-orange-400">
                     <Timer :size="20" />
                     <span class="text-lg font-bold">
                         {{ timeLeft }}s
@@ -87,7 +81,7 @@ onUnmounted(() => {
 
             <!-- progress -->
             <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
-                <div class="h-full bg-orange-400 transition-all" :style="{ width: progress + '%' }" />
+                <div class="h-full dark:bg-orange-400 transition-all" :style="{ width: progress + '%' }" />
             </div>
 
             <!-- step -->

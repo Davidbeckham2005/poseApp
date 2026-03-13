@@ -1,136 +1,131 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Camera } from 'lucide-vue-next'
-// Mock Data
+import { Camera, Mail, Calendar, Edit3, LayoutDashboard, Settings } from 'lucide-vue-next'
 import { useUser } from '../../../store/user.store';
-const userStore = useUser()
-
-const user = ref({
-    name: 'Alex Morgan',
-    email: 'alex.morgan@email.com',
-    joined: 'January 2025',
-    level: 12,
-    xp: 3450,
-    nextLevelXp: 4000,
-    streak: 7
-});
-
-const stats = computed(() => {
-    return [
-        { label: 'Total Sessions', value: userStore.user.total_session, icon: 'activity', color: 'text-orange-400' },
-        { label: 'Workout Time', value: userStore.user.total_time_work + "M", icon: 'clock', color: 'text-purple-400' },
-        { label: 'Calories Burned', value: userStore.user.total_caloris, icon: 'zap', color: 'text-orange-400' },
-        { label: 'Avg Accuracy', value: userStore.user.avg_accuracy + "%", icon: 'target', color: 'text-emerald-400' },
-    ];
-})
 import { open } from "@tauri-apps/plugin-dialog";
 import { convertFileSrc } from "@tauri-apps/api/core";
 
-// component
-import show_profile_value from './show_profile_value.vue';
+// Components
 import Profile_overview from './Profile_overview.vue';
 import Profile_setting from './Profile_setting.vue';
 import Profile_btn from './Profile_btn.vue';
-import Achievement from './Achievement.vue';
-import History from '../History/History.vue';
-const avatar = ref()
+import Show_profile_value from './show_profile_value.vue';
+
+
+const userStore = useUser();
+const avatar = ref(userStore.user.avatar || "https://via.placeholder.com/150");
+
+const stats = computed(() => [
+    { label: 'Số phiên tập', value: userStore.user.total_session + " phiên", icon: 'activity', color: 'text-orange-400' },
+    { label: 'Thời gian', value: userStore.user.total_time_work + " phút", icon: 'clock', color: 'text-purple-400' },
+    { label: 'Tổng calo', value: userStore.user.total_caloris + " calo", icon: 'zap', color: 'text-amber-400' },
+    { label: 'Trung bình chính xác', value: userStore.user.avg_accuracy + "%", icon: 'target', color: 'text-emerald-400' },
+]);
+
 async function change_avatar() {
     try {
         const pathSelected = await open({
-            filters: [{
-                name: "avatar",
-                extensions: ["*"]
-            }]
-        })
-        if (pathSelected) avatar.value = convertFileSrc(pathSelected)
-
+            multiple: false,
+            filters: [{ name: "Images", extensions: ["png", "jpg", "jpeg", "webp"] }]
+        });
+        if (pathSelected) avatar.value = convertFileSrc(pathSelected);
     } catch (error) {
-        console.log(error)
+        console.error("Avatar upload error:", error);
     }
 }
-const current_tab = ref('Overview')
-const profile_tab = ['Overview', 'Achievement', 'Setting']
-const switch_tab = (tab) => {
-    current_tab.value = tab
-}
 
+const current_tab = ref('Overview');
+const tabs = [
+    { id: 'Overview', name: 'Tổng quan', icon: LayoutDashboard },
+    { id: 'Setting', name: 'Cài đặt', icon: Settings }
+];
 </script>
 
 <template>
-    <div>
-        <div class="mx-auto bg-gray-700/50 border border-white/20 rounded-3xl p-8">
-            <div class="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8 ">
-                <div class="relative group">
-                    <img :src="avatar" alt="Profile" 1
-                        class="w-28 h-28 rounded-2xl object-cover border-2 border-slate-700" />
+    <div class="max-w-6xl mx-auto p-6 space-y-8">
+        <div
+            class="relative overflow-hidden bg-white dark:bg-gray-800/40 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-3xl p-8 shadow-xl">
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl"></div>
+            <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                <div class="relative group cursor-pointer" @click="change_avatar">
                     <div
-                        class="absolute -top-3 -right-3 bg-orange-400 text-black font-bold px-2 py-1 rounded-lg text-sm">
-                        LVL {{ user.level }}
+                        class="w-32 h-32 rounded-2xl overflow-hidden border-4 border-white dark:border-gray-700 shadow-2xl transition-transform duration-300 group-hover:scale-105">
+                        <img :src="avatar" alt="Profile" class="w-full h-full object-cover" />
                     </div>
-                    <button @click="change_avatar"
-                        class="absolute -bottom-2 -right-2 bg-orange-400 p-2 rounded-full hover:bg-orange-500 transition-colors text-black">
-                        <Camera></Camera>
-                    </button>
-                </div>
-
-
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h1 class="text-3xl font-bold tracking-tight text-white">{{ userStore.user.name }}</h1>
-                            <div class="flex gap-4 mt-1 text-slate-400 text-sm">
-                                <span class="flex items-center gap-1"> {{ userStore.user.email }}</span>
-                                <span class="flex items-center gap-1"> Joined {{ userStore.user.joined }}</span>
-                            </div>
-                        </div>
-                        <Profile_btn @click="switch_tab('Setting')" text="Edit profile"></Profile_btn>
-
+                    <div
+                        class="absolute -bottom-2 -right-2 bg-orange-500 p-2.5 rounded-xl shadow-lg text-white transform transition-all duration-300 hover:scale-110">
+                        <Camera :size="20" />
                     </div>
-
-                    <div class="mt-6">
-                        <div class="flex justify-between text-sm mb-2">
-                            <span class="text-slate-400">Experience Points</span>
-                            <span class="text-white">{{ user.xp }} / {{ user.nextLevelXp }} XP</span>
-                        </div>
-                        <div class="w-full h-3  rounded-full overflow-hidden">
-                            <div class="h-full bg-orange-400"
-                                :style="{ width: (user.xp / user.nextLevelXp) * 100 + '%' }"></div>
-                        </div>
-                        <p class="text-[11px] text-slate-500 mt-2 uppercase tracking-wider">
-                            {{ user.nextLevelXp - user.xp }} XP UNTIL LEVEL {{ user.level + 1 }}
-                        </p>
+                    <div
+                        class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
+                        <span class="text-white text-xs font-medium">Thay đổi ảnh</span>
                     </div>
                 </div>
+                <div class="flex-1 text-center md:text-left space-y-3">
+                    <div>
+                        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                            {{ userStore.user.name }}
+                        </h1>
+                        <div
+                            class="flex flex-wrap justify-center md:justify-start gap-4 mt-2 text-gray-500 dark:text-gray-400">
+                            <span class="flex items-center gap-1.5 text-sm">
+                                <Mail :size="16" class="text-orange-400" /> {{ userStore.user.email }}
+                            </span>
+                            <span
+                                class="flex items-center gap-1.5 text-sm border-l border-gray-300 dark:border-gray-600 pl-4">
+                                <Calendar :size="16" class="text-orange-400" /> Tham gia: {{ userStore.user.joined }}
+                            </span>
+                        </div>
+                    </div>
 
+                    <div class="pt-2">
+                        <button @click="current_tab = 'Setting'"
+                            class="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-900 dark:bg-white dark:text-gray-900 text-white rounded-xl font-semibold text-sm hover:bg-orange-500 dark:hover:bg-orange-400 transition-all shadow-md active:scale-95">
+                            <Edit3 :size="16" /> Thiết lập tài khoản
+                        </button>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
             </div>
-
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <show_profile_value v-for="stat in stats" :stat="stat"></show_profile_value>
-            </div>
-
-            <!-- <div class="bg-orange-500/10 border border-orange-500/20 rounded-2xl p-4 flex items-center gap-4">
-                <div class="bg-orange-500 p-3 rounded-xl shadow-lg shadow-orange-500/20">
-                    🔥
-                </div>
-                <div>
-                    <h3 class="font-bold text-orange-400 leading-tight">{{ user.streak }} Day Streak!</h3>
-                    <p class="text-xs text-orange-300/70">Keep it up! You're on fire!</p>
-                </div>
-            </div> -->
         </div>
-        <div>
-            <div class="grid grid-2 lg:grid-cols-8">
-                <div class="uppercase font-bold mt-8  pb-3  text-center"
-                    :class="current_tab == tab ? 'text-orange-400 border-b border-orange-400' : 'border-b-gray-700/30 hover:border-orange-400 border-b '"
-                    v-for="tab in profile_tab" @click="switch_tab(tab)">{{
-                        tab
-                    }}
-                </div>
+
+        <div class="space-y-6">
+            <div class="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
+                <button v-for="tab in tabs" :key="tab.id" @click="current_tab = tab.id" :class="[
+                    'flex items-center gap-2 px-8 py-4 text-sm font-bold uppercase tracking-wider transition-all relative',
+                    current_tab === tab.id
+                        ? 'text-orange-500'
+                        : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                ]">
+                    <component :is="tab.icon" :size="18" />
+                    {{ tab.name }}
+                    <div v-if="current_tab === tab.id"
+                        class="absolute bottom-0 left-0 right-0 h-1 bg-orange-500 rounded-t-full"></div>
+                </button>
             </div>
-            <Profile_overview v-if="current_tab == 'Overview'" :stats="stats"></Profile_overview>
-            <Profile_setting v-else-if="current_tab == 'Setting'" :user="userStore.user"></Profile_setting>
-            <History v-else-if="current_tab == 'Achievement'">
-            </History>
+
+            <Transition mode="out-in" enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0 translate-y-4" enter-to-class="opacity-100 translate-y-0"
+                leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0"
+                leave-to-class="opacity-0 translate-y-4">
+                <div :key="current_tab" class="min-h-[400px]">
+                    <Profile_overview v-if="current_tab === 'Overview'" :stats="stats" />
+                    <Profile_setting v-else-if="current_tab === 'Setting'" :user="userStore.user" />
+                </div>
+            </Transition>
         </div>
     </div>
 </template>
+
+<style scoped>
+.overflow-x-auto::-webkit-scrollbar {
+    display: none;
+}
+
+.overflow-x-auto {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+</style>

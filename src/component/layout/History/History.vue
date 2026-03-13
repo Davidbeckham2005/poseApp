@@ -1,6 +1,6 @@
 <template>
-    <div class="rounded-2xl bg-gray-700/50 p-3 mt-5 space-y-5">
-        <Title_content_horizontal title="Recents video" :content="videoStore.total_video"
+    <div class="rounded-2xl dark:bg-gray-700/50 p-3 mt-5 space-y-5">
+        <Title_content_horizontal title="Lịch sử" :content="videoStore.total_video"
             class="border-b-2 border-gray-700/30">
         </Title_content_horizontal>
         <History_item :accuracy_good="video.accuracy_good" :count="video.total" :size_video="video.size_video"

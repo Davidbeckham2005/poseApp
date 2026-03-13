@@ -14,8 +14,8 @@ defineProps({
 </script>
 
 <template>
-    <div class="flex flex-col">
-        <h2 :class='["font-semibold text-white", size_title]'>{{ title }}</h2>
+    <div class="flex flex-col font-semibold">
+        <h2 :class='[" dark:text-white text-black", size_title]'>{{ title }}</h2>
         <p :class='["text-gray-500 mb-4", size_content]'>{{ content }}</p>
     </div>
 </template>

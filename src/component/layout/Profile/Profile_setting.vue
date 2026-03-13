@@ -9,7 +9,7 @@
             <span class="text-gray-500 text-lg">Email</span>
             <input type="text" class="border bg-gray-800/90 h-10 pl-5 rounded-xl mt-2" v-model="email">
         </div>
-        <Profile_btn @click="update_user_handle" text="Save Changes"></Profile_btn>
+        <Profile_btn @click="update_user_handle" text="Lưu thay đổi"></Profile_btn>
     </div>
 </template>
 

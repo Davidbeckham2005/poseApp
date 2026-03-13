@@ -63,7 +63,6 @@ class exercise_Service:
         cv2.line(frame,(0,310),(310,310),(255,0,0),5)
 
     def run_detection(self,frame):
-       
         self.push_frame()
         result = self.pose.run_process(frame)
         if result.pose_landmarks:
@@ -81,7 +80,7 @@ class exercise_Service:
                 self.draw.draw_skeleton(frame,pose_landmark)
             if self.isMake_Result:
                 self.capture.makeResult(frame)  
-           
+        return frame
   
     def run_estimate(self,pose_landmark,frame):
         pass

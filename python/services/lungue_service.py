@@ -15,7 +15,7 @@ class lungService(exercise_Service):
         self.history_origin_lungue = []
     def run_estimate(self,pose_landmark,frame):
         data = self.pose.get_landmark(pose_landmark)
-        
+        # print(data)
         left_knee = data["left_knee"]
         right_knee = data["right_knee"]
         right_hip = data["right_hip"]
@@ -40,8 +40,8 @@ class lungService(exercise_Service):
         cv2.putText(frame,str(origin),(left_knee_px[0]-10,left_knee_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
         cv2.putText(frame,str( origin),(right_knee_px[0]-10,right_knee_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
         origin = (knee_origin_left+knee_origin_right)/2.0
-        self.lungue_counting(origin,pose_landmark)
-    def lungue_counting(self, origin,pose_landmark):
+        self.lungue_counting(origin,data)
+    def lungue_counting(self, origin,data):
         update_history(self.history_origin_lungue,origin)
         balance = isBalance(self.history_origin_lungue)
         if origin<self.down_standard:
@@ -59,7 +59,7 @@ class lungService(exercise_Service):
             self.data_on_rep = {
                 "total" : self.count_total,
                 "estimate" : self.estimate,
-                "good" : self.count_good
+                "good" : self.count_good,
             }
             record = {
             "count" : self.count_total,

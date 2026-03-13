@@ -1,17 +1,11 @@
 <template>
-    <div @click.once="unclock" class="flex h-screen bg-[#0a0a0c] text-gray-300 font-sans">
-
-        <sidebar v-if="!get_state_game" class="w-36 md:w-70 border-r border-gray-800 flex flex-col bg-black"
+    <div @click.once="unclock" class="flex h-screen dark:bg-[#0a0a0c] dark:text-gray-300 font-sans">
+        <sidebar v-if="!get_state_game" class="w-36 md:w-70 border-r border-gray-800 flex flex-col dark:bg-black"
             :menu-items="menuItems" :current-tab="currentTab" @active-menu="setActive" />
-
         <main class="flex-1 flex flex-col overflow-y-auto">
-
-
-            <Header v-if="!get_state_game" class="flex items-center justify-between px-6 py-4 border-b border-gray-800">
+            <Header v-if="!get_state_game" class="flex justify-end px-6 py-4 border-b border-gray-800">
             </Header>
-
             <div class="py-4 px-2 max-w-6xl mx-auto w-full ">
-                <!-- <Live v-if="currentTab === `live`"></Live> -->
                 <pose_advanture v-if="currentTab == 'game'"></pose_advanture>
                 <Profile v-if="currentTab === `profile`"></Profile>
                 <Dashbroad v-else-if="currentTab === `dashboard`"></Dashbroad>

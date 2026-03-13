@@ -20,7 +20,7 @@
         <div v-if="isshow_filter"
             class="bg-gray-700/50 border border-white/20 w-full mt-4 h-25 rounded-2xl flex items-center pl-4">
             <div class="w-44 h-15 space-y-3 flex flex-col justify-between">
-                <span class="text-gray-500 text-sm">Sort By</span>
+                <span class="text-gray-500 text-sm">Sắp xếp</span>
                 <Field name="sort" as="select" v-model="sort_selected"
                     class="text-white w-full rounded-lg bg-gray-900/90 h-15 pl-2 pr-2 p-2 border border-white/20 focus:border-cyan-400">
                     <option value=" " disabled>--Select--</option>
@@ -34,7 +34,7 @@
         <div class="space-y-4 mt-2">
             <div class="flex justify-between text-sm">
                 <span class="text-gray-500">Showing {{ videos.length }} of {{ videoStore.total_video }}
-                    Sessions</span>
+                    Số bài tập</span>
                 <span class="text-cyan-400" @click="select_all">Select all</span>
             </div>
             <History_item_video v-for="video in videos" :video="video" @select_video="append_on_delete_list"
