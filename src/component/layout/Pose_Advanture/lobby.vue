@@ -98,9 +98,7 @@ h1 {
 }
 
 /* Hiệu ứng trôi nổi cho các hình cầu */
-.blur-[100px] {
-    animation: float 10s infinite alternate ease-in-out;
-}
+/* / */
 
 @keyframes float {
     from {

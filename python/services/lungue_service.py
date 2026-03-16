@@ -1,5 +1,7 @@
+from sqlalchemy import false
+
 from utils.calc import goc_tai_tham_so_thu_nhat, convert_to_px
-from utils.detecting import isBalance, isReadyVisibility, update_history
+from utils.detecting import isBalance, isReadyVisibility, update_history, get_landmark
 from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
 from services.video_services import VideoService
@@ -14,7 +16,7 @@ class lungService(exercise_Service):
         super().__init__(draw,pose,capture,data)
         self.history_origin_lungue = []
     def run_estimate(self,pose_landmark,frame):
-        data = self.pose.get_landmark(pose_landmark)
+        data = get_landmark(pose_landmark)
         # print(data)
         left_knee = data["left_knee"]
         right_knee = data["right_knee"]
@@ -24,11 +26,17 @@ class lungService(exercise_Service):
         left_ankle = data["left_ankle"]
         
 
-        right_knee_px =  convert_to_px(right_knee,frame)
-        left_knee_px =  convert_to_px(left_knee,frame)
-    
-        if not isReadyVisibility(left_ankle,left_hip,left_knee,right_ankle,right_hip,right_knee):
-            return
+        # right_knee_px =  convert_to_px(right_knee,frame)
+        # left_knee_px =  convert_to_px(left_knee,frame)
+       
+        if not isReadyVisibility(
+            left_ankle,
+            left_hip,
+            left_knee,
+            right_ankle,
+            right_hip,
+            right_knee):
+            return False
        
 
         knee_origin_left = goc_tai_tham_so_thu_nhat(left_knee,left_ankle,left_hip)
@@ -37,16 +45,16 @@ class lungService(exercise_Service):
         knee_origin_left = round(knee_origin_left,2) 
         knee_origin_right = round(knee_origin_right,2)
         origin = max(knee_origin_left,knee_origin_right)
-        cv2.putText(frame,str(origin),(left_knee_px[0]-10,left_knee_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
-        cv2.putText(frame,str( origin),(right_knee_px[0]-10,right_knee_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
-        origin = (knee_origin_left+knee_origin_right)/2.0
+        # cv2.putText(frame,str(origin),(left_knee_px[0]-10,left_knee_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
+        # cv2.putText(frame,str( origin),(right_knee_px[0]-10,right_knee_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
+        # origin = (knee_origin_left+knee_origin_right)/2.0
         self.lungue_counting(origin,data)
+        return True
     def lungue_counting(self, origin,data):
         update_history(self.history_origin_lungue,origin)
-        balance = isBalance(self.history_origin_lungue)
         if origin<self.down_standard:
             # print(self.history_origin_lungue)
-            if balance and self.isEstimate:
+            if isBalance(self.history_origin_lungue) and self.isEstimate:
                 self.evaluate_form(origin)
                 # self.time_start = self.capture.get_current_time_video(self.current_frame)
                 self.isEstimate = False
@@ -56,11 +64,6 @@ class lungService(exercise_Service):
             # self.time_end = self.capture.get_current_time_video(self.current_frame)
             self.count_total +=1
             self.isEstimate = True
-            self.data_on_rep = {
-                "total" : self.count_total,
-                "estimate" : self.estimate,
-                "good" : self.count_good,
-            }
             record = {
             "count" : self.count_total,
             "estimate" : self.estimate,
@@ -70,7 +73,13 @@ class lungService(exercise_Service):
             }
             self.record_couting.append(record)
             self.estimate="estimate"
-
+        self.data_on_rep = {
+                "total" : self.count_total,
+                "estimate" : self.estimate,
+                "good" : self.count_good,
+                "state" : self.state,
+            }
+        return True
     def evaluate_form(self,origin):
         if origin<self.bad_standard:
             self.estimate = "bad"

@@ -8,12 +8,17 @@ export function useAudio() {
         audioUnlocked = true
     }
     const speak = (text) => {
-        if (!audioUnlocked) return
-        // window.speechSynthesis.cancel()
-        const speech = new SpeechSynthesisUtterance(text)
-        speech.lang = "vi-VN"
-        speech.rate = 1
-        window.speechSynthesis.speak(speech)
+        return new Promise((resolve) => {
+            const utter = new SpeechSynthesisUtterance(String(text))
+            utter.lang = "vi-VN"
+            utter.rate = 1
+            utter.pitch = 1
+
+            utter.onend = () => resolve()
+            utter.onerror = () => resolve()
+
+            speechSynthesis.speak(utter)
+        })
     }
     return { unlockAudio, speak }
 }

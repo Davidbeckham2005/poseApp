@@ -38,6 +38,7 @@ async def send_loop(websocket, result_buffer):
             await websocket.send_bytes(result)
         except:
             break
+
 @router.websocket("/live")
 async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
     await websocket.accept()
@@ -82,6 +83,7 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
     finally:
         print("close by backend")
         stop_event.set()
+        thread.join(timeout=1)
         if websocket.client_state.name != 'DISCONNECTED':
             await websocket.close()
 
@@ -95,14 +97,16 @@ def detection_loop(frane_buffer, result_buffer, service,stop_event):
         frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         if frame is None:
             continue
-        small = cv2.resize(frame,(320,240))
+
         frame = cv2.flip(frame,1)
-        frame = service.run_detection(frame)
+        value = service.run_detection(frame)
+        # print(value)
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
         success, buffer = cv2.imencode(".jpg", frame,encode_param)
         if not success:
             continue
         data_result = service.get_data_live()
+        data_result["ready"] = value
         frame_bytes = buffer.tobytes()
         meta = json.dumps(data_result).encode()
         payload = len(meta).to_bytes(4, "big") + meta + frame_bytes
@@ -113,5 +117,45 @@ def detection_loop(frane_buffer, result_buffer, service,stop_event):
         # if cv2.waitKey(1) & 0xFF == ord('q'):
         #     break   
         result_buffer.set(payload)
+class Landmark:
+    def __init__(self,data):
+        self.x = data["x"]
+        self.y = data["y"]
+        self.z = data["z"]
+        self.visibility = data["visibility"]
+@router.websocket("/live2")
+async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
+    await websocket.accept()
+    print("client connected! exercise:", exercise_type)
 
-        time.sleep(0.003)
+    detector = PoseDetector()
+    draw = DrawingService(detector)
+    data = Webcam_Schemas(Analyst_FPS=False, type=exercise_type)
+
+    if exercise_type == 'squat':
+        service = squatService(None, None, None, data)
+    elif exercise_type == 'pushup':
+        service = pushupService(None, None, None, data)
+    elif exercise_type == 'plank':
+        service = plankService(None, None, None, data)
+    elif exercise_type == 'lungue':
+        service = lungService(None, None, None, data)
+    else:
+        await websocket.close()
+        return
+
+    try:
+        while True:
+
+            data = await websocket.receive_json()
+
+            landmarks = data["landmarks"]
+            landmarks = [Landmark(x) for x in landmarks]
+            service.run_estimate(landmarks,None)
+
+            result = service.get_data_live()
+            # print(result)
+            await websocket.send_json(result)
+
+    except WebSocketDisconnect:
+        print("client disconnected")

@@ -1,5 +1,5 @@
 from utils.calc import get_form, goc_tai_tham_so_thu_nhat, trungbinh, calculating_accuracy, calc_time, calculating_caloris
-from utils.detecting import  isBalance, isReadyVisibility, update_history,check_y_hip_and_shoulder, drawtext
+from utils.detecting import  isBalance, isReadyVisibility, update_history,check_y_hip_and_shoulder, drawtext, get_landmark
 from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
 from services.video_services import VideoService
@@ -39,7 +39,7 @@ class plankService(exercise_Service):
     def run_estimate(self, pose_landmark, frame):
         self.count_total+=1
         # print(self.count_good,self.count_total)
-        data = self.pose.get_for_push_up(pose_landmark)
+        data = get_landmark(pose_landmark)
         data_px = self.pose.get_for_push_up_px(frame,pose_landmark)
         left_shoulder=data["left_shoulder"]
         right_shoulder=data["right_shoulder"]

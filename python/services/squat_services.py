@@ -1,5 +1,5 @@
 from utils.calc import goc_tai_tham_so_thu_nhat, convert_to_px
-from utils.detecting import isBalance, isReadyVisibility, drawtext, update_history, check_view
+from utils.detecting import isBalance, isReadyVisibility, drawtext, update_history, get_landmark
 from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
 from services.video_services import VideoService
@@ -14,7 +14,7 @@ class squatService(exercise_Service):
         super().__init__(draw,pose,capture,data)
         self.history_origin_squat = []
     def run_estimate(self,pose_landmark,frame):
-        data = self.pose.get_landmark(pose_landmark)
+        data = get_landmark(pose_landmark)
         
         left_knee = data["left_knee"]
         right_knee = data["right_knee"]
@@ -25,11 +25,11 @@ class squatService(exercise_Service):
         left_shoulder = data['left_shoulder']
         right_shoulder = data['right_shoulder']
 
-        right_knee_px =  convert_to_px(right_knee,frame)
-        left_knee_px =  convert_to_px(left_knee,frame)
+        # right_knee_px =  convert_to_px(right_knee,frame)
+        # left_knee_px =  convert_to_px(left_knee,frame)
     
         if not isReadyVisibility(left_ankle,left_hip,left_knee,right_ankle,right_hip,right_knee,right_shoulder,left_shoulder):
-            return
+            return False
         # self.draw.draw_line(frame,left_ankle_px,left_knee_px,(0,255,0))
         # self.draw.draw_line(frame,left_hip_px,left_knee_px,(0,255,0))
         # self.draw.draw_line(frame,right_ankle_px,right_knee_px,(0,255,0))
@@ -41,9 +41,10 @@ class squatService(exercise_Service):
         knee_origin_left = round(knee_origin_left,2) 
         knee_origin_right = round(knee_origin_right,2)
         # ve goc
-        self.draw.draw_origin_at_intersection(frame,knee_origin_left,knee_origin_right,left_knee_px,right_knee_px,(0,0,255)) 
+        # self.draw.draw_origin_at_intersection(frame,knee_origin_left,knee_origin_right,left_knee_px,right_knee_px,(0,0,255)) 
         origin = (knee_origin_left+knee_origin_right)/2.0
         self.squat_counting(origin,data)
+        return True
     def squat_counting(self, origin,data):
         update_history(self.history_origin_squat,origin)
         balance = isBalance(self.history_origin_squat)
@@ -55,15 +56,9 @@ class squatService(exercise_Service):
                 self.isEstimate = False
                 self.state = "down"
         elif origin>self.up_standard and self.state=="down":
-            self.state = "up"
             # self.time_end = self.capture.get_current_time_video(self.current_frame)
             self.count_total +=1
             self.isEstimate = True
-            self.data_on_rep = {
-                "total" : self.count_total,
-                "estimate" : self.estimate,
-                "good" : self.count_good,
-            }
             record = {
             "count" : self.count_total,
             "estimate" : self.estimate,
@@ -73,7 +68,14 @@ class squatService(exercise_Service):
             }
             self.record_couting.append(record)
             self.estimate="estimate"
+            self.state = "up"
+        self.data_on_rep = {
+            "total" : self.count_total,
+            "estimate" : self.estimate,
+            "good" : self.count_good,
+            "state" : self.state,
 
+        }
     def evaluate_form(self,origin):
         if origin<self.bad_standard:
             self.estimate = "bad"

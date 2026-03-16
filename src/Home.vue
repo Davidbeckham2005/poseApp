@@ -8,6 +8,7 @@
             <div class="py-4 px-2 max-w-6xl mx-auto w-full ">
                 <pose_advanture v-if="currentTab == 'game'"></pose_advanture>
                 <Profile v-if="currentTab === `profile`"></Profile>
+                <CameraView v-if="currentTab === 'test'"></CameraView>
                 <Dashbroad v-else-if="currentTab === `dashboard`"></Dashbroad>
                 <Upload v-else-if="currentTab === `upload`"></Upload>
                 <Settings v-else-if="currentTab === `settings`"></Settings>
@@ -36,6 +37,7 @@ const unclock = () => {
 }
 // console.log(get_state_game())
 // component
+import CameraView from './component/layout/Pose_Advanture/CameraView.vue';
 import Header from './component/layout/Header.vue';
 import sidebar from './component/layout/sidebar/sidebar.vue';
 import Upload from './component/layout/Upload.vue';
@@ -52,7 +54,7 @@ const { switch_on_sidebar, currentTab } = useNavigation()
 
 const menuItems = [
     { name: 'game', label: 'FITNESS ADVENTURE', icon: Swords },
-    // { name: 'live', label: 'LIVE DEMO', icon: Radio },
+    { name: 'test', label: 'LIVE DEMO', icon: Radio },
     // { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
     { name: 'profile', label: 'Trang cá nhân', icon: UserRound },
     { name: 'upload', label: 'Kiểm tra tập luyện', icon: UploadIcon },

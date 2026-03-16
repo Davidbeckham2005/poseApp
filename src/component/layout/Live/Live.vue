@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col w-full max-w-4xl mx-auto font-sans text-slate-200">
         <div
-            class="relative w-full aspect-video rounded-3xl overflow-hidden bg-slate-950 border border-white/10 shadow-2xl group">
+            class="relative w-full aspect-video rounded-3xl overflow-hidden bg-slate-950 border border-white/10 shadow-2xl group mt-3">
 
             <img v-if="start_analyst && frame" :src="frame" class="absolute inset-0 w-full h-full object-cover"
                 alt="AI Processed Frame">
@@ -86,6 +86,8 @@ const props = defineProps({ exercise_type: String, currentHp: Number })
 const frame = ref("")
 import { ref, onUnmounted, onMounted, watch, computed } from 'vue'
 import { Lightbulb } from 'lucide-vue-next'
+import { useAudio } from '../../../composable/audio'
+const { speak } = useAudio()
 const videoRef = ref(null)
 const start_analyst = ref(false)
 const old_data = ref('')
@@ -99,8 +101,9 @@ watch(() => props.exercise_type, (newValue) => {
     console.log(current_exercise.value)
 })
 const connect = () => {
-    if (ws && ws.readyState === WebSocket.OPEN) {
+    if (ws) {
         ws.close()
+        ws = null
     }
     ws = new WebSocket(`ws://localhost:8000/websocket/live?exercise_type=${current_exercise.value}`)
     ws.onopen = () => {
@@ -141,8 +144,8 @@ const startCamera = async () => {
         stream.value = await navigator.mediaDevices.getUserMedia(
             {
                 video: {
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
+                    width: { ideal: 640 },
+                    height: { ideal: 480 },
                     frameRate: { ideal: 30 }
                 },
                 audio: false
@@ -179,11 +182,11 @@ onUnmounted(() => {
     }
     clearInterval(tipsInterval)
 })
-
+let rafId = null
 function loop() {
     if (!start_analyst.value) return
     sendData()
-    requestAnimationFrame(loop)
+    rafId = requestAnimationFrame(loop)
 }
 const canvas = document.createElement('canvas')
 const ctx = canvas.getContext('2d')
@@ -222,7 +225,7 @@ const tutorial_message = ref('')
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const startAnalyst = async () => {
     connect()
-    startRepare()
+    // await startRepare()
     start_analyst.value = true
     loop()
     startRotationTips(props.exercise_type)
@@ -230,6 +233,7 @@ const startAnalyst = async () => {
 const stopAnalyst = () => {
     start_analyst.value = false
     emit('is_analyst', start_analyst.value)
+    if (rafId) cancelAnimationFrame(rafId)
     ws.close()
 }
 const handle_analyst = () => {
@@ -247,27 +251,25 @@ watch(start_analyst, () => {
 let tipsInterval = null
 const startRepare = async () => {
     statusMessage.value = "Đang khởi động hệ thống AI..."
-    await delay(1500)
+    await speak(statusMessage.value)
+    // await delay(1500)
+
 
     statusMessage.value = "Vui lòng đứng xa camera khoảng 2-3 mét để thấy toàn thân"
-    await delay(3000)
+    await speak(statusMessage.value)
+
+    // await delay(3000)
     statusMessage.value = "Chuẩn bị..."
-    countdown.value = 3
+    await speak(statusMessage.value)
 
-    while (countdown.value > 0) {
-        await delay(1000)
-        countdown.value--
-    }
-
-    countdown.value = null
     statusMessage.value = "BẮT ĐẦU!"
+    await speak(statusMessage.value)
 
     await delay(2000)
     statusMessage.value = ""
 }
-import { useAudio } from '../../../composable/audio'
-const { speak } = useAudio()
-const startRotationTips = () => {
+
+const startRotationTips = async () => {
     if (!start_analyst.value) return
     // Xóa interval cũ nếu có
     if (tipsInterval) clearInterval(tipsInterval)
@@ -278,14 +280,19 @@ const startRotationTips = () => {
     let index = 0
     // Hiển thị câu đầu tiên ngay lập tức
     tutorial_message.value = tips[0]
-
+    await speak(tutorial_message.value)
     // Cứ mỗi 6 giây đổi một câu khác
-    tipsInterval = setInterval(() => {
+    tipsInterval = setInterval(async () => {
         index = (index + 1) % tips.length
-        speak(tips[index])
         tutorial_message.value = tips[index]
+        await speak(tips[index])
     }, 6000)
 }
+
+
+
+
+// animation ko can quan tam
 </script>
 <style scoped>
 /* Animations cho UX mượt mà */

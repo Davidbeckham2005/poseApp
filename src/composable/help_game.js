@@ -50,15 +50,15 @@ const monsters = ref({
         path: '/Monster/dragon',
         bg: 'bg-gradient-to-br from-blue-500 to-cyan-400'
     },
-    dancer: {
-        name: 'dancer',
-        level: 4,
-        atk: 6,
-        currentHp: 200,
-        maxHp: 200,
-        path: '/Monster/dancer',
-        bg: 'bg-gradient-to-br from-red-500 to-cyan-400'
-    },
+    // dancer: {
+    //     name: 'dancer',
+    //     level: 4,
+    //     atk: 6,
+    //     currentHp: 200,
+    //     maxHp: 200,
+    //     path: '/Monster/dancer',
+    //     bg: 'bg-gradient-to-br from-red-500 to-cyan-400'
+    // },
     CactiniSandalini: {
         name: 'Cactini Sandalini',
         level: 4,

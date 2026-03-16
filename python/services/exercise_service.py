@@ -54,21 +54,23 @@ class exercise_Service:
         if self.Analyst_FPS:
             drawtext(frame,(20,300),f'FPS: {str(self.capture.getFPS())}',(0,128,128))
         if self.Analyst_count:
-            drawtext(frame,(20,100),f"Reps: {str(self.count_total)}",(128,0,0))
+            drawtext(frame,(60,100),f"Reps: {str(self.count_total)}",(128,0,0))
         if self.Analyst_estimate:
             drawtext(frame,(20,250),self.estimate,(128,0,0))
         if self.Analyst_count_good:
             drawtext(frame,(20,200),f'Good: {str(self.count_good)}',(128,0,0))
-        cv2.line(frame,(310,0),(310,310),(255,0,0),5)
-        cv2.line(frame,(0,310),(310,310),(255,0,0),5)
+        # cv2.line(frame,(310,0),(310,310),(255,0,0),5)
+        # cv2.line(frame,(0,310),(310,310),(255,0,0),5)
 
     def run_detection(self,frame):
         self.push_frame()
         result = self.pose.run_process(frame)
+        value = False
         if result.pose_landmarks:
             pose_landmark = result.pose_landmarks[0]
-            self.run_estimate(pose_landmark,frame)
-            drawtext(frame,(10,50),f"Exercise: {self.type}",(0,0,255))
+            value = self.run_estimate(pose_landmark,frame)
+        if value:
+            drawtext(frame,(10,100),f"Exercise: {self.type}",(0,0,255))
             if self.isAnalyst:
                 self.show_analyst(frame)
             # if self.isCheck_view:
@@ -79,8 +81,10 @@ class exercise_Service:
             if self.isDrawing:
                 self.draw.draw_skeleton(frame,pose_landmark)
             if self.isMake_Result:
-                self.capture.makeResult(frame)  
-        return frame
+                self.capture.makeResult(frame) 
+        else:
+            drawtext(frame,(10,50),"Vui long dung vao khung anh",(0,0,255))
+        return value
   
     def run_estimate(self,pose_landmark,frame):
         pass

@@ -20,7 +20,7 @@ class DrawingService:
             landmarks_px.append((int(lm.x * w), int(lm.y * h)))
 
         # 2. Vẽ các đường nối (Connections)
-        for connection in self.CONNECTIONS_leg:
+        for connection in self.CONNECTIONS:
             start_idx, end_idx = connection
             pt1 = landmarks_px[start_idx]
             pt2 = landmarks_px[end_idx]

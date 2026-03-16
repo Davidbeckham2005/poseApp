@@ -1,5 +1,5 @@
-from utils.calc import goc_tai_tham_so_thu_nhat, trungbinh
-from utils.detecting import  isBalance, isReadyVisibility, update_history,check_y_hip_and_shoulder, drawtext
+from utils.calc import goc_tai_tham_so_thu_nhat, trungbinh, convert_to_px
+from utils.detecting import  isBalance, isReadyVisibility, update_history, get_landmark
 from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
 from services.video_services import VideoService
@@ -7,7 +7,7 @@ from services.exercise_service import exercise_Service
 import cv2
 class pushupService(exercise_Service):
     down_standard = 130
-    up_standard = 160
+    up_standard = 140
     good_standard = 90  
     bad_standard = 32
     def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService,data):    
@@ -18,8 +18,7 @@ class pushupService(exercise_Service):
     
     def run_estimate(self, pose_landmark, frame):
         # return super().run_estimate(pose_landmark, frame)
-        data = self.pose.get_for_push_up(pose_landmark)
-        data_px = self.pose.get_for_push_up_px(frame,pose_landmark)
+        data = get_landmark(pose_landmark)
         left_shoulder=data["left_shoulder"]
         right_shoulder=data["right_shoulder"]
         left_elbow=data["left_elbow"]
@@ -28,15 +27,17 @@ class pushupService(exercise_Service):
         right_wrist=data["right_wrist"]
         left_hip = data["left_hip"]
         right_hip = data["right_hip"]
-        left_shoulder_px=data_px["left_shoulder_px"]
-        right_shoulder_px=data_px["right_shoulder_px"]
-        left_elbow_px=data_px["left_elbow_px"]
-        right_elbow_px=data_px["right_elbow_px"]
-        left_wrist_px=data_px["left_wrist_px"]
-        right_wrist_px=data_px["right_wrist_px"]
+        # left_shoulder_px = convert_to_px(left_shoulder, frame)
+        # right_shoulder_px = convert_to_px(right_shoulder, frame)
+        # left_elbow_px = convert_to_px(left_elbow, frame)
+        # right_elbow_px = convert_to_px(right_elbow, frame)
+        # left_wrist_px = convert_to_px(left_wrist, frame)
+        # right_wrist_px = convert_to_px(right_wrist, frame)
         # print(left_elbow_px)
-        if not isReadyVisibility(left_elbow,right_elbow,left_shoulder,right_shoulder,left_wrist,right_wrist):
-            return
+        left_ready = isReadyVisibility(left_shoulder, left_elbow, left_wrist)
+        right_ready = isReadyVisibility(right_shoulder, right_elbow, right_wrist)
+        if not (left_ready or right_ready):
+            return False    
         
 
         # left_elbow_origin = goc_tai_tham_so_thu_nhat(left_elbow,left_shoulder,left_wrist)
@@ -44,8 +45,8 @@ class pushupService(exercise_Service):
         
         origin = self.choose_arm(right_elbow,right_shoulder,right_wrist,left_elbow,left_shoulder,left_wrist)
        
-        cv2.putText(frame,str(origin),(left_elbow_px[0]-10,left_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
-        cv2.putText(frame,str(origin),(right_elbow_px[0]-10,right_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
+        # cv2.putText(frame,str(origin),(left_elbow_px[0]-10,left_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
+        # cv2.putText(frame,str(origin),(right_elbow_px[0]-10,right_elbow_px[1]+10),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
       
 
         update_history(self.history_origin_pushup,origin)
@@ -56,7 +57,7 @@ class pushupService(exercise_Service):
                 self.isEstimate = False
                 self.state = "down"
         elif origin>self.up_standard and self.state=="down":
-            self.state = "up"
+            
             # self.time_end = self.capture.get_current_time_video(self.current_frame)
             self.isEstimate = True
             record = {
@@ -65,13 +66,16 @@ class pushupService(exercise_Service):
             "require" : self.require,
             "origin" : self.origin,
             }
-            self.data_on_rep = {
+            self.state = "up"
+            self.record_couting.append(record)
+            self.estimate="estimate"
+        self.data_on_rep = {
                 "total" : self.count_total,
                 "estimate" : self.estimate,
                 "good" : self.count_good,
+                'state' : self.state,
             }
-            self.record_couting.append(record)
-            self.estimate="estimate"
+        return True
     def evaluate_form(self,origin):
         if origin < self.bad_standard:
             self.estimate = "bad"
