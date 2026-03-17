@@ -38,17 +38,12 @@
                 </div>
                 <div
                     class="col-span-8 bg-[#0a0a0a] rounded-3xl flex flex-col md:px-10 justify-center relative border border-white/20">
-                    <Live @result="result_handle" :exercise_type="current_exercise_type?.id"
+                    <!-- <Live @result="result_handle" :exercise_type="current_exercise_type?.id"
                         :currentHp="monster.currentHp" @is_analyst="handle_send_analyst" @finish="finish_handle">
-                    </Live>
+                    </Live> -->
+                    <CaneraView :exercise_type="current_exercise_type?.id" :currentHp="monster.currentHp"
+                        @finish="finish_handle"></CaneraView>
                 </div>
-                <!-- <div
-                    class="col-span-3 rounded-3xl border relative border-cyan-800 flex flex-col bg-white overflow-hidden p-5">
-                    <exercise_tutorial :prop_current_exercise_tutorial="current_exercise_tutorial"></exercise_tutorial>
-                    <div class="text-black">
-                        <span>fdjj</span>
-                    </div>
-                </div> -->
             </div>
             <ExerciseSelector @send_current_exercise="handle_current_exercise_type" :start_analyst="is_start">
             </ExerciseSelector>
@@ -95,8 +90,8 @@
     </div>
 </template>
 <script setup>
+import CaneraView from './CameraView.vue'
 import ExerciseSelector from './ExerciseSelector.vue'
-import Live from '../Live/Live.vue';
 import menu_btn from '../../bases/menu_btn.vue'
 import Warmup from './Warmup.vue';
 import Trainer from '../Trainer/Trainer.vue';
@@ -150,7 +145,6 @@ const normal_damage = computed(() => (current_exercise_type.value?.damage || 0))
 const finnal_damage = ref(normal_damage.value)
 const show_damage = ref(false)
 const handleHit = async () => {
-
     if (monster.value.currentHp > 0) {
         monster.value.currentHp -= finnal_damage.value;
         show_damage.value = true
@@ -163,11 +157,15 @@ const handleHit = async () => {
     }
     finnal_damage.value = normal_damage.value
 };
+
+
+// nút trở lại menu
 const handle_menu = () => {
     router.push({ name: 'menu' })
 }
 </script>
 
+<!-- css không liên quan -->
 <style scoped>
 @keyframes shake-left {
     0% {

@@ -13,7 +13,7 @@ def isBalance(history, eps=2, n=4,require_ratio=0.8):
     differences = np.abs(np.diff(history[-n:]))
     state_count = np.sum(differences <= eps)
     require_count = int((n-1) * require_ratio)
-    print(history, differences, state_count, require_count)
+    # print(history, differences, state_count, require_count)
     return state_count >= require_count 
 # bat ki phan tu args nao co gia tri visibility deu se return ve false nghia la thieu 1 trong 3 se la false
 def isReadyVisibility(*args):
