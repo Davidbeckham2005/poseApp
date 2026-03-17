@@ -24,7 +24,7 @@
             </div>
             <!-- overlay label -->
         </div>
-   
+
         <!-- CONTROL PANEL -->
         <div class="flex gap-4">
 
@@ -77,8 +77,7 @@ watch(() => props.exercise_type, (newValue) => {
 // theo dõi hp của quái
 watch(() => props.currentHp, (newValue) => {
     if (newValue <= 0) {
-        startCamera()
-        if (tipsInterval) clearInterval(tipsInterval)
+        stopCamera()
         emit('finish')
     }
 })

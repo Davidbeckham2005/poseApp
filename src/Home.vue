@@ -54,8 +54,6 @@ const { switch_on_sidebar, currentTab } = useNavigation()
 
 const menuItems = [
     { name: 'game', label: 'FITNESS ADVENTURE', icon: Swords },
-    { name: 'test', label: 'LIVE DEMO', icon: Radio },
-    // { name: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
     { name: 'profile', label: 'Trang cá nhân', icon: UserRound },
     { name: 'upload', label: 'Kiểm tra tập luyện', icon: UploadIcon },
     { name: 'history', label: 'lịch sử', icon: HistoryIcon },

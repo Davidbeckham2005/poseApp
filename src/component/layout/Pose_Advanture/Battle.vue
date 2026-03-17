@@ -50,6 +50,26 @@
                         @result="result_handle" @finish="finish_handle" @is_analyst_active="handle_is_analyst_active">
                     </CaneraView>
                 </div>
+
+                <div class="col-span-3 flex flex-col justify-center gap-4">
+                    <div class="bg-gradient-to-b from-blue-900/40 to-black rounded-3xl border-3 p-6 flex flex-col items-center justify-center min-h-[300px]"
+                        :class="required_state === 'up' ? 'border-green-400' : 'border-orange-400'">
+                        <!-- Required State -->
+                        <div v-if="required_state" class="text-center">
+                            <p class="text-sm text-yellow-300 font-bold mb-6">NEXT ACTION</p>
+                            <div class="flex items-center justify-center h-32 w-32 rounded-full border-4  bg-yellow-900/30"
+                                :class="required_state === 'up' ? 'border-green-400' : 'border-orange-400'">
+                                <div class="text-7xl font-black"
+                                    :class="required_state === 'up' ? 'text-green-400' : 'text-orange-400'">
+                                    {{ required_state === 'up' ? '↑' : '↓' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="text-center">
+                            <p class="text-sm text-gray-400 font-bold">Start analyzing to see action</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- EXERCISE SELECTOR - BOTTOM OVERLAY -->
@@ -122,8 +142,8 @@ import ExerciseSelector from './ExerciseSelector.vue'
 import menu_btn from '../../bases/menu_btn.vue'
 import Warmup from './Warmup.vue';
 import Trainer from '../Trainer/Trainer.vue';
-import { ref, computed, watch } from 'vue';
-import { calculating, get_translate } from '../../../composable/helpers';
+import { ref, computed } from 'vue';
+import { calculating } from '../../../composable/helpers';
 import { Use_is_warmup } from '../../../composable/help_game';
 import { useMonster } from '../../../composable/help_game';
 import { useRouter } from 'vue-router';
@@ -137,11 +157,23 @@ const finish_handle = () => {
 const { get_monster } = useMonster()
 const { persen } = calculating()
 const is_start = ref(false)
+const result_on_rep = ref(null)
+
+
 // State của Quái vật
 const old_total = ref(0)
 const old_good = ref(0)
+const user_state = ref('') // Track current user pose state (up/down)
+const required_state = ref('') // Track required state for counter-attack
+// hiển thị damage khi đánh trúng
 const result_handle = (e) => {
     console.log('result:', e)
+    result_on_rep.value = e
+    // Update user current state
+    user_state.value = e.state || ''
+    // Set required state as opposite of current user state
+    required_state.value = e.state === 'up' ? 'down' : (e.state === 'down' ? 'up' : '')
+
     if (e.total != old_total.value) {
         if (e.good != old_good.value) {
             old_good.value = e.good
