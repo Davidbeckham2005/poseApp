@@ -21,7 +21,7 @@ let backendData = {
     estimate: "",
     state: ""
 }
-export function startPose(video, canvas, exerciseType, isStarted) {
+export function startPose(video, canvas, exerciseType, isStarted, emit) {
 
     const ctx = canvas.getContext("2d")
 
@@ -31,7 +31,8 @@ export function startPose(video, canvas, exerciseType, isStarted) {
         try {
             const data = JSON.parse(event.data)
             backendData = data
-            console.log(backendData)
+            // console.log(backendData)
+            emit("result", backendData)
         } catch (err) {
             console.log("parse error", err)
         }

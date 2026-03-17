@@ -24,12 +24,7 @@
             </div>
             <!-- overlay label -->
         </div>
-
-        <!-- TIPS DISPLAY -->
-        <div v-if="tutorial_message" class="mt-4 p-4 bg-gray-800 text-white rounded-lg shadow-md">
-            <p class="text-center text-lg font-semibold">{{ tutorial_message }}</p>
-        </div>
-
+   
         <!-- CONTROL PANEL -->
         <div class="flex gap-4">
 
@@ -49,10 +44,10 @@
 <script setup>
 // props 
 const props = defineProps({ exercise_type: String, currentHp: Number })
-const emit = defineEmits(['result', 'finish'])
+const emit = defineEmits(['result', 'finish', 'is_analyst_active'])
 
 // import
-import { computed, ref, watch } from "vue"
+import { computed, onUnmounted, ref, watch } from "vue"
 import { startPose, stopPose } from "../../../services/PoseDetector"
 import { usePose } from "../../../services/detect_help"
 import { exercises_data } from "../../../constants/exercise"
@@ -66,13 +61,13 @@ const canvasRef = ref(null)
 const isStarted = ref(false)
 const current_exercise_type = ref(null)
 let tipsInterval = null
+let warningInterval = null
 const tutorial_message = ref("")
 /* trạng thái người dùng trong safe zone */
 const inside = computed(() => { return isInside.value })
 
 // trạng thái để kiểm soát việc nói cảnh báo
-const isSpeakingWarning = ref(false)
-let warningInterval = null
+let isSpeaking = false
 
 // trạng thái của bài tập được chọn
 watch(() => props.exercise_type, (newValue) => {
@@ -83,22 +78,43 @@ watch(() => props.exercise_type, (newValue) => {
 watch(() => props.currentHp, (newValue) => {
     if (newValue <= 0) {
         startCamera()
+        if (tipsInterval) clearInterval(tipsInterval)
         emit('finish')
     }
 })
 
 // start camera và bắt đầu bài tập
 const startCamera = () => {
+    if (!current_exercise_type.value) {
+        alert("Please choose a skill before starting the analysis.")
+        return
+    }
     isStarted.value = true
     console.log('Starting pose detection for exercise type:', current_exercise_type.value)
-    startPose(videoRef.value, canvasRef.value, current_exercise_type.value, isStarted)
+    startPose(videoRef.value, canvasRef.value, current_exercise_type.value, isStarted, emit)
     startRotationTips()
+    emit('is_analyst_active', true)
 }
 
-//  strop camera và dừng bài tập
+//  stop camera và dừng bài tập
 const stopCamera = () => {
     isStarted.value = false
+    isSpeaking = false
+    emit('is_analyst_active', false)
     stopPose()
+
+    // Clear all intervals
+    if (tipsInterval) {
+        clearInterval(tipsInterval)
+        tipsInterval = null
+    }
+    if (warningInterval) {
+        clearInterval(warningInterval)
+        warningInterval = null
+    }
+
+    // Clear display
+    tutorial_message.value = ""
 }
 
 // cảnh báo khi người dùng không đứng trong safe zone
@@ -111,10 +127,11 @@ watch(warning, (newValue) => {
     if (newValue) {
         if (tipsInterval) clearInterval(tipsInterval) // Dừng nói tips khi có cảnh báo
         if (!warningInterval) {
-
             warningInterval = setInterval(() => {
-                speak("Vui lòng đứng vào khung tập để tiếp tục bài tập")
-            }, 2000) // Lặp lại cảnh báo mỗi 5 giây
+                if (isStarted.value) {
+                    speak("Vui lòng đứng vào khung tập để tiếp tục bài tập")
+                }
+            }, 2000) // Lặp lại cảnh báo mỗi 2 giây
         }
     } else {
         clearInterval(warningInterval)
@@ -126,8 +143,7 @@ watch(warning, (newValue) => {
 // tính toán và hiển thị tips bài tập
 const exercise_tips = computed(() => { return exercises_data.find(e => e.type === current_exercise_type.value)?.tips })
 const startRotationTips = async () => {
-    if (warning.value) return
-    // Không bắt đầu tips nếu đang có cảnh báo
+    if (warning.value) return // Không bắt đầu tips nếu đang có cảnh báo
     if (!isStarted.value) return
     if (tipsInterval) clearInterval(tipsInterval)
     const tips = exercise_tips.value || []
@@ -138,9 +154,16 @@ const startRotationTips = async () => {
     tutorial_message.value = tips[0]
     await speak(tutorial_message.value)
     tipsInterval = setInterval(async () => {
+        if (!isStarted.value) return // Stop if camera is stopped
         index = (index + 1) % tips.length
         tutorial_message.value = tips[index]
         await speak(tips[index])
     }, 6000)
 }
+
+onUnmounted(() => {
+    stopCamera()
+    if (tipsInterval) clearInterval(tipsInterval)
+    if (warningInterval) clearInterval(warningInterval)
+}) 
 </script>
