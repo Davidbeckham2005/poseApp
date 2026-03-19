@@ -29,7 +29,7 @@ class warmup_jumping_jack_service(exercise_Service):
     def run_estimate(self, pose_landmark, frame):
         """Track jumping jack movement"""
         # Count every frame processed
-        self.count_total += 1
+        # self.count_total += 1
         
         data = get_landmark(pose_landmark)
         data_px = self.pose.get_for_push_up_px(frame, pose_landmark)

@@ -59,10 +59,6 @@ const handlePoseResult = (data) => {
     }
 }
 
-// Handle pose detection active state
-const handlePoseActive = (isActive) => {
-    // Can be used for logging or future features
-}
 
 function nextStep() {
     isDetecting.value = false
@@ -98,46 +94,9 @@ function skipWarmup() {
     nextStep()
 }
 
-// Form accuracy calculation
-const formAccuracy = computed(() => {
-    if (poseStats.value.total === 0) return 0
-    return Math.floor((poseStats.value.good / poseStats.value.total) * 100)
-})
 
-// Form quality indicator based on estimate
-const formQuality = computed(() => {
-    const estimate = poseStats.value.estimate
-    return estimate || "pending"
-})
 
-// Form quality color
-const formQualityColor = computed(() => {
-    switch (poseStats.value.estimate) {
-        case "good":
-            return "text-green-400 bg-green-900/30 border-green-500"
-        case "okay":
-            return "text-yellow-400 bg-yellow-900/30 border-yellow-500"
-        case "bad":
-            return "text-red-400 bg-red-900/30 border-red-500"
-        default:
-            return "text-gray-400 bg-gray-700/30 border-gray-500"
-    }
-})
 
-// Display state with styling
-const stateDisplay = computed(() => {
-    const state = poseStats.value.state
-    if (state === "up") return "↑ Lên"
-    if (state === "down") return "↓ Xuống"
-    return "• Nhận diện"
-})
-
-const stateColor = computed(() => {
-    const state = poseStats.value.state
-    if (state === "up") return "text-cyan-300 bg-cyan-900/30"
-    if (state === "down") return "text-orange-300 bg-orange-900/30"
-    return "text-gray-400 bg-gray-700/30"
-})
 
 // Warning feedback for out of frame
 watch(warning, (newValue) => {
@@ -241,57 +200,6 @@ onUnmounted(() => {
                         <div class="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-300"
                             :style="{ width: progress + '%' }" />
                     </div>
-
-                    <!-- Pos Detection Stats -->
-                    <div class="bg-gray-700/50 rounded-lg p-4 space-y-3">
-                        <p class="text-xs text-gray-400 font-semibold">FORM DETECTION</p>
-
-                        <!-- Form Quality Badge -->
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-300">Form Quality:</span>
-                            <span class="px-3 py-1 rounded-lg font-bold text-sm border" :class="formQualityColor">
-                                {{ poseStats.estimate || "Detecting..." }}
-                            </span>
-                        </div>
-
-                        <!-- Current State -->
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-300">Position:</span>
-                            <span class="px-3 py-1 rounded-lg font-bold text-sm border" :class="stateColor">
-                                {{ stateDisplay }}
-                            </span>
-                        </div>
-
-                        <!-- Rep Counter -->
-                        <div class="grid grid-cols-2 gap-2 py-2 border-y border-gray-600">
-                            <div class="text-center">
-                                <p class="text-xs text-gray-400">Total Reps</p>
-                                <p class="text-2xl font-bold text-yellow-400">{{ poseStats.total }}</p>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-xs text-gray-400">Perfect Form</p>
-                                <p class="text-2xl font-bold text-green-400">{{ poseStats.good }}</p>
-                            </div>
-                        </div>
-
-                        <!-- Form Accuracy -->
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-300">Accuracy:</span>
-                            <span class="text-lg font-bold"
-                                :class="formAccuracy >= 70 ? 'text-green-400' : formAccuracy >= 40 ? 'text-yellow-400' : 'text-orange-400'">
-                                {{ formAccuracy }}%
-                            </span>
-                        </div>
-
-                        <!-- Coaching Message -->
-                        <div v-if="poseStats.require"
-                            class="bg-blue-900/30 border border-blue-500 rounded-lg p-3 text-center">
-                            <p class="text-blue-300 text-sm font-semibold italic">
-                                💡 {{ poseStats.require }}
-                            </p>
-                        </div>
-                    </div>
-
                     <!-- Step Indicator -->
                     <div class="text-center text-sm text-gray-400 py-2">
                         Bài {{ step + 1 }} / {{ warmups.length }}

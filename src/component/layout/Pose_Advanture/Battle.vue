@@ -1,6 +1,7 @@
 <template>
-    <div class="min-h-screen overflow-scroll bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden pt-10">
+    <div class="min-h-screen overflow-scroll bg-linear-to-b from-gray-900 to-black text-white pt-10">
         <menu_btn class="text-white absolute top-3 left-3 z-50"></menu_btn>
+        <NavBar></NavBar>
         <Warmup v-if="get_state_warmup()"></Warmup>
         <div v-else class="relative w-full h-screen flex flex-col">
             <!-- MAIN GRID LAYOUT -->
@@ -140,6 +141,7 @@
 import CaneraView from './CameraView.vue'
 import ExerciseSelector from './ExerciseSelector.vue'
 import menu_btn from '../../bases/menu_btn.vue'
+import NavBar from './NavBar.vue'
 import Warmup from './Warmup.vue';
 import Trainer from '../Trainer/Trainer.vue';
 import { ref, computed } from 'vue';
