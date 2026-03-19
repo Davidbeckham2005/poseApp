@@ -4,8 +4,12 @@ from services.drawing_service import DrawingService
 from services.pushup_service import pushupService
 from services.plank_service import plankService
 from services.lungue_service import lungService
-from services.webcam import FrameBuffer,ResultBuffer
 from services.squat_services import squatService
+from services.warmup_shoulder_stretch_service import warmup_shoulder_stretch_service
+from services.warmup_hip_rotation_service import warmup_hip_rotation_service
+from services.warmup_squat_service import warmup_squat_service
+from services.warmup_jumping_jack_service import warmup_jumping_jack_service
+from services.webcam import FrameBuffer,ResultBuffer
 from services.pose_service import PoseDetector
 from schemas.video_schemas import Webcam_Schemas
 from fastapi import APIRouter,WebSocket, WebSocketDisconnect# type: ignore
@@ -51,6 +55,8 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
     data = Webcam_Schemas(Analyst_FPS=False,type=exercise_type)
     # capture = websocket_service()
     # capture.start(data=None)
+    
+    # Regular exercises
     if exercise_type == 'squat':
         service = squatService(draw, detector ,None,data)
     elif exercise_type == 'pushup':
@@ -59,6 +65,15 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
         service = plankService(draw, detector, None,data)
     elif exercise_type == 'lungue':
         service = lungService(draw, detector, None,data)
+    # Warmup exercises
+    elif exercise_type == 'warmup_shoulder_stretch':
+        service = warmup_shoulder_stretch_service(draw, detector, None, data)
+    elif exercise_type == 'warmup_hip_rotation':
+        service = warmup_hip_rotation_service(draw, detector, None, data)
+    elif exercise_type == 'warmup_squat':
+        service = warmup_squat_service(draw, detector, None, data)
+    elif exercise_type == 'warmup_jumping_jack':
+        service = warmup_jumping_jack_service(draw, detector, None, data)
     else:
         print("đóng nối kết do không có bài tập đó!")
         await websocket.close()
@@ -132,6 +147,7 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
     draw = DrawingService(detector)
     data = Webcam_Schemas(Analyst_FPS=False, type=exercise_type)
 
+    # Regular exercises
     if exercise_type == 'squat':
         service = squatService(None, None, None, data)
     elif exercise_type == 'pushup':
@@ -140,6 +156,15 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
         service = plankService(None, None, None, data)
     elif exercise_type == 'lungue':
         service = lungService(None, None, None, data)
+    # Warmup exercises
+    elif exercise_type == 'warmup_shoulder_stretch':
+        service = warmup_shoulder_stretch_service(None, None, None, data)
+    elif exercise_type == 'warmup_hip_rotation':
+        service = warmup_hip_rotation_service(None, None, None, data)
+    elif exercise_type == 'warmup_squat':
+        service = warmup_squat_service(None, None, None, data)
+    elif exercise_type == 'warmup_jumping_jack':
+        service = warmup_jumping_jack_service(None, None, None, data)
     else:
         await websocket.close()
         return
