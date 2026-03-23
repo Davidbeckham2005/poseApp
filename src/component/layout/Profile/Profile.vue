@@ -13,7 +13,7 @@ import Show_profile_value from './show_profile_value.vue';
 
 
 const userStore = useUser();
-const avatar = ref(userStore.user.avatar || "https://via.placeholder.com/150");
+const avatar = ref(userStore.user.avatar);
 
 const stats = computed(() => [
     { label: 'Số phiên tập', value: userStore.user.total_session + " phiên", icon: 'activity', color: 'text-orange-400' },

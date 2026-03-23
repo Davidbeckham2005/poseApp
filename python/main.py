@@ -1,7 +1,9 @@
 from fastapi import FastAPI # type: ignore
 from fastapi.middleware.cors import CORSMiddleware
 from model.db_model import engine,Base
-from routers import video_router,setting_router,service_router, websocket_router, user_router
+from routers import video_router,setting_router,service_router, websocket_router, user_router, nutrition_router
+# Import models to ensure they're registered with Base
+from model import nutrition_model
 
 Base.metadata.create_all(bind=engine)
 
@@ -24,3 +26,4 @@ app.include_router(video_router.router)
 app.include_router(setting_router.router)
 # app.include_router(service_router.router)
 app.include_router(user_router.router)
+app.include_router(nutrition_router.router)

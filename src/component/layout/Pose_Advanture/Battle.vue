@@ -114,7 +114,7 @@
                         class="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-3 border-l-4 border-purple-500">
                         <span class="text-lg font-semibold text-gray-300">Damage Dealt</span>
                         <span class="text-2xl font-black text-purple-400">{{ (monster.maxHp - monster.currentHp) || 0
-                            }}</span>
+                        }}</span>
                     </div>
 
                     <div
@@ -165,8 +165,8 @@ const result_on_rep = ref(null)
 // State của Quái vật
 const old_total = ref(0)
 const old_good = ref(0)
-const user_state = ref('') // Track current user pose state (up/down)
-const required_state = ref('') // Track required state for counter-attack
+const user_state = ref('')
+const required_state = ref('')
 // hiển thị damage khi đánh trúng
 const result_handle = (e) => {
     console.log('result:', e)
@@ -179,7 +179,7 @@ const result_handle = (e) => {
     if (e.total != old_total.value) {
         if (e.good != old_good.value) {
             old_good.value = e.good
-            finnal_damage.value = normal_damage.value * 1.2
+            finnal_damage.value = normal_damage.value * 2
         }
         handleHit()
     }

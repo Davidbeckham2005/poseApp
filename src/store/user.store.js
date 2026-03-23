@@ -8,8 +8,8 @@ export const useUser = defineStore('user', () => {
     const fetchUser = async () => {
         try {
             const res = await get_user()
-            user.value = res.user
-            // console.log(user.value)
+            user.value = res
+            console.log(res)
         } catch (error) {
             console.log(error)
         }

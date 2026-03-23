@@ -6,9 +6,11 @@
             <Header v-if="!get_state_game" class="flex justify-end px-6 py-4 border-b border-gray-800">
             </Header>
             <div class="py-4 px-2 max-w-6xl mx-auto w-full ">
-                <pose_advanture v-if="currentTab == 'game'"></pose_advanture>
-                <Profile v-if="currentTab === `profile`"></Profile>
-                <CameraView v-if="currentTab === 'test'"></CameraView>
+                <UserDashboard v-if="currentTab === `home`"></UserDashboard>
+                <pose_advanture v-else-if="currentTab == 'game'"></pose_advanture>
+                <Profile v-else-if="currentTab === `profile`"></Profile>
+                <MealPlanner v-else-if="currentTab === `meals`"></MealPlanner>
+                <CameraView v-else-if="currentTab === 'test'"></CameraView>
                 <Dashbroad v-else-if="currentTab === `dashboard`"></Dashbroad>
                 <Upload v-else-if="currentTab === `upload`"></Upload>
                 <Settings v-else-if="currentTab === `settings`"></Settings>
@@ -21,13 +23,13 @@
 <script setup>
 
 import {
-    LayoutDashboardIcon as DashboardIcon,
     HistoryIcon,
     SettingsIcon,
     UploadIcon,
-    Radio,
     UserRound,
     Swords,
+    Home,
+    Apple,
 } from 'lucide-vue-next';
 // game
 import { state_game } from './composable/help_game';
@@ -47,7 +49,8 @@ import Dashbroad from './component/layout/Dashbroad/dashbroad.vue';
 import { useNavigation } from "./composable/helpers";
 import Profile from './component/layout/Profile/Profile.vue';
 import pose_advanture from './component/layout/Pose_Advanture/pose_advanture.vue';
-// import lobby from './component/layout/Pose_Advanture/Warmup.vue'
+import UserDashboard from './component/layout/UserDashboard.vue';
+import MealPlanner from './component/layout/MealPlanner.vue';
 import { useAudio } from './composable/audio';
 const { unlockAudio, speak } = useAudio()
 const { switch_on_sidebar, currentTab } = useNavigation()
@@ -55,6 +58,7 @@ const { switch_on_sidebar, currentTab } = useNavigation()
 const menuItems = [
     { name: 'game', label: 'FITNESS ADVENTURE', icon: Swords },
     { name: 'profile', label: 'Trang cá nhân', icon: UserRound },
+    { name: 'meals', label: 'Bữa ăn & Dinh dưỡng', icon: Apple },
     { name: 'upload', label: 'Kiểm tra tập luyện', icon: UploadIcon },
     { name: 'history', label: 'lịch sử', icon: HistoryIcon },
     { name: 'settings', label: 'Cài đặt', icon: SettingsIcon },

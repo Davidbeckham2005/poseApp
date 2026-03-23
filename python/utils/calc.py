@@ -78,15 +78,15 @@ def detect_type_BMI(BMI):
         return "Invalid index"
     
     if BMI < 18.5:
-        return "Underweight"
+        return "Thiếu cân"
     elif 18.5 <= BMI <= 22.9:
-        return "Normal weight"
+        return "Bình thường"
     elif 23.0 <= BMI <= 24.9:
-        return "Overweight (Pre-obese)"
+        return "Thừa cân"
     elif 25.0 <= BMI <= 29.9:
-        return "Obese Class I"
+        return "Tiền béo phì"
     else:
-        return "Obese Class II (Severely obese)"
+        return "Béo phì"
     
 def calculating_caloris(time_sec,weight_kg,accuracy,type):
     Met_value_hight_accuracy = {
@@ -112,3 +112,20 @@ def calculating_caloris(time_sec,weight_kg,accuracy,type):
 def cal_now_date():
     return datetime.now()
    
+def cal_age(day_of_birth):
+    today = datetime.today()
+    age = today.year - day_of_birth.year - ((today.month, today.day) < (day_of_birth.month, day_of_birth.day))
+    return age
+
+def detect_goal(user_obj):
+    old_weight = user_obj.weight
+    target_weight = user_obj.target_weight
+    if target_weight < old_weight:
+        return "giảm cân"
+    elif target_weight > old_weight:
+        return "tăng cân"
+    else:
+        return "duy trì cân nặng"
+    
+def get_now():
+    return {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}

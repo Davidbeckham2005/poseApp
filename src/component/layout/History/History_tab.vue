@@ -46,10 +46,11 @@
 
 <script setup>
 import { useUser } from '../../../store/user.store';
+import { useWellness } from '../../../store/wellness.store';
 const userStore = useUser()
+const wellnessStore = useWellness()
 onMounted(async () => {
     await userStore.fetchUser()
-    // console.log(userStore.user)
 })
 // componnt
 import Title_content from '../../bases/title_content.vue';
