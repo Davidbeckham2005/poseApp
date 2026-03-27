@@ -65,7 +65,7 @@
                 <div class="flex justify-between mb-2">
                     <span>Dinh dưỡng hôm nay</span>
                     <span class="font-bold">{{ calculateTotalNutrition().calories }} / {{ userProfile.dailyCalorieGoal
-                    }} cal</span>
+                        }} cal</span>
                 </div>
                 <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
                     <div class="h-full bg-gradient-to-r from-green-500 to-blue-500 rounded-full transition-all"
@@ -249,7 +249,7 @@
                         <p class="text-sm font-bold truncate mb-1" :title="food.name">{{ food.name }}</p>
 
                         <p class="text-xs text-yellow-400 font-bold mb-2">{{ food.calories }} kcal/{{ food.serving_size
-                        }}
+                            }}
 
                         </p>
 
@@ -365,6 +365,7 @@ const wellnessStore = useWellness()
 import { X } from 'lucide-vue-next';
 // Profile State
 
+const totalMacros = computed(() => props.macros);
 const userProfile = computed(() => ({
     weight: userStore.user?.weight || 0,
     height: userStore.user?.height || 0,

@@ -1,5 +1,6 @@
 import threading
 
+from services import shoulder_press_service
 from services.drawing_service import DrawingService
 from services.pushup_service import pushupService
 from services.plank_service import plankService
@@ -12,6 +13,8 @@ from services.warmup_jumping_jack_service import warmup_jumping_jack_service
 from services.webcam import FrameBuffer,ResultBuffer
 from services.pose_service import PoseDetector
 from schemas.video_schemas import Webcam_Schemas
+from services.bicep_service import bicep_service
+from services.shoulder_press_service import ShoulderPressServices
 from fastapi import APIRouter,WebSocket, WebSocketDisconnect# type: ignore
 import numpy as np
 import cv2, json, time
@@ -65,7 +68,6 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
         service = plankService(draw, detector, None,data)
     elif exercise_type == 'lungue':
         service = lungService(draw, detector, None,data)
-    # Warmup exercises
     elif exercise_type == 'warmup_shoulder_stretch':
         service = warmup_shoulder_stretch_service(draw, detector, None, data)
     elif exercise_type == 'warmup_hip_rotation':
@@ -74,6 +76,10 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
         service = warmup_squat_service(draw, detector, None, data)
     elif exercise_type == 'warmup_jumping_jack':
         service = warmup_jumping_jack_service(draw, detector, None, data)
+    elif exercise_type == 'bicep_curls':
+        service = bicep_service(draw,detector, None, data)
+    elif exercise_type == "shoulder_press":
+        service = shoulder_press_service(draw,detector, None,data)
     else:
         print("đóng nối kết do không có bài tập đó!")
         await websocket.close()
@@ -143,8 +149,6 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
     await websocket.accept()
     print("client connected! exercise:", exercise_type)
 
-    detector = PoseDetector()
-    draw = DrawingService(detector)
     data = Webcam_Schemas(Analyst_FPS=False, type=exercise_type)
 
     # Regular exercises
@@ -165,7 +169,12 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
         service = warmup_squat_service(None, None, None, data)
     elif exercise_type == 'warmup_jumping_jack':
         service = warmup_jumping_jack_service(None, None, None, data)
+    elif exercise_type == 'bicep_curls':
+        service = bicep_service(None,None, None, data)
+    elif exercise_type == "shoulder_press":
+        service = shoulder_press_service(None,None, None,data)
     else:
+        print("not found exercise")
         await websocket.close()
         return
 
@@ -184,3 +193,28 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
 
     except WebSocketDisconnect:
         print("client disconnected")
+
+from services.game_services.controller_game import WorkoutController
+@router.websocket("/live_workout")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+
+    workout_plan = [
+        {"type": "pushup", "target": 2},
+        {"type": "bicep_curls", "target": 2}
+    ]
+    controller = WorkoutController(workout_plan)
+    try:
+        while not controller.is_finish:
+            data = await websocket.receive_json()
+            landmarks = data["landmarks"]
+            landmarks = [Landmark(x) for x in landmarks]
+            await controller.update(landmarks,websocket)
+    except WebSocketDisconnect:
+        print("Client disconected")
+    finally:
+        if not websocket.client_state.name == "DISCONNECTED":
+            print("close by finnaly")
+            await websocket.close()
+    # data = Webcam_Schemas(Analyst_FPS=False, type=exercise_type)
+

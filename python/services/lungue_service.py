@@ -8,7 +8,7 @@ from services.video_services import VideoService
 from services.exercise_service import exercise_Service
 import cv2
 class lungService(exercise_Service):
-    down_standard = 100
+    down_standard = 130
     up_standard = 160
     good_standard = 110
     bad_standard = 60
@@ -68,8 +68,8 @@ class lungService(exercise_Service):
             "count" : self.count_total,
             "estimate" : self.estimate,
             "require" : self.require,
-            "start" : self.time_start,
-            "end" : self.time_end         
+            # "start" : self.time_start,
+            # "end" : self.time_end         
             }
             self.record_couting.append(record)
             self.estimate="estimate"
@@ -78,6 +78,10 @@ class lungService(exercise_Service):
                 "estimate" : self.estimate,
                 "good" : self.count_good,
                 "state" : self.state,
+                "origin" : origin,
+                "good_standard" : self.good_standard,
+                "bad_standard" : self.bad_standard,
+                "up_standard" : self.up_standard,
             }
         return True
     def evaluate_form(self,origin):

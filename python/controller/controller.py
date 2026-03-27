@@ -5,6 +5,8 @@ from services.drawing_service import DrawingService
 from services.pushup_service import pushupService
 from services.plank_service import plankService
 from services.lungue_service import lungService
+from services.bicep_service import bicep_service
+from services.shoulder_press_service import ShoulderPressServices
 import cv2
 from pathlib import Path
 from urllib.parse import unquote
@@ -28,7 +30,10 @@ def process(data):
         service = plankService(draw, detector, capture,data)
     if type =='lungue':
         service = lungService(draw, detector, capture,data)
-
+    if type =='bicep_curls':
+        service = bicep_service(draw, detector, capture,data)
+    if type == 'shoulder_press':
+        service = ShoulderPressServices(draw, detector, capture,data)
     if not capture.getCap().isOpened():
         return False
     

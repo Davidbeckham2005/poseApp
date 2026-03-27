@@ -9,7 +9,7 @@ const attacks = ref([
     id: 'pushup',
     name: 'Push-up',
     emoji: '💪',
-    damage: 50,
+    damage: 30,
     bgColor: 'bg-gradient-to-br from-blue-500 to-blue-700',
     borderColor: 'border-blue-400',
     tutorial: '/tutorial/pushup_tutorial',
@@ -43,6 +43,32 @@ const attacks = ref([
     difficulty: 'Intermediate',
     caloriesPerMin: 5,
     muscle: 'Legs, Glutes, Balance'
+  },
+  {
+    id: 'bicep_curls',
+    name: 'Bicep Curls',
+    emoji: '☄️',
+    damage: 25,
+    bgColor: 'bg-gradient-to-br from-orange-500 to-red-700',
+    borderColor: 'border-orange-400',
+    tutorial: '/tutorial/Bicep Curls',
+    description: 'Focus your power into your arms for a massive strike!',
+    difficulty: 'Beginner',
+    caloriesPerMin: 4,
+    muscle: 'Biceps, Forearms'
+  },
+  {
+    id: 'shoulder_press',
+    name: 'Shoulder Press',
+    emoji: '🌋',
+    damage: 45,
+    bgColor: 'bg-gradient-to-br from-amber-500 to-yellow-700',
+    borderColor: 'border-amber-400',
+    tutorial: '/tutorial/Shoulder Press',
+    description: 'Crush your enemies by lifting the heavens!',
+    difficulty: 'Intermediate',
+    caloriesPerMin: 6,
+    muscle: 'Shoulders, Triceps'
   },
 ]);
 
@@ -128,14 +154,14 @@ const handleSelectExercise = (attack) => {
             </div>
 
             <!-- MUSCLE GROUPS -->
-            <div class="text-xs text-white/80 text-center mb-2 leading-tight">
+            <!-- <div class="text-xs text-white/80 text-center mb-2 leading-tight">
               {{ attack.muscle }}
-            </div>
+            </div> -->
 
             <!-- DESCRIPTION -->
-            <p class="text-xs text-white/70 text-center">
+            <!-- <p class="text-xs text-white/70 text-center">
               {{ attack.description }}
-            </p>
+            </p> -->
           </div>
 
           <!-- SELECTION INDICATOR -->

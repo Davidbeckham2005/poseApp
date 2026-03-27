@@ -9,8 +9,8 @@ export function usePose() {
         const centerX = (hipLeft.x + hipRight.x) / 2
         const centerY = (hipLeft.y + hipRight.y) / 2
 
-        const width = 0.5
-        const height = 0.7
+        const width = 0.6
+        const height = 0.8
 
         const minX = 0.5 - width / 2
         const maxX = 0.5 + width / 2
@@ -26,8 +26,8 @@ export function usePose() {
     }
     function drawSafeZone(ctx, canvas) {
 
-        const width = canvas.width * 0.5
-        const height = canvas.height * 0.7
+        const width = canvas.width * 0.6
+        const height = canvas.height * 0.8
 
         const x = (canvas.width - width) / 2
         const y = (canvas.height - height) / 2

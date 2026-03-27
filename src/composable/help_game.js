@@ -48,7 +48,8 @@ const monsters = ref({
         currentHp: 20000,
         maxHp: 20000,
         path: '/Monster/dragon',
-        bg: 'bg-gradient-to-br from-blue-500 to-cyan-400'
+        bg: 'bg-gradient-to-br from-blue-500 to-cyan-400',
+        difficulty: 'Hard'
     },
     // dancer: {
     //     name: 'dancer',
@@ -66,7 +67,8 @@ const monsters = ref({
         currentHp: 200,
         maxHp: 200,
         path: '/Monster/Monster 3',
-        bg: 'bg-gradient-to-br from-green-500 to-cyan-400'
+        bg: 'bg-gradient-to-br from-green-500 to-cyan-400',
+        difficulty: 'Easy'
 
     },
     pochita: {
@@ -76,7 +78,8 @@ const monsters = ref({
         currentHp: 200,
         maxHp: 200,
         path: '/Monster/Pochita',
-        bg: 'bg-gradient-to-br from-pink-500 to-cyan-400'
+        bg: 'bg-gradient-to-br from-pink-500 to-cyan-400',
+        difficulty: 'Medium'
     },
     // slime: {
     //     name: 'Slime',
@@ -95,7 +98,8 @@ const monsters = ref({
         currentHp: 200,
         maxHp: 200,
         path: '/Monster/wolf',
-        bg: 'bg-gradient-to-br from-amber-500 to-orange-400'
+        bg: 'bg-gradient-to-br from-amber-500 to-orange-400',
+        difficulty: 'Medium'
 
     },
     gost1: {
@@ -105,7 +109,8 @@ const monsters = ref({
         currentHp: 200,
         maxHp: 200,
         path: '/Monster/gost1',
-        bg: 'bg-gradient-to-br from-black to-orange-400'
+        bg: 'bg-gradient-to-br from-black to-orange-400',
+        difficulty: 'Hard'
 
     },
 });

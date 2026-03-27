@@ -54,7 +54,7 @@ class exercise_Service:
         if self.Analyst_FPS:
             drawtext(frame,(20,300),f'FPS: {str(self.capture.getFPS())}',(0,128,128))
         if self.Analyst_count:
-            drawtext(frame,(60,100),f"Reps: {str(self.count_total)}",(128,0,0))
+            drawtext(frame,(20,100),f"Reps: {str(self.count_total)}",(128,0,0))
         if self.Analyst_estimate:
             drawtext(frame,(20,250),self.estimate,(128,0,0))
         if self.Analyst_count_good:
@@ -70,7 +70,7 @@ class exercise_Service:
             pose_landmark = result.pose_landmarks[0]
             value = self.run_estimate(pose_landmark,frame)
         if value:
-            drawtext(frame,(10,100),f"Exercise: {self.type}",(0,0,255))
+            drawtext(frame,(20,50),f"Exercise: {self.type}",(0,0,255))
             if self.isAnalyst:
                 self.show_analyst(frame)
             # if self.isCheck_view:

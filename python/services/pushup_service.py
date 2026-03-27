@@ -4,7 +4,6 @@ from services.pose_service import PoseDetector
 from services.drawing_service import DrawingService
 from services.video_services import VideoService
 from services.exercise_service import exercise_Service
-import cv2
 class pushupService(exercise_Service):
     down_standard = 130
     up_standard = 140
@@ -70,10 +69,14 @@ class pushupService(exercise_Service):
             self.record_couting.append(record)
             self.estimate="estimate"
         self.data_on_rep = {
-                "total" : self.count_total,
-                "estimate" : self.estimate,
-                "good" : self.count_good,
-                'state' : self.state,
+            "total" : self.count_total,
+            "estimate" : self.estimate,
+            "good" : self.count_good,
+            'state' : self.state,
+            "origin" : origin,
+            "good_standard" : self.good_standard,
+            "bad_standard" : self.bad_standard,
+            "up_standard" : self.up_standard,
             }
         return True
     def evaluate_form(self,origin):

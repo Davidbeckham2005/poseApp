@@ -1,48 +1,54 @@
+import { ref, watch } from 'vue'
+
+// ĐƯA BIẾN RA NGOÀI: Để tất cả component dùng chung 1 trạng thái duy nhất
+const audioEnabled = ref(true)
 let audioUnlocked = false
-import { ref,watch } from 'vue'
+
+// Theo dõi biến để hủy speech ngay lập tức khi tắt
+watch(audioEnabled, (newVal) => {
+    if (!newVal) {
+        window.speechSynthesis.cancel()
+        console.log('🔈 Audio: Toàn bộ hàng đợi đã được hủy.')
+    }
+})
+
 export function useAudio() {
-    const audioEnabled = ref(true)
-    watch(audioEnabled, (newVal) => {
-        if (!newVal) {
-            window.speechSynthesis.cancel()
-            console.log('Audio disabled, speech cancelled')
-        }
-    })
     const unlockAudio = () => {
         if (audioUnlocked) return
-        // phát 1 speech rỗng để mở khóa audio
         const speech = new SpeechSynthesisUtterance("")
         window.speechSynthesis.speak(speech)
         audioUnlocked = true
     }
+
     const speak = (text) => {
         return new Promise((resolve) => {
+            // Kiểm tra trạng thái trước khi bắt đầu
             if (!audioEnabled.value) {
                 resolve()
                 return
             }
+
+            // QUAN TRỌNG: Hủy các câu nói cũ đang xếp hàng 
+            // để tránh việc app đọc "dồn toa" khi tập liên tục
+            window.speechSynthesis.cancel()
+
             const utter = new SpeechSynthesisUtterance(String(text))
             utter.lang = "vi-VN"
-            utter.rate = 1
+            utter.rate = 1.1 // Đọc nhanh hơn một chút để bắt kịp nhịp tập
             utter.pitch = 1
 
             utter.onend = () => resolve()
             utter.onerror = () => resolve()
 
-            speechSynthesis.speak(utter)
+            window.speechSynthesis.speak(utter)
         })
     }
-    //  bật/tắt âm thanh
+
     const toggleAudio = () => {
         audioEnabled.value = !audioEnabled.value
-        return audioEnabled
     }
-    // kiểm tra trạng thái âm thanh
-    const isAudioEnabled = () => {
-        return audioEnabled.value
-    }
+
+    const isAudioEnabled = () => audioEnabled.value
+
     return { unlockAudio, speak, toggleAudio, isAudioEnabled }
 }
-
-
-

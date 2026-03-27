@@ -38,16 +38,13 @@
                 </div>
             </div>
 
-            <!-- <div class="flex items-center gap-2.5 pt-1">
+            <div class="flex items-center gap-2.5 pt-1">
                 <span v-for="muscle in muscles" :key="muscle"
                     class="px-4 py-2 bg-[#25282b] rounded-full text-xs font-bold text-slate-300 border border-white/5 uppercase">
-                    {{ muscle }}
+                    #{{ muscle }}
                 </span>
-                <span
-                    class="px-3.5 py-2 bg-[#25282b] rounded-full text-xs font-bold text-slate-500 border border-white/5">
-                    +1
-                </span>
-            </div> -->
+
+            </div>
 
             <div class="pt-2">
                 <button @click.stop="upload(type)"

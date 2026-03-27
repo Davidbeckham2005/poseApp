@@ -21,7 +21,7 @@
 
                 <div class="space-y-2">
                     <h1 class="text-6xl md:text-8xl font-black tracking-tighter italic 
-                               bg-gradient-to-br from-orange-500 via-purple-500 to-pink-500 bg-clip-text text-transparent
+                               bg-gradient-to-br from-orange-500 via-purple-500 to-pink-500 bg-clip-text
                                drop-shadow-sm dark:drop-shadow-[0_5px_15px_rgba(249,115,22,0.4)]">
                         FITNESS<br>ADVENTURE
                     </h1>

@@ -19,10 +19,148 @@ let backendData = {
     total: 0,
     good: 0,
     estimate: "",
-    state: ""
+    state: "",
+    origin: "",
+    good_standard: 0,
+    bad_standard: 0,
+    up_standard: 0,
+    workout_progress: 0,
+    target_of_current: 0,
 }
-export function startPose(video, canvas, exerciseType, isStarted, emit) {
+let currentExerciseTitle = "";
+export async function startPose_game2(video, canvas, exerciseType, isStarted, emit) {
+    if (camera) {
+        await camera.stop();
+        camera = null;
+    }
+    if (pose) {
+        await pose.close();
+        pose = null;
+    }
+    if (ws) {
+        ws.close();
+        ws = null;
+    }
+    const ctx = canvas.getContext("2d")
 
+    ws = new WebSocket(`ws://localhost:8000/websocket/live_workout`)
+    ws.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data)
+            const nextEx = data.exercise_type || "bai tiep theo"
+            currentExerciseTitle = nextEx.toUpperCase()
+            backendData = data
+            console.log(backendData)
+            emit("result", backendData)
+            if (data.event === "rest_start") {
+                console.log("time rest");
+                return
+            }
+            if (data.event === "rest_end") {
+                console.log("continue exercise");
+                return
+            }
+            if (data.event === "workout_complete") {
+                console.log("Chúc mừng! Bạn đã hoàn thành chuỗi bài tập.");
+                return
+            }
+        } catch (err) {
+            console.log("parse error", err)
+        }
+    }
+    pose = new Pose({
+        locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+        }
+    })
+
+    pose.setOptions({
+        modelComplexity: 1,
+        smoothLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+    })
+    pose.onResults((results) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.font = "28px Arial"
+        ctx.fillStyle = "yellow"
+        ctx.strokeStyle = "black"
+        ctx.lineWidth = 3
+
+        ctx.fillStyle = "#00BFFF";
+        ctx.fillText(`Bài tập: ${currentExerciseTitle}`, 20, 40);
+
+        ctx.fillStyle = "yellow"
+        ctx.fillText(`Reps: ${backendData.total}/${backendData.target_of_current || 0}`, 20, 80)
+
+        if (backendData.workout_progress) {
+            ctx.fillStyle = "#00FF00";
+            ctx.fillText(`Tiến độ: ${backendData.workout_progress}`, 20, 120)
+        }
+
+        ctx.fillStyle = "white";
+        ctx.fillText(`Trạng thái: ${backendData.state}`, 20, 160)
+        if (!results.poseLandmarks) return
+        // drawSafeZone(ctx, canvas)
+
+        if (get_skeleton()) {
+            drawConnectors(
+                ctx,
+                results.poseLandmarks,
+                POSE_CONNECTIONS,
+                { color: "#00FF00", lineWidth: 4 }
+            )
+
+            drawLandmarks(
+                ctx,
+                results.poseLandmarks,
+                { color: "#FF0000", lineWidth: 2 }
+            )
+        }
+        const inside = isInsideSafeZone(results.poseLandmarks)
+
+        set_analysting(isStarted.value && inside)
+
+        // ❌ nếu ngoài vùng thì không gửi websocket
+        if (!inside || !isStarted.value) return
+        const landmarks = results.poseLandmarks.map(p => ({
+            x: p.x,
+            y: p.y,
+            z: p.z,
+            visibility: p.visibility
+        }))
+
+        if (ws && ws.readyState === 1) {
+            ws.send(JSON.stringify({
+                landmarks: landmarks
+            }))
+
+        }
+
+    })
+
+    camera = new Camera(video, {
+        onFrame: async () => {
+            await pose.send({ image: video })
+        },
+        width: 640,
+        height: 480
+    })
+    camera.start()
+}
+export async function startPose(video, canvas, exerciseType, isStarted, emit) {
+    if (camera) {
+        await camera.stop();
+        camera = null;
+    }
+    if (pose) {
+        await pose.close();
+        pose = null;
+    }
+    if (ws) {
+        ws.close();
+        ws = null;
+    }
     const ctx = canvas.getContext("2d")
 
     ws = new WebSocket(`ws://localhost:8000/websocket/live2?exercise_type=${exerciseType}`)
@@ -31,7 +169,7 @@ export function startPose(video, canvas, exerciseType, isStarted, emit) {
         try {
             const data = JSON.parse(event.data)
             backendData = data
-            // console.log(backendData)
+            console.log(backendData)
             emit("result", backendData)
         } catch (err) {
             console.log("parse error", err)
@@ -117,9 +255,7 @@ export function startPose(video, canvas, exerciseType, isStarted, emit) {
         width: 640,
         height: 480
     })
-
     camera.start()
-
 }
 
 export function stopPose() {

@@ -3,8 +3,7 @@
         <!-- CAMERA CONTAINER -->
         <div class="relative w-[640px] h-[480px] rounded-2xl overflow-hidden bg-slat-900 shadow-2xl">
             <!-- video -->
-            <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]" autoplay
-                playsinline />
+            <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover" autoplay playsinline />
             <!-- canvas -->
             <canvas ref="canvasRef" width="640" height="480" class="absolute inset-0" :class="'absolute inset-0 w-full h-full object-cover  transition duration-500',
                 warning ? 'blur-md brightness-50' : ''
@@ -32,6 +31,10 @@
       text-white font-medium shadow-lg hover:scale-105 hover:shadow-xl transition">
                 Start
             </button>
+            <button @click="start2" class="px-6 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-400
+      text-white font-medium shadow-lg hover:scale-105 hover:shadow-xl transition">
+                Start2
+            </button>
 
             <button @click="stopCamera" class="px-6 py-2 rounded-xl bg-gradient-to-r from-red-500 to-rose-400
       text-white font-medium shadow-lg hover:scale-105 hover:shadow-xl transition">
@@ -48,7 +51,7 @@ const emit = defineEmits(['result', 'finish', 'is_analyst_active'])
 
 // import
 import { computed, onUnmounted, ref, watch } from "vue"
-import { startPose, stopPose } from "../../../services/PoseDetector"
+import { startPose, stopPose, startPose_game2 } from "../../../services/PoseDetector"
 import { usePose } from "../../../services/detect_help"
 import { exercises_data } from "../../../constants/exercise"
 import { useAudio } from '../../../composable/audio'
@@ -83,6 +86,17 @@ watch(() => props.currentHp, (newValue) => {
 })
 
 // start camera và bắt đầu bài tập
+const start2 = () => {
+    if (!current_exercise_type.value) {
+        alert("Please choose a skill before starting the analysis.")
+        return
+    }
+    isStarted.value = true
+    console.log('Starting pose detection for exercise type:', current_exercise_type.value)
+    startPose_game2(videoRef.value, canvasRef.value, current_exercise_type.value, isStarted, emit)
+    startRotationTips()
+    emit('is_analyst_active', true)
+}
 const startCamera = () => {
     if (!current_exercise_type.value) {
         alert("Please choose a skill before starting the analysis.")

@@ -4,8 +4,33 @@
         <NavBar></NavBar>
         <Warmup v-if="get_state_warmup()"></Warmup>
         <div v-else class="relative w-full h-screen flex flex-col">
-            <!-- MAIN GRID LAYOUT -->
+            <div class="p-10 bg-slate-900 flex flex-col items-center">
+                <div class="relative w-full max-w-xl h-6 bg-slate-700 rounded- border border-slate-600 overflow-hidden">
+                    <div class="absolute left-0 h-full bg-red-600/30 border-x border-red-500/50" :style="{
+                        width: badWidth + '%',
+                    }">
+                    </div>
+                    <div class="absolute  h-full bg-green-600/30 border-x border-red-500/50" :style="{
+                        width: goodWidth + '%', left: badWidth + '%'
+                    }">
+                    </div>
+                    <div class="absolute  h-full bg-orange-600/30 border-x border-red-500/50" :style="{
+                        width: dowwWidth + '%', left: goodWidth + '%'
+                    }">
+                    </div>
+
+                    <div class="absolute top-0 h-full bg-blue-400 w-1 z-10" :style="{
+                        left: progress * 100 + '%',
+
+                    }">
+                    </div>
+                </div>
+                <p class="mt-4 text-slate-500 font-mono text-xs uppercase tracking-widest">
+                    Power: {{ (progress * 100).toFixed(0) }}%
+                </p>
+            </div>
             <div class="flex-1 grid grid-cols-12 gap-4 p-4">
+
                 <!-- MONSTER SIDE - LEFT -->
                 <div class="col-span-3 flex flex-col justify-center">
                     <div class="rounded-3xl border-3 border-red-600 relative overflow-hidden p-4 bg-gradient-to-b from-red-900/20 to-black"
@@ -67,9 +92,13 @@
                             </div>
                         </div>
                         <div v-else class="text-center">
-                            <p class="text-sm text-gray-400 font-bold">Start analyzing to see action</p>
+                            <p class="text-sm text-gray-400 font-bold">Bắt đầu phân tích để xem hướng dẫn
+                                <span>{{ normal_damage }}</span>
+                            </p>
                         </div>
+
                     </div>
+
                 </div>
             </div>
 
@@ -114,7 +143,7 @@
                         class="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-3 border-l-4 border-purple-500">
                         <span class="text-lg font-semibold text-gray-300">Damage Dealt</span>
                         <span class="text-2xl font-black text-purple-400">{{ (monster.maxHp - monster.currentHp) || 0
-                        }}</span>
+                            }}</span>
                     </div>
 
                     <div
@@ -144,7 +173,7 @@ import menu_btn from '../../bases/menu_btn.vue'
 import NavBar from './NavBar.vue'
 import Warmup from './Warmup.vue';
 import Trainer from '../Trainer/Trainer.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, shallowRef } from 'vue';
 import { calculating } from '../../../composable/helpers';
 import { Use_is_warmup } from '../../../composable/help_game';
 import { useMonster } from '../../../composable/help_game';
@@ -169,7 +198,9 @@ const user_state = ref('')
 const required_state = ref('')
 // hiển thị damage khi đánh trúng
 const result_handle = (e) => {
-    console.log('result:', e)
+    origin.value = e.origin
+    // console.log(origin.value)
+    // console.log('result:', e)
     result_on_rep.value = e
     // Update user current state
     user_state.value = e.state || ''
@@ -223,6 +254,22 @@ const handleHit = async () => {
 // nút trở lại menu
 const handle_menu = () => {
     router.push({ name: 'menu' })
+}
+// 3/23/2026 thiết kế progress origin cho từng bài tập
+const origin = shallowRef(null)
+const up_standard = ref(140)
+const bad_standard = ref(32)
+const good_standard = ref(90)
+const down_standard = ref(130)
+const badWidth = computed(() => (bad_standard.value / 200) * 100);
+const goodWidth = computed(() => (good_standard.value / 200) * 100);
+const dowwWidth = computed(() => (down_standard.value / 200) * 100)
+const progress = computed(() => {
+    let p = (origin.value) / 200
+    return Math.max(0, Math.min(1, p))
+})
+const percent = (val) => {
+    return (val / 200) * 100
 }
 </script>
 
