@@ -200,8 +200,8 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
 
     workout_plan = [
-        {"type": "pushup", "target": 2},
-        {"type": "bicep_curls", "target": 2}
+        {"type": "pushup", "target": 5},
+        {"type": "bicep_curls", "target": 7}
     ]
     controller = WorkoutController(workout_plan)
     try:

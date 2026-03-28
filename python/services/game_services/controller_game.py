@@ -30,7 +30,7 @@ class WorkoutController:
         # Thêm thông tin về tiến độ tổng thể
         result["workout_progress"] = f"{self.current_index + 1}/{len(self.plan)}"
         result["target_of_current"] = target
-        result["exercise_type"] = self.plan[self.current_index]["type"],
+        result["exercise_type"] = self.plan[self.current_index]["type"]
         # type, target_rep = self.excercises[self.current_index]
         # success = current_service.run_estimate(landmarks,None)
         print(result)
