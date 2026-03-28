@@ -68,7 +68,7 @@
                         }} cal</span>
                 </div>
                 <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-green-500 to-blue-500 rounded-full transition-all"
+                    <div class="h-full bg-linear-to-r from-green-500 to-blue-500 rounded-full transition-all"
                         :style="{ width: Math.min((calculateTotalNutrition().calories / userProfile.dailyCalorieGoal) * 100, 100) + '%' }">
                     </div>
                 </div>
@@ -90,7 +90,7 @@
             <h2 class="text-2xl font-bold mb-4 mt-4">Bửa ăn khuyến nghị</h2>
             <span @click="get_menu_handle"
                 class="px-4 py-3 rounded-lg font-semibold transition-all cursor-pointer hover:scale-105"
-                :class="selectedBuoi ? 'bg-gradient-to-r from-blue-600 to-cyan-500 shadow-lg' : 'bg-gray-800 hover:bg-gray-700'">Nhận
+                :class="selectedBuoi ? 'bg-linear-to-r from-blue-600 to-cyan-500 shadow-lg' : 'bg-gray-800 hover:bg-gray-700'">Nhận
                 menu </span>
             <div class="space-y-6 mt-5 bg-gray-900 p-4 rounded-xl">
                 <div class="grid grid-cols-4 gap-2 mb-6 bg-gray-900/50 p-3 rounded-xl border border-gray-700">
@@ -170,7 +170,7 @@
     <!-- All Meals Selected Today -->
     <!-- <div class="mb-8">
         <h2 class="text-2xl font-bold mb-4">📅 Today's Meals</h2>
-        <div class="bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-xl border border-purple-500/30 p-6">
+        <div class="bg-linear-to-br from-purple-900/30 to-pink-900/30 rounded-xl border border-purple-500/30 p-6">
             <div v-if="selectedBuoi.length === 0" class="text-center text-gray-400 py-8">
                 <p>No meals selected yet. Add meals to see them here! 👇</p>
             </div>
@@ -211,7 +211,7 @@
                 <div>
                     <span @click="ShowFilterModal = !ShowFilterModal"
                         class="px-4 py-2 rounded-lg font-semibold transition-all"
-                        :class="!ShowFilterModal ? 'bg-gradient-to-r from-blue-600 to-cyan-500 shadow-lg' : 'bg-gray-800 hover:bg-gray-700'">Bộ
+                        :class="!ShowFilterModal ? 'bg-linear-to-r from-blue-600 to-cyan-500 shadow-lg' : 'bg-gray-800 hover:bg-gray-700'">Bộ
                         lọc </span>
                 </div>
                 <div v-if="ShowFilterModal"
@@ -220,7 +220,7 @@
                         :class="[
                             'px-4 py-2 rounded-lg font-semibold transition-all',
                             selectedCategory === category
-                                ? 'bg-gradient-to-r from-blue-600 to-cyan-500 shadow-lg'
+                                ? 'bg-linear-to-r from-blue-600 to-cyan-500 shadow-lg'
                                 : 'bg-gray-800 hover:bg-gray-700'
                         ]">
                         {{ category }}
@@ -517,9 +517,5 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-
-input[type=number] {
-    -moz-appearance: textfield;
 }
 </style>

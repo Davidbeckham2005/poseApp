@@ -48,7 +48,7 @@ const monsters = ref({
         currentHp: 20000,
         maxHp: 20000,
         path: '/Monster/dragon',
-        bg: 'bg-gradient-to-br from-blue-500 to-cyan-400',
+        bg: 'bg-linear-to-br from-blue-500 to-cyan-400',
         difficulty: 'Hard'
     },
     // dancer: {
@@ -58,7 +58,7 @@ const monsters = ref({
     //     currentHp: 200,
     //     maxHp: 200,
     //     path: '/Monster/dancer',
-    //     bg: 'bg-gradient-to-br from-red-500 to-cyan-400'
+    //     bg: 'bg-linear-to-br from-red-500 to-cyan-400'
     // },
     CactiniSandalini: {
         name: 'Cactini Sandalini',
@@ -67,7 +67,7 @@ const monsters = ref({
         currentHp: 200,
         maxHp: 200,
         path: '/Monster/Monster 3',
-        bg: 'bg-gradient-to-br from-green-500 to-cyan-400',
+        bg: 'bg-linear-to-br from-green-500 to-cyan-400',
         difficulty: 'Easy'
 
     },
@@ -78,7 +78,7 @@ const monsters = ref({
         currentHp: 200,
         maxHp: 200,
         path: '/Monster/Pochita',
-        bg: 'bg-gradient-to-br from-pink-500 to-cyan-400',
+        bg: 'bg-linear-to-br from-pink-500 to-cyan-400',
         difficulty: 'Medium'
     },
     // slime: {
@@ -88,7 +88,7 @@ const monsters = ref({
     //     currentHp: 200,
     //     maxHp: 200,
     //     path: '/Monster/slime',
-    //     bg: 'bg-gradient-to-br from-red-500 to-blue-400'
+    //     bg: 'bg-linear-to-br from-red-500 to-blue-400'
 
     // },
     wolf: {
@@ -98,7 +98,7 @@ const monsters = ref({
         currentHp: 200,
         maxHp: 200,
         path: '/Monster/wolf',
-        bg: 'bg-gradient-to-br from-amber-500 to-orange-400',
+        bg: 'bg-linear-to-br from-amber-500 to-orange-400',
         difficulty: 'Medium'
 
     },
@@ -109,7 +109,7 @@ const monsters = ref({
         currentHp: 200,
         maxHp: 200,
         path: '/Monster/gost1',
-        bg: 'bg-gradient-to-br from-black to-orange-400',
+        bg: 'bg-linear-to-br from-black to-orange-400',
         difficulty: 'Hard'
 
     },

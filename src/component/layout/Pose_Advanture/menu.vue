@@ -30,10 +30,10 @@
 
                 <div v-for="card in menuCards" :key="card.id" @click="handleSelect(card.id)" :class="[
                     'relative overflow-hidden cursor-pointer group rounded-3xl p-8 transition-all duration-500',
-                    'bg-gradient-to-br shadow-2xl hover:scale-[1.02] hover:shadow-cyan-500/20',
+                    'bg-linear-to-br shadow-2xl hover:scale-[1.02] hover:shadow-cyan-500/20',
                     card.bg]">
                     <div
-                        class="absolute -inset-full bg-gradient-to-r from-transparent via-white/10 to-transparent rotate-45 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000">
+                        class="absolute -inset-full bg-linear-to-r from-transparent via-white/10 to-transparent rotate-45 translate-x-full group-hover:translate-x-full transition-transform duration-1000">
                     </div>
 
                     <div class="relative z-10 flex flex-col gap-6">
@@ -61,7 +61,7 @@
                             class="flex items-center gap-2 text-white font-bold text-sm mt-4 opacity-70 group-hover:opacity-100 transition-opacity">
                             CHƠI NGAY
                             <div
-                                class="w-8 h-[2px] bg-white transform origin-left scale-x-50 group-hover:scale-x-100 transition-transform">
+                                class="w-8 h-0.5 bg-white transform origin-left scale-x-50 group-hover:scale-x-100 transition-transform">
                             </div>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ const menuCards = [
         title: 'Chế độ luyện tập',
         desc: 'Luyện tập với các bài tập thực tế',
         icon: Play,
-        bg: 'bg-gradient-to-br from-blue-500 to-cyan-400'
+        bg: 'bg-linear-to-br from-blue-500 to-cyan-400'
     },
     {
         // component: selectMonster,
@@ -140,7 +140,7 @@ const menuCards = [
         title: 'Chế độ chiến đấu',
         desc: 'Đánh bại quái vật với các bài tập thực tế',
         icon: Swords,
-        bg: 'bg-gradient-to-br from-red-500 to-cyan-400'
+        bg: 'bg-linear-to-br from-red-500 to-cyan-400'
     },
 ];
 </script>

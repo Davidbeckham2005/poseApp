@@ -38,7 +38,7 @@ import Music from '../../bases/Music.vue'
                 <div @click="battle_handle(key)" v-for="(monster, key) in monsters" :key="key" :class="[
                     monster.bg,
                     'group relative p-6 rounded-[2.5rem] cursor-pointer transition-all duration-500',
-                    'hover:scale-[1.05] hover:shadow-[0_20px_50px_rgba(0,0,0,0.4)] shadow-xl overflow-hidden min-h-[320px] flex flex-col'
+                    'hover:scale-[1.05] hover:shadow-[0_20px_50px_rgba(0,0,0,0.4)] shadow-xl overflow-hidden min-h-80 flex flex-col'
                 ]">
                     <div
                         class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -57,7 +57,7 @@ import Music from '../../bases/Music.vue'
 
                     <div
                         class="relative z-10 flex-1 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500">
-                        <div class="w-full h-full min-h-[140px] flex items-center justify-center">
+                        <div class="w-full h-full min-h-35 flex items-center justify-center">
                             <Trainer :path_json="monster.path" :key="key"></Trainer>
                         </div>
                     </div>
@@ -78,7 +78,7 @@ import Music from '../../bases/Music.vue'
                     </div>
 
                     <div
-                        class="absolute -top-[100%] -left-[100%] w-[200%] h-[200%] bg-gradient-to-br from-white/20 via-transparent to-transparent rotate-45 group-hover:top-[-50%] group-hover:left-[-50%] transition-all duration-1000 pointer-events-none">
+                        class="absolute -top-full -left-full w-[200%] h-[200%] bg-linear-to-br from-white/20 via-transparent to-transparent rotate-45 group-hover:top-[-50%] group-hover:left-[-50%] transition-all duration-1000 pointer-events-none">
                     </div>
                 </div>
             </div>

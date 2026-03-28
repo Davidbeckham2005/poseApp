@@ -6,7 +6,7 @@
 
             <div class="relative flex items-center justify-center w-8 h-8">
                 <div class="absolute inset-0 rounded-full border border-emerald-500/20"></div>
-                <div @click="togglePlay" :class="['text-xl transition-all duration-[30000ms] linear infinite',
+                <div @click="togglePlay" :class="['text-xl transition-all duration-[30000] linear infinite',
                     isPlaying ? 'animate-spin' : 'opacity-50']">
                     💿
                 </div>

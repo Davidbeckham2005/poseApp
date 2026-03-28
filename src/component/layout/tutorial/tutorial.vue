@@ -15,7 +15,7 @@ const Content = [
         content:
             'Sân Đấu Thể Hình biến các bài tập ngoài đời thành trận chiến quái vật hoành tráng. Thực hiện động tác thật để tấn công kẻ địch, tạo combo và nâng cấp nhân vật!',
         tip: 'Bật webcam để nhận diện tư thế trực tiếp, hoặc chơi chế độ mô phỏng nếu không dùng camera.',
-        background: 'bg-gradient-to-br from-blue-600 to-purple-700',
+        background: 'bg-linear-to-br from-blue-600 to-purple-700',
     },
     {
         icon: BicepsFlexed,
@@ -23,7 +23,7 @@ const Content = [
         content:
             'Chọn 1 trong 3 bài tập: Chống đẩy, Squat, Plank. Mỗi động tác tiêu hao Thể lực và gây sát thương lên quái vật.',
         tip: 'Mỗi bài tập có lượng sát thương và tiêu hao thể lực khác nhau.',
-        background: 'bg-gradient-to-br from-cyan-600 to-blue-700',
+        background: 'bg-linear-to-br from-cyan-600 to-blue-700',
     },
     {
         icon: BowArrow,
@@ -31,7 +31,7 @@ const Content = [
         content:
             'Tư thế của bạn được chấm điểm theo thời gian thực: - HOÀN HẢO — 1.5× sát thương, +1 combo - TỐT — 1.2× sát thương, +1 combo - SAI — sát thương thường, mất combo!',
         tip: 'Thực hiện động tác chậm và chuẩn để gây nhiều sát thương hơn.',
-        background: 'bg-gradient-to-br from-green-600 to-emerald-700',
+        background: 'bg-linear-to-br from-green-600 to-emerald-700',
     },
     {
         icon: Flame,
@@ -39,7 +39,7 @@ const Content = [
         content:
             'Chuỗi động tác Tốt hoặc Hoàn Hảo sẽ tăng combo. Khi đạt 5× combo, COMBO MODE kích hoạt và sát thương tăng mạnh. Sai tư thế sẽ mất toàn bộ combo!',
         tip: 'Luôn theo dõi thanh combo — sai một lần là mất hết.',
-        background: 'bg-gradient-to-br from-orange-600 to-red-700',
+        background: 'bg-linear-to-br from-orange-600 to-red-700',
     },
     {
         icon: Shield,
@@ -47,7 +47,7 @@ const Content = [
         content:
             'Trước mỗi trận, bạn có thể chọn tối đa 2 hiệu ứng. thêm XP và phần thưởng lớn, hoặc tăng sát tương.',
         tip: 'Kết hợp nhiều hiệu ứng để thử thách bản thân và nhận thưởng tốt hơn.',
-        background: 'bg-gradient-to-br from-purple-600 to-pink-700',
+        background: 'bg-linear-to-br from-purple-600 to-pink-700',
     },
     {
         icon: Activity,
@@ -55,7 +55,7 @@ const Content = [
         content:
             'Mỗi trận đấu bắt đầu với khởi động ngắn: xoay cổ, xoay tay, xoay hông và chạy nhẹ. Hoàn thành sẽ nhận bonus trong 30 giây đầu.',
         tip: 'Bạn có thể bỏ qua, nhưng sẽ mất bonus và dễ chấn thương hơn.',
-        background: 'bg-gradient-to-br from-teal-600 to-cyan-700',
+        background: 'bg-linear-to-br from-teal-600 to-cyan-700',
     },
     {
         icon: Trophy,
@@ -63,7 +63,7 @@ const Content = [
         content:
             'Hoàn thành nhiệm vụ hằng ngày để nhận XP, đánh bại quái vật để lên cấp và tiến hóa từ Tân Binh thành Huyền Thoại!',
         tip: 'Tiến độ nhiệm vụ sẽ được lưu giữa các trận đấu.',
-        background: 'bg-gradient-to-br from-yellow-500 to-orange-600',
+        background: 'bg-linear-to-br from-yellow-500 to-orange-600',
     },
 ];
 const progressPercentage = computed(() => (currentStep.value / totalSteps) * 100);
@@ -125,7 +125,7 @@ const { only_from_left } = get_translate()
             </button>
 
             <button @click="currentStep === 7 ? handle_skip() : nextStep()"
-                :class="{ 'bg-gradient-to-br from-red-500 to-orange-700 text-white': currentStep === 7 }"
+                :class="{ 'bg-linear-to-br from-red-500 to-orange-700 text-white': currentStep === 7 }"
                 class="flex items-center gap-2 px-10 py-3 rounded-2xl dark:bg-orange-400 text-black font-bold hover:dark:bg-orange-300 transition-all shadow-lg shadow-orange-500/20">
                 {{ currentStep === 7 ? 'Bắt đầu ngay' : 'Tiếp theo' }}
                 <ChevronRight :size="20" />

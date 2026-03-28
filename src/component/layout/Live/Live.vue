@@ -46,7 +46,7 @@
                     Tắt Camera
                 </button>
 
-                <div class="w-[1px] h-6 bg-white/10 mx-2"></div>
+                <div class="w-px h-6 bg-white/10 mx-2"></div>
 
                 <button v-if="!start_analyst" @click="handle_analyst" :disabled="!stream?.active"
                     class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-xl font-semibold shadow-lg shadow-blue-900/20 transition-all active:scale-95">
@@ -63,7 +63,7 @@
         <Transition name="slide-up">
             <div v-if="start_analyst" class="mt-8">
                 <div
-                    class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500/10 to-transparent border border-orange-500/20 p-5 flex items-start gap-4">
+                    class="relative overflow-hidden rounded-2xl bg-linear-to-br from-orange-500/10 to-transparent border border-orange-500/20 p-5 flex items-start gap-4">
                     <div class="p-3 rounded-xl bg-orange-500/20 text-orange-400 shadow-inner">
                         <Lightbulb :size="24" />
                     </div>

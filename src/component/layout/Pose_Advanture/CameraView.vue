@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col items-center gap-6">
         <!-- CAMERA CONTAINER -->
-        <div class="relative w-[640px] h-[480px] rounded-2xl overflow-hidden bg-slat-900 shadow-2xl">
+        <div class="relative w-160 h-120 rounded-2xl overflow-hidden bg-slat-900 shadow-2xl">
             <!-- video -->
             <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover" autoplay playsinline />
             <!-- canvas -->
@@ -27,16 +27,16 @@
         <!-- CONTROL PANEL -->
         <div class="flex gap-4">
 
-            <button @click="startCamera" class="px-6 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-400
+            <button @click="startCamera" class="px-6 py-2 rounded-xl bg-linear-to-r from-emerald-500 to-green-400
       text-white font-medium shadow-lg hover:scale-105 hover:shadow-xl transition">
                 Start
             </button>
-            <button @click="start2" class="px-6 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-400
+            <button @click="start2" class="px-6 py-2 rounded-xl bg-linear-to-r from-emerald-500 to-green-400
       text-white font-medium shadow-lg hover:scale-105 hover:shadow-xl transition">
                 Start2
             </button>
 
-            <button @click="stopCamera" class="px-6 py-2 rounded-xl bg-gradient-to-r from-red-500 to-rose-400
+            <button @click="stopCamera" class="px-6 py-2 rounded-xl bg-linear-to-r from-red-500 to-rose-400
       text-white font-medium shadow-lg hover:scale-105 hover:shadow-xl transition">
                 Stop
             </button>
@@ -128,8 +128,8 @@ watch(() => props.currentHp, (newValue) => {
 
 // start camera và bắt đầu bài tập
 const start2 = () => {
-    
-    
+
+
     if (!current_exercise_type.value) {
         alert("Please choose a skill before starting the analysis.")
         return

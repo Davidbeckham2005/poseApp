@@ -24,7 +24,7 @@
                 </div>
 
                 <div
-                    class="w-full md:w-7/12 p-8 md:p-12 overflow-y-auto custom-scrollbar bg-gradient-to-br from-transparent to-orange-500/5">
+                    class="w-full md:w-7/12 p-8 md:p-12 overflow-y-auto custom-scrollbar bg-linear-to-br from-transparent to-orange-500/5">
                     <div class="space-y-8">
                         <div class="flex gap-8">
                             <div class="space-y-1">

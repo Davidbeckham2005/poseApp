@@ -21,7 +21,7 @@
 
                 <div class="space-y-2">
                     <h1 class="text-6xl md:text-8xl font-black tracking-tighter italic 
-                               bg-gradient-to-br from-orange-500 via-purple-500 to-pink-500 bg-clip-text
+                               bg-linear-to-br from-orange-500 via-purple-500 to-pink-500 bg-clip-text
                                drop-shadow-sm dark:drop-shadow-[0_5px_15px_rgba(249,115,22,0.4)]">
                         FITNESS<br>ADVENTURE
                     </h1>
@@ -42,7 +42,7 @@
             <div
                 class="grid grid-cols-3 gap-4 p-1 bg-slate-200/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2.5rem] backdrop-blur-xl">
                 <div v-for="(stat, i) in stats" :key="i"
-                    class="flex flex-col items-center py-6 px-2 rounded-[2rem] hover:bg-white dark:hover:bg-white/5 transition-colors group">
+                    class="flex flex-col items-center py-6 px-2 rounded-4xl hover:bg-white dark:hover:bg-white/5 transition-colors group">
                     <div
                         :class="['w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-transform group-hover:scale-110 shadow-lg', stat.bg]">
                         <component :is="stat.icon" :class="['w-6 h-6', stat.color]" />

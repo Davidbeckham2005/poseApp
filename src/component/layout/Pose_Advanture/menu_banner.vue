@@ -1,6 +1,6 @@
 <template>
     <div
-        class="relative w-full max-w-5xl mx-auto bg-gradient-to-b from-indigo-600 to-purple-700 rounded-3xl p-10 text-center mb-8 overflow-hidden">
+        class="relative w-full max-w-5xl mx-auto bg-linear-to-b from-indigo-600 to-purple-700 rounded-3xl p-10 text-center mb-8 overflow-hidden">
         <div
             class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
         </div>

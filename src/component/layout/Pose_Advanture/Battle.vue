@@ -33,7 +33,7 @@
 
                 <!-- MONSTER SIDE - LEFT -->
                 <div class="col-span-3 flex flex-col justify-center">
-                    <div class="rounded-3xl border-3 border-red-600 relative overflow-hidden p-4 bg-gradient-to-b from-red-900/20 to-black"
+                    <div class="rounded-3xl border-3 border-red-600 relative overflow-hidden p-4 bg-linear-to-b from-red-900/20 to-black"
                         :class="[
                             hpPercentage >= 75 ? monster.bg : '',
                             hpPercentage < 75 && hpPercentage >= 25 ? 'dark:bg-orange-400/20' : '',
@@ -53,7 +53,7 @@
                             <!-- HP BAR -->
                             <div
                                 class="w-full h-8 bg-gray-700 rounded-full border-2 border-gray-600 p-1 overflow-hidden">
-                                <div class="h-full bg-gradient-to-r from-orange-500 to-red-600 rounded-full transition-all duration-300"
+                                <div class="h-full bg-liear-to-r from-orange-500 to-red-600 rounded-full transition-all duration-300"
                                     :style="{ width: (monster.currentHp / monster.maxHp * 100) + '%' }"></div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="col-span-3 flex flex-col justify-center gap-4">
-                    <div class="bg-gradient-to-b from-blue-900/40 to-black rounded-3xl border-3 p-6 flex flex-col items-center justify-center min-h-[300px]"
+                    <div class="bg-linear-to-b from-blue-900/40 to-black rounded-3xl border-3 p-6 flex flex-col items-center justify-center min-h-75"
                         :class="required_state === 'up' ? 'border-green-400' : 'border-orange-400'">
                         <!-- Required State -->
                         <div v-if="required_state" class="text-center">
@@ -108,7 +108,7 @@
         </div>
         <!-- VICTORY/DEFEAT MODAL -->
         <div v-if="is_finish" class="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-blur-md z-50">
-            <div class="w-[520px] rounded-3xl bg-gradient-to-b from-gray-800 to-black text-white shadow-2xl p-10 border-3 animate-in fade-in"
+            <div class="w-130 rounded-3xl bg-linear-to-b from-gray-800 to-black text-white shadow-2xl p-10 border-3 animate-in fade-in"
                 :class="win ? 'border-green-500' : 'border-red-500'">
 
                 <!-- TITLE -->
@@ -127,13 +127,13 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <!-- Total Reps -->
                         <div
-                            class="bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 rounded-lg p-4 border-2 border-yellow-500/50">
+                            class="bg-linear-to-br from-yellow-500/20 to-yellow-600/10 rounded-lg p-4 border-2 border-yellow-500/50">
                             <p class="text-xs text-yellow-300 font-bold">TOTAL REPS</p>
                             <p class="text-3xl font-black text-yellow-400">{{ old_total }}</p>
                         </div>
                         <!-- Perfect Form Reps -->
                         <div
-                            class="bg-gradient-to-br from-green-500/20 to-green-600/10 rounded-lg p-4 border-2 border-green-500/50">
+                            class="bg-linear-to-br from-green-500/20 to-green-600/10 rounded-lg p-4 border-2 border-green-500/50">
                             <p class="text-xs text-green-300 font-bold">PERFECT FORM</p>
                             <p class="text-3xl font-black text-green-400">{{ old_good }}</p>
                         </div>
@@ -157,7 +157,7 @@
                 <!-- ACTION BUTTONS -->
                 <div class="flex gap-4">
                     <button @click="handle_menu"
-                        class="flex-1 px-6 py-4 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 rounded-xl text-white font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-lg">
+                        class="flex-1 px-6 py-4 bg-linear-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 rounded-xl text-white font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-lg">
                         ← Back to Menu
                     </button>
                 </div>

@@ -8,25 +8,25 @@
 
         <!-- Quick Stats -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-gradient-to-br from-blue-600/20 to-blue-900/20 rounded-lg p-6 border border-blue-500/30">
+            <div class="bg-linear-to-br from-blue-600/20 to-blue-900/20 rounded-lg p-6 border border-blue-500/30">
                 <p class="text-gray-400 text-sm mb-2">Total Workouts</p>
                 <p class="text-3xl font-bold text-blue-400">{{ stats.totalWorkouts }}</p>
                 <p class="text-gray-500 text-xs mt-2">This month</p>
             </div>
-            
-            <div class="bg-gradient-to-br from-green-600/20 to-green-900/20 rounded-lg p-6 border border-green-500/30">
+
+            <div class="bg-linear-to-br from-green-600/20 to-green-900/20 rounded-lg p-6 border border-green-500/30">
                 <p class="text-gray-400 text-sm mb-2">Avg Accuracy</p>
                 <p class="text-3xl font-bold text-green-400">{{ stats.avgAccuracy }}%</p>
                 <p class="text-gray-500 text-xs mt-2">Form quality</p>
             </div>
-            
-            <div class="bg-gradient-to-br from-orange-600/20 to-orange-900/20 rounded-lg p-6 border border-orange-500/30">
+
+            <div class="bg-linear-to-br from-orange-600/20 to-orange-900/20 rounded-lg p-6 border border-orange-500/30">
                 <p class="text-gray-400 text-sm mb-2">Calories Burned</p>
                 <p class="text-3xl font-bold text-orange-400">{{ stats.caloriesBurned }}</p>
                 <p class="text-gray-500 text-xs mt-2">This week</p>
             </div>
-            
-            <div class="bg-gradient-to-br from-purple-600/20 to-purple-900/20 rounded-lg p-6 border border-purple-500/30">
+
+            <div class="bg-linear-to-br from-purple-600/20 to-purple-900/20 rounded-lg p-6 border border-purple-500/30">
                 <p class="text-gray-400 text-sm mb-2">Streak</p>
                 <p class="text-3xl font-bold text-purple-400">{{ stats.dayStreak }}</p>
                 <p class="text-gray-500 text-xs mt-2">Days active</p>
@@ -37,23 +37,26 @@
         <div class="mb-8">
             <h2 class="text-2xl font-bold mb-4">Quick Actions</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button @click="navigateTo('game')" class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 rounded-lg p-6 font-semibold transition-all flex items-center gap-3">
+                <button @click="navigateTo('game')"
+                    class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 rounded-lg p-6 font-semibold transition-all flex items-center gap-3">
                     <span class="text-2xl">🏋️</span>
                     <div class="text-left">
                         <div>Start Workout</div>
                         <div class="text-sm text-red-200">Fitness Adventure</div>
                     </div>
                 </button>
-                
-                <button @click="navigateTo('wellness')" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 rounded-lg p-6 font-semibold transition-all flex items-center gap-3">
+
+                <button @click="navigateTo('wellness')"
+                    class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 rounded-lg p-6 font-semibold transition-all flex items-center gap-3">
                     <span class="text-2xl">🍎</span>
                     <div class="text-left">
                         <div>Nutrition</div>
                         <div class="text-sm text-green-200">View recommendations</div>
                     </div>
                 </button>
-                
-                <button @click="navigateTo('upload')" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-lg p-6 font-semibold transition-all flex items-center gap-3">
+
+                <button @click="navigateTo('upload')"
+                    class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-lg p-6 font-semibold transition-all flex items-center gap-3">
                     <span class="text-2xl">📹</span>
                     <div class="text-left">
                         <div>Check Form</div>
@@ -95,7 +98,8 @@
                 <div>
                     <p class="text-gray-300 mb-2">Complete 3 workout sessions</p>
                     <div class="w-48 h-2 bg-gray-700 rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" :style="{ width: goalProgress + '%' }"></div>
+                        <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
+                            :style="{ width: goalProgress + '%' }"></div>
                     </div>
                     <p class="text-sm text-gray-400 mt-2">{{ goalProgress }}% complete</p>
                 </div>
@@ -154,6 +158,7 @@ const navigateTo = (tab) => {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
