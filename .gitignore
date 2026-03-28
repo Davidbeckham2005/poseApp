@@ -32,3 +32,5 @@ src/assets/
 *.pyc
 *.db
 sql.poseApp.db
+QUICKSTART.md
+NUTRITION_SYSTEM.README.md
