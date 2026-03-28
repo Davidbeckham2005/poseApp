@@ -83,11 +83,14 @@ const stats = [
 // ... logic giữ nguyên ...
 const router = useRouter()
 const { set_state_game } = state_game()
-
+import { useAudio } from '../../../composable/audio';
+const { playBGM } = useAudio()
 const start_game = async () => {
+    playBGM("cartoon")
     set_state_game(true)
     router.push({ name: 'menu' })
     set_state_game(false)
+
 }
 </script>
 

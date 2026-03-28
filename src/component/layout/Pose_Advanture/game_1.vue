@@ -14,11 +14,15 @@ const battle_handle = (key) => {
     set_state_warmup(true)
     router.push(`/game/battle/${key}`)
 };
+import Music from '../../bases/Music.vue'
 </script>
 
 <template>
     <div class="dark:bg-[#0a0a0a] text-white">
-        <menu_btn></menu_btn>
+        <div class="h-15">
+            <menu_btn></menu_btn>
+            <Music></Music>
+        </div>
         <div class="w-full max-w-6xl mx-auto p-6 ">
             <div class="mb-8 flex justify-between items-end px-4">
                 <div>

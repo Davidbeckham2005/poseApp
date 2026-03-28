@@ -3,7 +3,10 @@
 
     <div v-else>
         <div class="min-h-screen relative dark:bg-[#0a0a0a] text-white p-6">
-            <Back_btn></Back_btn>
+            <div class="w-full h-15">
+                <Back_btn></Back_btn>
+                <Music></Music>
+            </div>
             <menu_banner></menu_banner>
             <!-- <div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-5xl mx-auto">
                 <div v-for="(monster, key) in monsters" @click="battle_handle(key)"
@@ -81,6 +84,7 @@
 </template>
 
 <script setup>
+import Music from '../../bases/Music.vue'
 import Trainer from '../Trainer/Trainer.vue'
 import menu_banner from './menu_banner.vue'
 import Back_btn from '../../bases/Back_btn.vue'

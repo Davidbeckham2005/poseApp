@@ -1,6 +1,7 @@
 <template>
     <div class="fixed top-20 right-4 z-40 flex gap-2 flex-col">
         <!-- Voice Toggle -->
+        <Music></Music>
         <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg border border-gray-700 p-3 backdrop-blur-md hover:border-blue-500 transition-all shadow-lg"
             :class="isAudioEnabled() ? 'border-blue-500' : 'border-red-500'">
             <button @click="toggleVoice" class="flex items-center gap-2 text-white font-semibold min-w-40">
@@ -25,7 +26,7 @@
 </template>
 
 <script setup>
-
+import Music from '../../bases/Music.vue'
 import { useAudio } from '../../../composable/audio'
 const { toggleAudio, isAudioEnabled } = useAudio()
 import { useSkeleton } from '../../../services/pose_state'

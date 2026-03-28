@@ -54,24 +54,65 @@ import { computed, onUnmounted, ref, watch } from "vue"
 import { startPose, stopPose, startPose_game2 } from "../../../services/PoseDetector"
 import { usePose } from "../../../services/detect_help"
 import { exercises_data } from "../../../constants/exercise"
-import { useAudio } from '../../../composable/audio'
-const { speak } = useAudio()
-
+import { useAudio, playSound } from '../../../composable/audio'
 // khai bao bien
 const { isInside } = usePose()
 const videoRef = ref(null)
 const canvasRef = ref(null)
 const isStarted = ref(false)
 const current_exercise_type = ref(null)
-let tipsInterval = null
-let warningInterval = null
-const tutorial_message = ref("")
+
+
 /* trạng thái người dùng trong safe zone */
 const inside = computed(() => { return isInside.value })
 
-// trạng thái để kiểm soát việc nói cảnh báo
-let isSpeaking = false
+const mainLoopInterval = ref(null)
+const lastSpeakTime = ref(0)
+const tipIndex = ref(0)
+const { speak, stopSpeak } = useAudio()
+const pendingSignal = ref(false)
+const signal_type = ref(null)
+const handleResult = (type) => {
+    pendingSignal.value = true
+    signal_type.value = type
+}
+const manageVoiceLogic = () => {
+    if (!isStarted.value) {
+        stopSpeak()
+        return
+    }
+    const now = Date.now()
+    if (pendingSignal.value) {
+        pendingSignal.value = false
+        playSound(signal_type.value)
+        return
+    }
+    if (warning.value) {
+        if (now - lastSpeakTime.value > 3000) {
+            speak("Vui lòng đứng vào khung tập để tiếp tục bài tập")
+            lastSpeakTime.value = now
+        }
+        return
+    }
+    // ưu tiên nói cảnh báo hơn tips
+    const tips = exercise_tips.value || []
+    if (tips.length > 0 && now - lastSpeakTime.value > 8000) {
+        speak(tips[tipIndex.value])
+        tipIndex.value = (tipIndex.value + 1) % tips.length
+        lastSpeakTime.value = now
+    }
+}
+watch(isStarted, (started) => {
+    if (started) {
+        tipIndex.value = 0
+        lastSpeakTime.value = 0
+        mainLoopInterval.value = setInterval(manageVoiceLogic, 500)
 
+    } else {
+        if (mainLoopInterval.value) clearInterval(mainLoopInterval.value)
+        stopSpeak()
+    }
+})
 // trạng thái của bài tập được chọn
 watch(() => props.exercise_type, (newValue) => {
     current_exercise_type.value = newValue
@@ -87,14 +128,14 @@ watch(() => props.currentHp, (newValue) => {
 
 // start camera và bắt đầu bài tập
 const start2 = () => {
+    
+    
     if (!current_exercise_type.value) {
         alert("Please choose a skill before starting the analysis.")
         return
     }
     isStarted.value = true
-    console.log('Starting pose detection for exercise type:', current_exercise_type.value)
-    startPose_game2(videoRef.value, canvasRef.value, current_exercise_type.value, isStarted, emit)
-    startRotationTips()
+    startPose_game2(videoRef.value, canvasRef.value, current_exercise_type.value, isStarted, emit, handleResult)
     emit('is_analyst_active', true)
 }
 const startCamera = () => {
@@ -103,80 +144,24 @@ const startCamera = () => {
         return
     }
     isStarted.value = true
-    console.log('Starting pose detection for exercise type:', current_exercise_type.value)
     startPose(videoRef.value, canvasRef.value, current_exercise_type.value, isStarted, emit)
-    startRotationTips()
     emit('is_analyst_active', true)
 }
 
 //  stop camera và dừng bài tập
 const stopCamera = () => {
     isStarted.value = false
-    isSpeaking = false
-    emit('is_analyst_active', false)
+    if (mainLoopInterval.value) clearInterval(mainLoopInterval.value)
     stopPose()
-
-    // Clear all intervals
-    if (tipsInterval) {
-        clearInterval(tipsInterval)
-        tipsInterval = null
-    }
-    if (warningInterval) {
-        clearInterval(warningInterval)
-        warningInterval = null
-    }
-
-    // Clear display
-    tutorial_message.value = ""
+    emit('is_analyst_active', false)
 }
 
 // cảnh báo khi người dùng không đứng trong safe zone
 const warning = computed(() => {
     return isStarted.value && !inside.value
 })
-
-// Theo dõi trạng thái cảnh báo và thông báo bằng giọng nói
-watch(warning, (newValue) => {
-    if (newValue) {
-        if (tipsInterval) clearInterval(tipsInterval) // Dừng nói tips khi có cảnh báo
-        if (!warningInterval) {
-            warningInterval = setInterval(() => {
-                if (isStarted.value) {
-                    speak("Vui lòng đứng vào khung tập để tiếp tục bài tập")
-                }
-            }, 2000) // Lặp lại cảnh báo mỗi 2 giây
-        }
-    } else {
-        clearInterval(warningInterval)
-        warningInterval = null
-        startRotationTips() // Tiếp tục nói tips khi cảnh báo kết thúc
-    }
-})
-
-// tính toán và hiển thị tips bài tập
 const exercise_tips = computed(() => { return exercises_data.find(e => e.type === current_exercise_type.value)?.tips })
-const startRotationTips = async () => {
-    if (warning.value) return // Không bắt đầu tips nếu đang có cảnh báo
-    if (!isStarted.value) return
-    if (tipsInterval) clearInterval(tipsInterval)
-    const tips = exercise_tips.value || []
-    if (tips.length === 0) return
-
-    let index = 0
-    // Hiển thị câu đầu tiên ngay lập tức
-    tutorial_message.value = tips[0]
-    await speak(tutorial_message.value)
-    tipsInterval = setInterval(async () => {
-        if (!isStarted.value) return // Stop if camera is stopped
-        index = (index + 1) % tips.length
-        tutorial_message.value = tips[index]
-        await speak(tips[index])
-    }, 6000)
-}
-
 onUnmounted(() => {
     stopCamera()
-    if (tipsInterval) clearInterval(tipsInterval)
-    if (warningInterval) clearInterval(warningInterval)
 }) 
 </script>

@@ -52,9 +52,12 @@ import pose_advanture from './component/layout/Pose_Advanture/pose_advanture.vue
 import UserDashboard from './component/layout/UserDashboard.vue';
 import MealPlanner from './component/layout/MealPlanner.vue';
 import { useAudio } from './composable/audio';
-const { unlockAudio, speak } = useAudio()
+import { onMounted } from 'vue';
+const { unlockAudio, speak, stopBGM } = useAudio()
 const { switch_on_sidebar, currentTab } = useNavigation()
-
+onMounted(() => {
+    stopBGM()
+})
 const menuItems = [
     { name: 'game', label: 'FITNESS ADVENTURE', icon: Swords },
     { name: 'profile', label: 'Trang cá nhân', icon: UserRound },
