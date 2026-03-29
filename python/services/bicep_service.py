@@ -74,6 +74,8 @@ class bicep_service(exercise_Service):
             "origin": origin,
             "good_standard": self.good_standard,
             "up_standard": self.up_standard, # Ngưỡng để tính là hoàn thành lượt lên
+            "bad_standard": self.bad_standard,
+            "down_standard": self.down_standard
         }
         return True
 

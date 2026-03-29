@@ -27,11 +27,11 @@
         <!-- CONTROL PANEL -->
         <div class="flex gap-4">
 
-            <button @click="startCamera" class="px-6 py-2 rounded-xl bg-linear-to-r from-emerald-500 to-green-400
+            <button @click="startCamera" v-if="current_game === 'game1'" class="px-6 py-2 rounded-xl bg-linear-to-r from-emerald-500 to-green-400
       text-white font-medium shadow-lg hover:scale-105 hover:shadow-xl transition">
                 Start
             </button>
-            <button @click="start2" class="px-6 py-2 rounded-xl bg-linear-to-r from-emerald-500 to-green-400
+            <button @click="start2" v-if="current_game === 'game2'" class="px-6 py-2 rounded-xl bg-linear-to-r from-emerald-500 to-green-400
       text-white font-medium shadow-lg hover:scale-105 hover:shadow-xl transition">
                 Start2
             </button>
@@ -50,6 +50,7 @@ const props = defineProps({ exercise_type: String, currentHp: Number })
 const emit = defineEmits(['result', 'finish', 'is_analyst_active'])
 
 // import
+import { useGameChoose } from "../../../composable/help_game"
 import { computed, onUnmounted, ref, watch } from "vue"
 import { startPose, stopPose, startPose_game2 } from "../../../services/PoseDetector"
 import { usePose } from "../../../services/detect_help"
@@ -61,8 +62,8 @@ const videoRef = ref(null)
 const canvasRef = ref(null)
 const isStarted = ref(false)
 const current_exercise_type = ref(null)
-
-
+const { get_game_choose, set_game_choose } = useGameChoose()
+const current_game = computed(() => get_game_choose())
 /* trạng thái người dùng trong safe zone */
 const inside = computed(() => { return isInside.value })
 
@@ -129,13 +130,8 @@ watch(() => props.currentHp, (newValue) => {
 // start camera và bắt đầu bài tập
 const start2 = () => {
 
-
-    if (!current_exercise_type.value) {
-        alert("Please choose a skill before starting the analysis.")
-        return
-    }
     isStarted.value = true
-    startPose_game2(videoRef.value, canvasRef.value, current_exercise_type.value, isStarted, emit, handleResult)
+    startPose_game2(videoRef.value, canvasRef.value, isStarted, emit, handleResult)
     emit('is_analyst_active', true)
 }
 const startCamera = () => {

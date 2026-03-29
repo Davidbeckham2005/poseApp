@@ -91,9 +91,10 @@ import Back_btn from '../../bases/Back_btn.vue'
 import tutorial from '../tutorial/tutorial.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { Usetutorial } from '../../../composable/help_game'
-import { useMonster, Use_is_warmup } from '../../../composable/help_game'
+import { useMonster, Use_is_warmup, useGameChoose } from '../../../composable/help_game'
 const { set_state_warmup } = Use_is_warmup()
 const { get_all_monsters } = useMonster()
+const { get_game_choose, set_game_choose } = useGameChoose()
 const { get_state_tutorial, set_state_tutorial } = Usetutorial()
 const monsters = get_all_monsters()
 const router = useRouter()
@@ -101,9 +102,11 @@ const current_game = ref('')
 
 const handleSelect = (id) => {
     if (id === 'game1') {
+        set_game_choose('game1')
         router.push('/game/game_1')
     } else if (id === 'game2') {
-        router.push('/game/monster_selector')
+        set_game_choose('game2')
+        router.push('/game/game_2')
     }
 }
 const skip_tutorial = () => {

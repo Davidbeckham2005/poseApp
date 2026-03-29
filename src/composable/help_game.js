@@ -4,6 +4,7 @@ const current_layout = ref('lobby')
 const is_run_game = ref(false)
 const is_tutorial = ref(true)
 const is_warmup = ref(false)
+const game_choose = ref()
 export function useNavigation() {
     const get_current_layout = () => {
         return current_layout.value
@@ -128,4 +129,33 @@ export function useMonster() {
         return monsters.value
     }
     return { get_monster, get_all_monsters }
+}
+export function useGameChoose() {
+    const get_game_choose = () => {
+        return game_choose.value
+    }
+    const set_game_choose = (game) => {
+        game_choose.value = game
+    }
+    return { get_game_choose, set_game_choose }
+}
+const data_estimate = ref({
+    good_standard: 0,
+    bad_standard: 0,
+    up_standard: 0,
+    down_standard: 0,
+    exercise_type: "",
+})
+export function dataOnRep() {
+    const get_data_estimate = () => {
+        return data_estimate
+    }
+    const set_data_estimate = (data) => {
+        data_estimate.value.good_standard = data.good_standard
+        data_estimate.value.bad_standard = data.bad_standard
+        data_estimate.value.up_standard = data.up_standard
+        data_estimate.value.down_standard = data.down_standard
+        data_estimate.value.exercise_type = data.exercise_type
+    }
+    return { get_data_estimate, set_data_estimate }
 }

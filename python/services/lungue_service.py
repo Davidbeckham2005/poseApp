@@ -82,6 +82,7 @@ class lungService(exercise_Service):
                 "good_standard" : self.good_standard,
                 "bad_standard" : self.bad_standard,
                 "up_standard" : self.up_standard,
+                "down_standard" : self.down_standard
             }
         return True
     def evaluate_form(self,origin):

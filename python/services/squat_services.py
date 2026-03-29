@@ -78,6 +78,7 @@ class squatService(exercise_Service):
             "good_standard" : self.good_standard,
             "bad_standard" : self.bad_standard,
             "up_standard" : self.up_standard,   
+            "down_standard" : self.down_standard
         }
     def evaluate_form(self,origin):
         if origin<self.bad_standard:

@@ -13,7 +13,9 @@ const { get_analysting, set_analysting } = use_analysting()
 import { POSE_CONNECTIONS } from "@mediapipe/pose"
 import { usePose } from "./detect_help"
 const { drawSafeZone, isInsideSafeZone } = usePose()
-let lastTotal = 0
+import { dataOnRep } from "../composable/help_game"
+const { set_data_estimate, get_data_estimate } = dataOnRep()
+let lastTotal = -1
 let camera = null
 let pose = null
 let ws = null
@@ -26,10 +28,12 @@ let backendData = {
     good_standard: 0,
     bad_standard: 0,
     up_standard: 0,
+    down_standard: 0,
     workout_progress: 0,
     target_of_current: 0,
     exercise_type: "",
 }
+let firstRep = true
 let restime = 0
 let restInterval = null
 let nextExercise = "";
@@ -90,7 +94,7 @@ const drawHUB = (ctx, backendData) => {
     ctx.fillStyle = "white";
     ctx.fillText(`Trạng thái: ${backendData.state}`, 20, 160)
 }
-export async function startPose_game2(video, canvas, exerciseType, isStarted, emit, handleResult) {
+export async function startPose_game2(video, canvas, isStarted, emit, handleResult) {
     if (camera) {
         await camera.stop();
         camera = null;
@@ -110,6 +114,11 @@ export async function startPose_game2(video, canvas, exerciseType, isStarted, em
         try {
             const data = JSON.parse(event.data)
             backendData = data
+            if (firstRep && data.total === 1) {
+                set_data_estimate(backendData)
+                console.log(get_data_estimate())
+                firstRep = false
+            }
             if (data.total > lastTotal) {
                 handleResult("rep")
                 lastTotal = data.total
@@ -117,10 +126,12 @@ export async function startPose_game2(video, canvas, exerciseType, isStarted, em
             // console.log(backendData)
             emit("result", backendData)
             if (data.event === "rest_start") {
-                lastTotal = 0
+                lastTotal = -1
+                firstRep = true
                 const second = data.seconds || 10
                 startRestCountDown(second)
                 const nextEx = data.exercise_type || "bai tiep theo"
+                set_data_estimate(backendData)
                 handleResult("success")
                 speak(`Nghỉ ngơi ${data.seconds || 10} giây, chuẩn bị cho bài tiếp theo"}`)
                 currentExerciseTitle = nextEx.toUpperCase()

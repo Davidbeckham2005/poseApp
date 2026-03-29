@@ -3,6 +3,7 @@ import Home from "../Home.vue";
 import Menu from "../component/layout/Pose_Advanture/menu.vue"
 import Battle from "../component/layout/Pose_Advanture/Battle.vue";
 import game_1 from "../component/layout/Pose_Advanture/game_1.vue";
+import game_2 from "../component/layout/Pose_Advanture/Battle_2.vue";
 const routes = [
     {
         path: "/",
@@ -26,7 +27,7 @@ const routes = [
     },
     {
         path: "/game/game_2",
-        component: game_1,
+        component: game_2,
         name: 'game_2',
     },
 ]
