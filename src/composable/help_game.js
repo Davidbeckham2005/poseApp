@@ -128,7 +128,12 @@ export function useMonster() {
     const get_all_monsters = () => {
         return monsters.value
     }
-    return { get_monster, get_all_monsters }
+    const getRandomMonster = () => {
+        const monsterList = Object.values(monsters.value)
+        const randomIndex = Math.floor(Math.random() * monsterList.length)
+        return monsterList[randomIndex]
+    }
+    return { get_monster, get_all_monsters, getRandomMonster }
 }
 export function useGameChoose() {
     const get_game_choose = () => {

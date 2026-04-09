@@ -46,7 +46,7 @@
 
 <script setup>
 // props 
-const props = defineProps({ exercise_type: String, currentHp: Number })
+const props = defineProps({ exercise_type: String, currentHp: Number, workoutPlan: { type: Array, default: () => [] } })
 const emit = defineEmits(['result', 'finish', 'is_analyst_active'])
 
 // import
@@ -134,7 +134,7 @@ watch(() => props.currentHp, (newValue) => {
 // start camera và bắt đầu bài tập
 const start2 = () => {
     isStarted.value = true
-    startPose_game2(videoRef.value, canvasRef.value, isStarted, emit, handleResult, handle_game)
+    startPose_game2(videoRef.value, canvasRef.value, isStarted, emit, handleResult, handle_game, props.workoutPlan)
     emit('is_analyst_active', true)
 }
 const startCamera = () => {

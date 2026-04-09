@@ -8,24 +8,7 @@
                 <Music></Music>
             </div>
             <menu_banner></menu_banner>
-            <!-- <div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-5xl mx-auto">
-                <div v-for="(monster, key) in monsters" @click="battle_handle(key)"
-                    :class="[monster.bg, 'group relative p-8 rounded-[2rem] cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl shadow-lg min-h-[180px]']"> -->
-            <!-- <h2 class="text-2xl font-extrabold mb-1">{{ monster.maxHp }}</h2> -->
-            <!-- <div
-                        class="absolute top-6 right-6 px-3 py-1 rounded-full text-[10px] font-black bg-yellow-400 text-black">
-                        {{ monster.name }}
-                    </div>
-
-                    <div class="h-full flex flex-col justify-between"> -->
-            <!-- <component :is="card.icon" :size="32" class="mb-4 text-white/90" /> -->
-            <!-- <div>
-                            <h2 class="text-2xl font-extrabold mb-1">{{ card.title }}</h2>
-                        </div> -->
-            <!-- <Trainer :path_json="monster.path"></Trainer>
-                    </div>
-                </div>
-            </div> -->
+          
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
 
                 <div v-for="card in menuCards" :key="card.id" @click="handleSelect(card.id)" :class="[
@@ -138,7 +121,6 @@ const menuCards = [
         bg: 'bg-linear-to-br from-blue-500 to-cyan-400'
     },
     {
-        // component: selectMonster,
         id: 'game2',
         title: 'Chế độ chiến đấu',
         desc: 'Đánh bại quái vật với các bài tập thực tế',

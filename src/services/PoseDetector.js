@@ -110,7 +110,7 @@ const drawHUB = (ctx, backendData) => {
     // Reset shadow để các nét vẽ sau không bị nhòe
     ctx.shadowBlur = 0;
 }
-export async function startPose_game2(video, canvas, isStarted, emit, handleResult, handle_game) {
+export async function startPose_game2(video, canvas, isStarted, emit, handleResult, handle_game, workoutPlan = []) {
     if (camera) {
         await camera.stop();
         camera = null;
@@ -125,7 +125,12 @@ export async function startPose_game2(video, canvas, isStarted, emit, handleResu
     }
     const ctx = canvas.getContext("2d")
 
-    ws = new WebSocket(`ws://localhost:8000/websocket/live_workout`)
+    const safePlan = Array.isArray(workoutPlan) && workoutPlan.length > 0
+        ? workoutPlan
+        : [{ type: "bicep_curls", target: 6 }]
+    const planParam = encodeURIComponent(JSON.stringify(safePlan))
+
+    ws = new WebSocket(`ws://localhost:8000/websocket/live_workout?plan=${planParam}`)
     ws.onmessage = (event) => {
         try {
             const data = JSON.parse(event.data)

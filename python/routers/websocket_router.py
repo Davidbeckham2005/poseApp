@@ -199,9 +199,22 @@ from services.game_services.controller_game import WorkoutController
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
 
-    workout_plan = [
-        {"type": "bicep_curls", "target": 6}
-    ]
+    workout_plan = [{"type": "bicep_curls", "target": 6}]
+    raw_plan = websocket.query_params.get("plan")
+    if raw_plan:
+        try:
+            parsed_plan = json.loads(raw_plan)
+            if isinstance(parsed_plan, list) and parsed_plan:
+                workout_plan = [
+                    {
+                        "type": item.get("type", "bicep_curls"),
+                        "target": int(item.get("target", 6))
+                    }
+                    for item in parsed_plan
+                    if isinstance(item, dict)
+                ] or workout_plan
+        except Exception:
+            print("Invalid workout plan received, using default plan")
     controller = WorkoutController(workout_plan)
     try:
         while not controller.is_finish:

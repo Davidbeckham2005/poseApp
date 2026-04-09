@@ -24,7 +24,7 @@ const exercises_data = [
             "Hít vào khi xuống, thở ra khi lên"
         ],
         proTip: 'Hít vào khi hạ người xuống và thở ra mạnh khi đẩy người lên để tối ưu sức mạnh và giữ ổn định cơ lõi.',
-        damege: 30,
+        damage: 30,
         gif: '/GIF/squat.gif'
     },
     {
@@ -53,36 +53,36 @@ const exercises_data = [
             "Hít vào khi xuống, thở ra khi lên"
         ],
         proTip: 'Giữ cơ bụng siết chặt và không để hông võng để tránh chấn thương lưng.',
-        damege: 30,
+        damage: 30,
         gif: '/GIF/pushup.gif'
     },
-    {
-        type: 'plank',
-        image: '/image/plank.jpg',
-        difficulty: 'Beginner',
-        rating: 92,
-        title: 'Plank',
-        hasEquipment: false, // Bodyweight
-        description: 'Bài tập giữ cơ thể thẳng như tấm ván, chống bằng khuỷu tay và mũi chân để tăng sức mạnh cơ core (bụng, lưng dưới) và cải thiện khả năng giữ thăng bằng.',
-        time: '5-10',
-        kcal: 95,
-        muscles: ['Chest', 'Triceps'],
-        steps: [
-            'Giữ cơ thể trên một đường thẳng từ đầu đến gót chân.',
-            'Chống bằng khuỷu tay và mũi chân.',
-            'Gồng chặt cơ bụng và giữ tư thế lâu nhất có thể.'
-        ],
-        tips: [
-            "Giữ đầu, lưng, chân thẳng hàng",
-            "Không nín thở, hãy hít thở đều",
-            "Gồng chặt cơ bụng và cơ mông",
-            "Mắt nhìn xuống sàn, đừng ngước lên",
-            "Cố gắng giữ vững tư thế, đừng rung lắc"
-        ],
-        proTip: 'Giữ thân người thẳng và dồn lực vào gót chân trước để tăng hiệu quả tập luyện.',
-        damege: 20,
-        gif: ""
-    },
+    // {
+    //     type: 'plank',
+    //     image: '/image/plank.jpg',
+    //     difficulty: 'Beginner',
+    //     rating: 92,
+    //     title: 'Plank',
+    //     hasEquipment: false, // Bodyweight
+    //     description: 'Bài tập giữ cơ thể thẳng như tấm ván, chống bằng khuỷu tay và mũi chân để tăng sức mạnh cơ core (bụng, lưng dưới) và cải thiện khả năng giữ thăng bằng.',
+    //     time: '5-10',
+    //     kcal: 95,
+    //     muscles: ['Chest', 'Triceps'],
+    //     steps: [
+    //         'Giữ cơ thể trên một đường thẳng từ đầu đến gót chân.',
+    //         'Chống bằng khuỷu tay và mũi chân.',
+    //         'Gồng chặt cơ bụng và giữ tư thế lâu nhất có thể.'
+    //     ],
+    //     tips: [
+    //         "Giữ đầu, lưng, chân thẳng hàng",
+    //         "Không nín thở, hãy hít thở đều",
+    //         "Gồng chặt cơ bụng và cơ mông",
+    //         "Mắt nhìn xuống sàn, đừng ngước lên",
+    //         "Cố gắng giữ vững tư thế, đừng rung lắc"
+    //     ],
+    //     proTip: 'Giữ thân người thẳng và dồn lực vào gót chân trước để tăng hiệu quả tập luyện.',
+    //     damage: 20,
+    //     gif: ""
+    // },
     {
         type: 'lungue',
         image: '/image/lunge.jpg',
@@ -108,7 +108,7 @@ const exercises_data = [
             "Dùng lực chân trước để đẩy người trở lại vị trí ban đầu"
         ],
         proTip: 'Hít vào khi hạ người xuống và thở ra mạnh khi đẩy người lên để tối ưu sức mạnh cốt lõi.',
-        damege: 30,
+        damage: 30,
         gif: '/GIF/lunge.gif'
     },
     {
@@ -171,5 +171,5 @@ export function useExercise() {
     const get_exercise = (type) => {
         return exercises_data.find(ex => ex.type === type)
     }
-    return { get_exercises,get_exercise }
+    return { get_exercises, get_exercise }
 }

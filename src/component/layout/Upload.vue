@@ -114,7 +114,6 @@ const filteredExercises = computed(() => {
                         </div>
                     </div>
 
-
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <Exercise_card @click.prevent="openGuide(exercise)" v-for="exercise in filteredExercises"

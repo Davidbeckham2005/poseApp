@@ -51,7 +51,7 @@
                             <!-- HP BAR -->
                             <div
                                 class="w-full h-8 bg-gray-700 rounded-full border-2 border-gray-600 p-1 overflow-hidden">
-                                <div class="h-full bg-liear-to-r from-orange-500 to-red-600 rounded-full transition-all duration-300"
+                                <div class="h-full bg-linear-to-r from-orange-500 to-red-600 rounded-full transition-all duration-300"
                                     :style="{ width: (monster.currentHp / monster.maxHp * 100) + '%' }"></div>
                             </div>
                         </div>
@@ -70,8 +70,8 @@
                 <!-- CAMERA & EXERCISE - MIDDLE/RIGHT -->
                 <div
                     class="col-span-6 bg-black rounded-3xl border-3 border-emerald-500/50 overflow-hidden flex flex-col">
-                    <CaneraView :exercise_type="current_exercise_type?.id" @result="result_handle"
-                        @finish="finish_handle" @is_analyst_active="handle_is_analyst_active">
+                    <CaneraView :exercise_type="currentExerciseType" :workoutPlan="workoutPlan"
+                        @result="result_handle" @finish="finish_handle" @is_analyst_active="handle_is_analyst_active">
                     </CaneraView>
                 </div>
 
@@ -137,18 +137,27 @@ import Warmup from './Warmup.vue';
 import Trainer from '../Trainer/Trainer.vue';
 import { ref, computed, shallowRef, watch } from 'vue';
 import { calculating } from '../../../composable/helpers';
-import { Use_is_warmup } from '../../../composable/help_game';
-import { useMonster } from '../../../composable/help_game';
-import { useRouter } from 'vue-router';
+import { Use_is_warmup, useMonster, useGameChoose } from '../../../composable/help_game';
+import { useRouter, useRoute } from 'vue-router';
 import Summary from './Summary.vue';
 import { useExercise } from '../../../constants/exercise'
 import { useAudio } from '../../../composable/audio'
 const { get_exercise } = useExercise()
 const { stopSpeak } = useAudio()
 const { get_state_warmup } = Use_is_warmup()
+const { set_game_choose } = useGameChoose()
 const router = useRouter()
-const currentExercise = computed(() => get_exercise(current_exercise_type.value))
+const route = useRoute()
 const current_exercise_type = ref(null)
+const currentExerciseType = computed(() => {
+    if (!current_exercise_type.value) {
+        return null
+    }
+    return typeof current_exercise_type.value === 'string'
+        ? current_exercise_type.value
+        : current_exercise_type.value.id
+})
+const currentExercise = computed(() => get_exercise(currentExerciseType.value))
 const is_finish = ref(false)
 const summary = ref(null)
 const finish_handle = (data) => {
@@ -157,10 +166,24 @@ const finish_handle = (data) => {
     summary.value = data
     console.log('workout summary:', summary.value)
 }
-const { get_monster, get_all_monsters } = useMonster()
+set_game_choose('game2')
+const { getRandomMonster } = useMonster()
 const { persen } = calculating()
 const is_start = ref(false)
 const result_on_rep = ref(null)
+
+const workoutPlan = computed(() => {
+    const rawPlan = route.query.plan
+    if (!rawPlan) {
+        return []
+    }
+    try {
+        const parsed = JSON.parse(Array.isArray(rawPlan) ? rawPlan[0] : rawPlan)
+        return Array.isArray(parsed) ? parsed : []
+    } catch {
+        return []
+    }
+})
 
 
 const old_total = ref(0)
@@ -175,10 +198,9 @@ const result_handle = (e) => {
     required_state.value = e.state === 'up' ? 'down' : (e.state === 'down' ? 'up' : '')
 
     if (e.total != old_total.value) {
-        if (e.good != old_good.value) {
-            old_good.value = e.good
-            finnal_damage.value = normal_damage.value * 2
-        }
+        // Update damage: double if good rep, normal otherwise
+        finnal_damage.value = e.good > old_good.value ? normal_damage.value * 2 : normal_damage.value
+        old_good.value = e.good
         handleHit()
     }
     old_total.value = e.total
@@ -190,23 +212,39 @@ const handle_is_analyst_active = (e) => {
 // xử lý chọn bài tập
 // const current_exercise_type = ref()
 
-
-const monster = computed(() => get_all_monsters().dragon)
-
+const baseHP = computed(() => {
+    return Number(route.query.hp) || 20000
+})
+// const monster = computed(() => get_all_monsters().dragon)
+const baseMonster = ref(null)
+const monsterCurrentHp = ref(0)
+const monster = computed(() => {
+    if (!baseMonster.value) {
+        baseMonster.value = getRandomMonster()
+    }
+    if (monsterCurrentHp.value === 0) {
+        monsterCurrentHp.value = baseHP.value
+    }
+    return {
+        ...baseMonster.value,
+        maxHp: baseHP.value,
+        currentHp: monsterCurrentHp.value,
+    }
+})
 // Tính toán phần trăm máu
 const hpPercentage = computed(() => (persen(monster.value.currentHp, monster.value.maxHp)));
-const normal_damage = computed(() => (current_exercise_type.value?.damage || 0))
+const normal_damage = computed(() => (currentExercise.value?.damage || 0))
 const finnal_damage = ref(normal_damage.value)
 const show_damage = ref(false)
 const handleHit = async () => {
-    if (monster.value.currentHp > 0) {
-        monster.value.currentHp -= finnal_damage.value;
+    if (monsterCurrentHp.value > 0) {
+        monsterCurrentHp.value -= finnal_damage.value;
         show_damage.value = true
         await new Promise(r => setTimeout(r, 500))
         show_damage.value = false
 
-        if (monster.value.currentHp < 0) {
-            monster.value.currentHp = 0
+        if (monsterCurrentHp.value < 0) {
+            monsterCurrentHp.value = 0
         }
     }
     finnal_damage.value = normal_damage.value
@@ -220,7 +258,6 @@ const origin = shallowRef(0)
 const badWidth = computed(() => ((data_estimate.value?.bad_standard || 0) / 200) * 100);
 const goodWidth = computed(() => ((data_estimate.value?.good_standard || 0) / 200) * 100);
 const dowwWidth = computed(() => ((data_estimate.value?.down_standard || 0) / 200) * 100);
-console.log('badWidth:', badWidth.value, 'goodWidth:', goodWidth.value, 'dowwWidth:', dowwWidth.value)
 const progress = computed(() => {
     let p = (origin.value) / 200
     return Math.max(0, Math.min(1, p))

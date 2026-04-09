@@ -31,7 +31,7 @@ export const useWellness = defineStore('wellness', () => {
         loading.value = true
         try {
             const response = await nutritionApi.get_all_food_items()
-            console.log('All Food Items:', response)
+            // console.log('All Food Items:', response)
             listFoodItems.value = response
             error.value = null
         } catch (err) {
@@ -85,10 +85,10 @@ export const useWellness = defineStore('wellness', () => {
     // lấy thông tin dinh dưỡng tổng quan của một ngày cụ thể, bao gồm tổng calo, protein, carbs, fat đã tiêu thụ và các bữa ăn đã log trong ngày đó
     const fetchDailyNutrition = async (userId, date) => {
         loading.value = true
-        console.log(`Fetching daily nutrition for userId=${userId} on date=${date}`)
+        // console.log(`Fetching daily nutrition for userId=${userId} on date=${date}`)
         try {
             const response = await nutritionApi.getDailyNutrition(userId, date)
-            console.log('Daily Nutrition Data:', response)
+            // console.log('Daily Nutrition Data:', response)
             dailyNutrition.value = response
             error.value = null
         } catch (err) {
