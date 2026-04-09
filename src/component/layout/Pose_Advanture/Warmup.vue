@@ -37,6 +37,9 @@ const step = ref(0)
 const timeLeft = ref(warmups[0].time)
 let timer = null
 let isPoseSpeakActive = false
+let warningResetTimer = null
+let lastWarningSpeakAt = 0
+const warningCooldownMs = 3000
 
 const current = computed(() => warmups[step.value])
 
@@ -99,15 +102,24 @@ function skipWarmup() {
 
 
 // Warning feedback for out of frame
-watch(warning, (newValue) => {
-    if (newValue && !isPoseSpeakActive) {
-        isPoseSpeakActive = true
-        speak("Vui lòng đứng vào khung tập để tiếp tục")
-        setTimeout(() => {
-            isPoseSpeakActive = false
-        }, 2000)
-    }
-})
+const handleWarningChange = (newValue) => {
+    if (!newValue) return
+
+    const now = Date.now()
+    if (isPoseSpeakActive || now - lastWarningSpeakAt < warningCooldownMs) return
+
+    lastWarningSpeakAt = now
+    isPoseSpeakActive = true
+    speak("Vui lòng đứng vào khung tập để tiếp tục")
+
+    if (warningResetTimer) clearTimeout(warningResetTimer)
+    warningResetTimer = setTimeout(() => {
+        isPoseSpeakActive = false
+        warningResetTimer = null
+    }, 2000)
+}
+
+watch(warning, handleWarningChange)
 
 onMounted(async () => {
     // Request camera permission first
@@ -140,6 +152,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
     clearInterval(timer)
+    if (warningResetTimer) clearTimeout(warningResetTimer)
     stopPose()
     isDetecting.value = false
     speechSynthesis.cancel()
@@ -160,7 +173,7 @@ onUnmounted(() => {
                 <!-- CENTER: Camera with Pose Detection -->
                 <div class="bg-black rounded-2xl overflow-hidden border-3 border-emerald-500/50 shadow-2xl">
                     <!-- Camera Feed -->
-                    <div class="relative w-full h-[400px] bg-gray-900 rounded-2xl overflow-hidden">
+                    <div class="relative w-full h-100 bg-gray-900 rounded-2xl overflow-hidden">
                         <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]" autoplay
                             playsinline />
 
@@ -197,7 +210,7 @@ onUnmounted(() => {
 
                     <!-- Progress Bar -->
                     <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden border border-gray-600">
-                        <div class="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-300"
+                        <div class="h-full bg-linear-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-300"
                             :style="{ width: progress + '%' }" />
                     </div>
                     <!-- Step Indicator -->

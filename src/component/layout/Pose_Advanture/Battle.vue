@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen overflow-scroll bg-linear-to-b from-gray-900 to-black text-white pt-10">
         <menu_btn class="text-white absolute top-3 left-3 z-50"></menu_btn>
-        <NavBar></NavBar>
+        <!-- <NavBar></NavBar> -->
         <Warmup v-if="get_state_warmup()"></Warmup>
         <div v-else class="relative w-full h-screen flex flex-col">
             <div class="p-10 bg-slate-900 flex flex-col items-center">
@@ -53,8 +53,8 @@
                             <!-- HP BAR -->
                             <div
                                 class="w-full h-8 bg-gray-700 rounded-full border-2 border-gray-600 p-1 overflow-hidden">
-                                <div class="h-full bg-liear-to-r from-orange-500 to-red-600 rounded-full transition-all duration-300"
-                                    :style="{ width: (monster.currentHp / monster.maxHp * 100) + '%' }"></div>
+                                <div class="h-full bg-linear-to-r from-orange-500 to-red-600 rounded-full transition-all duration-300"
+                                    :style="{ width: monsterHpPercent + '%' }"></div>
                             </div>
                         </div>
                         <Trainer :path_json="monster.path">
@@ -72,7 +72,7 @@
                 <!-- CAMERA & EXERCISE - MIDDLE/RIGHT -->
                 <div
                     class="col-span-6 bg-black rounded-3xl border-3 border-emerald-500/50 overflow-hidden flex flex-col">
-                    <CaneraView :exercise_type="current_exercise_type?.id" :currentHp="monster.currentHp"
+                    <CaneraView :exercise_type="current_exercise?.type" :currentHp="monster.currentHp"
                         @result="result_handle" @finish="finish_handle" @is_analyst_active="handle_is_analyst_active">
                     </CaneraView>
                 </div>
@@ -93,7 +93,6 @@
                         </div>
                         <div v-else class="text-center">
                             <p class="text-sm text-gray-400 font-bold">Bắt đầu phân tích để xem hướng dẫn
-                                <span>{{ normal_damage }}</span>
                             </p>
                         </div>
 
@@ -103,63 +102,28 @@
             </div>
 
             <!-- EXERCISE SELECTOR - BOTTOM OVERLAY -->
-            <ExerciseSelector @send_current_exercise="handle_current_exercise_type" :start_analyst="is_start">
+            <ExerciseSelector @send_current_exercise="handle_current_exercise" :start_analyst="is_start">
             </ExerciseSelector>
         </div>
         <!-- VICTORY/DEFEAT MODAL -->
-        <div v-if="is_finish" class="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-blur-md z-50">
-            <div class="w-130 rounded-3xl bg-linear-to-b from-gray-800 to-black text-white shadow-2xl p-10 border-3 animate-in fade-in"
-                :class="win ? 'border-green-500' : 'border-red-500'">
+        <div v-if="is_start && !is_finish && current_exercise" class="fixed top-20 right-6 w-48 bg-gray-900/90 backdrop-blur-md rounded-2xl border-2 border-blue-500/50 p-2
+            shadow-2xl animate-in slide-in-from-right duration-500 z-40">
 
-                <!-- TITLE -->
-                <div class="text-center mb-8">
-                    <div class="text-7xl mb-4">{{ win ? '🏆' : '💔' }}</div>
-                    <h1 class="text-5xl font-black tracking-wider" :class="win ? 'text-green-400' : 'text-red-400'">
-                        {{ win ? "VICTORY!" : "DEFEAT!" }}
-                    </h1>
-                    <p class="text-gray-400 mt-3 text-lg">
-                        {{ win ? 'You defeated the monster!' : 'The monster defeated you!' }}
+            <div class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1 px-1 flex justify-between">
+                <span>Current Form</span>
+                <span class="animate-pulse">● LIVE</span>
+            </div>
+
+            <div class="relative w-full aspect-square bg-black rounded-xl overflow-hidden border border-gray-800">
+                <img :src="current_exercise.gif" class="w-full h-full object-cover opacity-90" />
+
+                <div class="absolute bottom-0 inset-x-0 bg-linear-to-t from-black via-black/70 to-transparent p-2">
+                    <p class="text-[10px] text-blue-200 font-bold leading-tight mb-1">
+                        {{ current_exercise.title }}
                     </p>
-                </div>
-
-                <!-- WORKOUT STATS -->
-                <div class="space-y-3 mb-8 bg-gray-900/80 rounded-2xl p-6">
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <!-- Total Reps -->
-                        <div
-                            class="bg-linear-to-br from-yellow-500/20 to-yellow-600/10 rounded-lg p-4 border-2 border-yellow-500/50">
-                            <p class="text-xs text-yellow-300 font-bold">TOTAL REPS</p>
-                            <p class="text-3xl font-black text-yellow-400">{{ old_total }}</p>
-                        </div>
-                        <!-- Perfect Form Reps -->
-                        <div
-                            class="bg-linear-to-br from-green-500/20 to-green-600/10 rounded-lg p-4 border-2 border-green-500/50">
-                            <p class="text-xs text-green-300 font-bold">PERFECT FORM</p>
-                            <p class="text-3xl font-black text-green-400">{{ old_good }}</p>
-                        </div>
-                    </div>
-
-                    <div
-                        class="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-3 border-l-4 border-purple-500">
-                        <span class="text-lg font-semibold text-gray-300">Damage Dealt</span>
-                        <span class="text-2xl font-black text-purple-400">{{ (monster.maxHp - monster.currentHp) || 0
-                        }}</span>
-                    </div>
-
-                    <div
-                        class="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-3 border-l-4 border-orange-500">
-                        <span class="text-lg font-semibold text-gray-300">Form Accuracy</span>
-                        <span class="text-2xl font-black text-orange-400">{{ old_total > 0 ? Math.floor((old_good /
-                            old_total) * 100) : 0 }}%</span>
-                    </div>
-                </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="flex gap-4">
-                    <button @click="handle_menu"
-                        class="flex-1 px-6 py-4 bg-linear-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 rounded-xl text-white font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-lg">
-                        ← Back to Menu
-                    </button>
+                    <p class="text-[9px] text-gray-300 leading-tight italic">
+                        "{{ current_exercise.proTip }}"
+                    </p>
                 </div>
             </div>
         </div>
@@ -179,7 +143,9 @@ import { Use_is_warmup } from '../../../composable/help_game';
 import { useMonster } from '../../../composable/help_game';
 import { useRouter } from 'vue-router';
 import { useAudio } from '../../../composable/audio'
+import { useExercise } from '../../../constants/exercise'
 const { get_state_warmup } = Use_is_warmup()
+
 const { stopSpeak } = useAudio()
 const router = useRouter()
 const win = ref(true)
@@ -188,6 +154,8 @@ const finish_handle = () => {
     stopSpeak()
     is_finish.value = true
 }
+
+const { get_exercise } = useExercise()
 const { get_monster } = useMonster()
 const { persen } = calculating()
 const is_start = ref(false)
@@ -207,9 +175,7 @@ const result_handle = (e) => {
     result_on_rep.value = e
     // Update user current state
     user_state.value = e.state || ''
-    // Set required state as opposite of current user state
     required_state.value = e.state === 'up' ? 'down' : (e.state === 'down' ? 'up' : '')
-
     if (e.total != old_total.value) {
         if (e.good != old_good.value) {
             old_good.value = e.good
@@ -224,31 +190,31 @@ const handle_is_analyst_active = (e) => {
     console.log('is_start:', is_start.value)
 }
 // xử lý chọn bài tập
-const current_exercise_tutorial = ref()
-const current_exercise_type = ref()
-const handle_current_exercise_type = (attact, tutorial) => {
-    current_exercise_type.value = attact
-    current_exercise_tutorial.value = tutorial
-    console.log(current_exercise_tutorial.value)
+const current_exercise = ref()
+
+const handle_current_exercise = (attact) => {
+    current_exercise.value = attact
 }
 
 const monster = computed(() => get_monster())
 
 // Tính toán phần trăm máu
 const hpPercentage = computed(() => (persen(monster.value.currentHp, monster.value.maxHp)));
-const normal_damage = computed(() => (current_exercise_type.value?.damage || 0))
+const monsterHpPercent = computed(() => {
+    const hp = Number(monster.value?.currentHp || 0)
+    const maxHp = Number(monster.value?.maxHp || 0)
+    if (maxHp <= 0) return 0
+    return Math.max(0, Math.min(100, (hp / maxHp) * 100))
+})
+const normal_damage = computed(() => (current_exercise.value?.damage || 0))
 const finnal_damage = ref(normal_damage.value)
 const show_damage = ref(false)
 const handleHit = async () => {
     if (monster.value.currentHp > 0) {
-        monster.value.currentHp -= finnal_damage.value;
+        monster.value.currentHp = Math.max(0, monster.value.currentHp - finnal_damage.value)
         show_damage.value = true
         await new Promise(r => setTimeout(r, 500))
         show_damage.value = false
-
-        if (monster.value.currentHp < 0) {
-            monster.value.currentHp = 0
-        }
     }
     finnal_damage.value = normal_damage.value
 };

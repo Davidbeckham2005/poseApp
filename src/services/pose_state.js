@@ -15,6 +15,6 @@ export function use_analyst() {
 const is_analysting = ref(false)
 export function use_analysting() {
     const get_analysting = () => { return is_analysting.value }
-    const set_analysting = (value) => { is_analysting.value = is_analysting.value = value }
+    const set_analysting = (value) => { is_analysting.value = value }
     return { get_analysting, set_analysting }
 }

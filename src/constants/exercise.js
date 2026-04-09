@@ -2,7 +2,7 @@ const exercises_data = [
     {
         type: 'squat',
         image: '/image/squat.jpg',
-        difficulty: 'Beginner',
+        difficulty: 'Dễ',
         rating: 95,
         title: 'Squats',
         hasEquipment: false, // Bodyweight
@@ -25,12 +25,16 @@ const exercises_data = [
         ],
         proTip: 'Hít vào khi hạ người xuống và thở ra mạnh khi đẩy người lên để tối ưu sức mạnh và giữ ổn định cơ lõi.',
         damage: 30,
-        gif: '/GIF/squat.gif'
+        gif: '/GIF/squat.gif',
+        bgColor: 'bg-linear-to-br from-blue-500 to-blue-700',
+        borderColor: 'border-blue-400',
+        emoji: '🦵',
     },
     {
+        emoji: '💪',
         type: 'pushup',
         image: '/image/pushups.jpg',
-        difficulty: 'Beginner',
+        difficulty: 'Dễ',
         rating: 92,
         title: 'Push-ups',
         hasEquipment: false, // Bodyweight
@@ -54,7 +58,9 @@ const exercises_data = [
         ],
         proTip: 'Giữ cơ bụng siết chặt và không để hông võng để tránh chấn thương lưng.',
         damage: 30,
-        gif: '/GIF/pushup.gif'
+        gif: '/GIF/pushup.gif',
+        bgColor: 'bg-linear-to-br from-purple-500 to-fuchsia-700',
+        borderColor: 'border-purple-400',
     },
     // {
     //     type: 'plank',
@@ -84,9 +90,10 @@ const exercises_data = [
     //     gif: ""
     // },
     {
+        emoji: '🦵',
         type: 'lungue',
         image: '/image/lunge.jpg',
-        difficulty: 'Advanced',
+        difficulty: 'Nâng cao',
         rating: 85,
         title: 'Lunges',
         hasEquipment: false, // Bodyweight
@@ -109,12 +116,15 @@ const exercises_data = [
         ],
         proTip: 'Hít vào khi hạ người xuống và thở ra mạnh khi đẩy người lên để tối ưu sức mạnh cốt lõi.',
         damage: 30,
-        gif: '/GIF/lunge.gif'
+        gif: '/GIF/lunge.gif',
+        bgColor: 'bg-linear-to-br from-cyan-500 to-blue-700',
+        borderColor: 'border-cyan-400',
     },
     {
+        emoji: '☄️',
         type: "bicep_curls",
         image: "/image/bicep_curls.jpg",
-        difficulty: "Beginner",
+        difficulty: "Dễ",
         rating: 80,
         title: "Bicep Curls",
         hasEquipment: true, // Cần tạ (Dumbbell/Barbell)
@@ -136,12 +146,15 @@ const exercises_data = [
         ],
         proTip: "Siết chặt bắp tay ở đỉnh động tác và hạ xuống chậm gấp đôi khi đưa lên để xé nhỏ sợi cơ.",
         damage: 25,
-        gif: "/GIF/bicep_curls.gif"
+        gif: "/GIF/bicep_curls.gif",
+        bgColor: 'bg-linear-to-br from-orange-500 to-red-700',
+        borderColor: 'border-orange-400',
     },
     {
+        emoji: '🌋',
         type: "shoulder_press",
         image: "/image/shoulder_press.jpg",
-        difficulty: "Intermediate",
+        difficulty: "Trung bình",
         rating: 90,
         title: "Shoulder Press",
         hasEquipment: true,
@@ -163,7 +176,9 @@ const exercises_data = [
         ],
         proTip: "Tưởng tượng bạn đang đẩy trần nhà lên cao để kích hoạt tối đa nhóm cơ vai.",
         damage: 45,
-        gif: '/GIF/shoulder_press'
+        gif: '/GIF/shoulder_press.gif',
+        bgColor: 'bg-linear-to-br from-amber-500 to-yellow-700',
+        borderColor: 'border-amber-400',
     }
 ];
 export function useExercise() {

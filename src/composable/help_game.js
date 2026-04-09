@@ -42,76 +42,67 @@ export function Use_is_warmup() {
     return { get_state_warmup, set_state_warmup }
 }
 const monsters = ref({
-    dragon: {
-        name: 'Dragon',
+    Funny: {
+        name: 'Funny',
         level: 4,
         atk: 6,
-        currentHp: 20000,
-        maxHp: 20000,
-        path: '/Monster/dragon',
+        currentHp: 2000,
+        maxHp: 2000,
+        path: '/Monster/Funny monsters',
         bg: 'bg-linear-to-br from-blue-500 to-cyan-400',
-        difficulty: 'Hard'
+        difficulty: 'Khó'
     },
-    // dancer: {
-    //     name: 'dancer',
-    //     level: 4,
-    //     atk: 6,
-    //     currentHp: 200,
-    //     maxHp: 200,
-    //     path: '/Monster/dancer',
-    //     bg: 'bg-linear-to-br from-red-500 to-cyan-400'
-    // },
-    CactiniSandalini: {
-        name: 'Cactini Sandalini',
+    BachTuoc: {
+        name: 'Bạch tuộc cactini',
         level: 4,
         atk: 6,
-        currentHp: 200,
-        maxHp: 200,
-        path: '/Monster/Monster 3',
-        bg: 'bg-linear-to-br from-green-500 to-cyan-400',
-        difficulty: 'Easy'
-
+        currentHp: 2000,
+        maxHp: 2000,
+        path: '/Monster/bachtuoc',
+        bg: 'bg-linear-to-br from-green-500 to-pink-400',
+        difficulty: 'Khó'
     },
-    pochita: {
-        name: 'Pochita',
+    fat: {
+        name: 'Chất béo khó ưa',
         level: 4,
         atk: 6,
-        currentHp: 200,
-        maxHp: 200,
-        path: '/Monster/Pochita',
-        bg: 'bg-linear-to-br from-pink-500 to-cyan-400',
-        difficulty: 'Medium'
+        currentHp: 500,
+        maxHp: 500,
+        path: '/Monster/fat',
+        bg: 'bg-linear-to-br from-green-500 to-pink-400',
+        difficulty: 'Dễ'
     },
-    // slime: {
-    //     name: 'Slime',
+    // pochita: {
+    //     name: 'Pochita',
     //     level: 4,
     //     atk: 6,
-    //     currentHp: 200,
-    //     maxHp: 200,
-    //     path: '/Monster/slime',
-    //     bg: 'bg-linear-to-br from-red-500 to-blue-400'
-
+    //     currentHp: 1000,
+    //     maxHp: 1000,
+    //     path: '/Monster/Pochita',
+    //     bg: 'bg-linear-to-br from-pink-500 to-cyan-400',
+    //     difficulty: 'Trung bình'
     // },
+
     wolf: {
-        name: 'Wolf',
+        name: 'Sói cô độc',
         level: 4,
         atk: 6,
-        currentHp: 200,
-        maxHp: 200,
+        currentHp: 1000,
+        maxHp: 1000,
         path: '/Monster/wolf',
         bg: 'bg-linear-to-br from-amber-500 to-orange-400',
-        difficulty: 'Medium'
+        difficulty: 'Trung bình'
 
     },
     gost1: {
         name: 'Gost',
         level: 4,
         atk: 6,
-        currentHp: 200,
-        maxHp: 200,
+        currentHp: 2000,
+        maxHp: 2000,
         path: '/Monster/gost1',
         bg: 'bg-linear-to-br from-black to-orange-400',
-        difficulty: 'Hard'
+        difficulty: 'Khó'
 
     },
 });

@@ -212,8 +212,10 @@ export async function startPose_game2(video, canvas, isStarted, emit, handleResu
             )
         }
         const inside = isInsideSafeZone(results.poseLandmarks)
-
-        set_analysting(isStarted.value && inside)
+        const nextAnalysting = isStarted.value && inside
+        if (get_analysting() !== nextAnalysting) {
+            set_analysting(nextAnalysting)
+        }
 
         // ❌ nếu ngoài vùng thì không gửi websocket
         if (!inside || !isStarted.value) return
@@ -263,7 +265,7 @@ export async function startPose(video, canvas, exerciseType, isStarted, emit) {
         try {
             const data = JSON.parse(event.data)
             backendData = data
-            console.log(backendData)
+            // console.log(backendData)
             emit("result", backendData)
         } catch (err) {
             console.log("parse error", err)
@@ -321,8 +323,10 @@ export async function startPose(video, canvas, exerciseType, isStarted, emit) {
             )
         }
         const inside = isInsideSafeZone(results.poseLandmarks)
-
-        set_analysting(isStarted.value && inside)
+        const nextAnalysting = isStarted.value && inside
+        if (get_analysting() !== nextAnalysting) {
+            set_analysting(nextAnalysting)
+        }
 
         // ❌ nếu ngoài vùng thì không gửi websocket
         if (!inside || !isStarted.value) return

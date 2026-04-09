@@ -1,19 +1,59 @@
 <template>
     <div class="flex flex-col items-center gap-6">
         <!-- CAMERA CONTAINER -->
-        <div class="relative w-160 h-120 rounded-2xl overflow-hidden bg-slat-900 shadow-2xl">
+        <div class="relative w-160 h-120 rounded-2xl overflow-hidden bg-slate-900 shadow-2xl">
             <!-- video -->
-            <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover" autoplay playsinline />
+            <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover transition duration-500"
+                :class="isStarted ? 'saturate-125 contrast-110' : ''" autoplay playsinline />
             <!-- canvas -->
             <canvas ref="canvasRef" width="640" height="480" class="absolute inset-0" :class="'absolute inset-0 w-full h-full object-cover  transition duration-500',
                 warning ? 'blur-md brightness-50' : ''
                 " />
+
+            <!-- ACTIVE CAMERA HUD -->
+            <div v-if="isStarted" class="absolute inset-0 z-10 pointer-events-none">
+                <!-- <div
+                    class="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 border border-red-400/60 text-red-300 text-xs font-black tracking-widest">
+                    ● LIVE AI
+                </div>
+                <div class="absolute top-3 right-3 px-3 py-1 rounded-full bg-black/70 text-xs font-bold"
+                    :class="inside ? 'text-emerald-300 border border-emerald-400/60' : 'text-amber-300 border border-amber-400/60'">
+                    {{ inside ? 'IN FRAME' : 'OUT OF FRAME' }}
+                </div> -->
+
+                <div class="absolute inset-6 rounded-xl border border-cyan-400/20"></div>
+                <div class="scanline absolute inset-x-0 h-0.5 bg-cyan-300/70"></div>
+
+                <div class="absolute bottom-3 inset-x-3 rounded-lg bg-black/65 border border-cyan-400/30 px-3 py-2">
+                    <p class="text-[11px] uppercase tracking-widest text-cyan-300 font-black mb-1">Live Coach</p>
+                    <p class="text-sm text-slate-100 leading-tight">{{ overlayTip }}</p>
+                </div>
+            </div>
+
+            <!-- CAMERA TUTORIAL OVERLAY -->
+            <div v-if="!isStarted"
+                class="absolute inset-0 z-10 bg-black/70 backdrop-blur-sm flex items-center justify-center p-6">
+                <div class="w-full max-w-md rounded-2xl border border-cyan-400/40 bg-slate-900/90 p-5 text-left">
+                    <p class="text-xs uppercase tracking-widest text-cyan-300 font-bold mb-3">Camera Setup</p>
+                    <h3 class="text-lg font-black text-white mb-3">Bật camera để bắt đầu phân tích</h3>
+                    <ul class="text-sm text-slate-200 space-y-2 leading-relaxed">
+                        <li>1. Chọn bài tập ở bảng phía dưới.</li>
+                        <li>2. Nhấn Start để bật camera AI.</li>
+                        <li>3. Nếu trình duyệt hỏi quyền, chọn Allow camera.</li>
+                        <li>4. Đứng giữa khung và giữ đủ ánh sáng.</li>
+                    </ul>
+                    <p class="mt-4 text-xs text-slate-400">
+                        Mẹo: Nếu vẫn đen màn hình, kiểm tra camera không bị app khác chiếm dụng.
+                    </p>
+                </div>
+            </div>
+
             <!-- SAFE ZONE -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
 
                 <!-- WARNING -->
                 <div v-if="warning" class="absolute inset-0 flex items-center justify-center
-  bg-black/40 backdrop-blur-sm text-center px-6">
+    bg-black/40 backdrop-blur-sm text-center px-6 z-20">
                     <div class="text-red-400 text-xl font-semibold animate-pulse">
                         ⚠ Không phát hiện người <br />
                         Hãy đứng vào khung tập
@@ -33,7 +73,7 @@
             </button>
             <button @click="start2" v-if="current_game === 'game2'" class="px-6 py-2 rounded-xl bg-linear-to-r from-emerald-500 to-green-400
       text-white font-medium shadow-lg hover:scale-105 hover:shadow-xl transition">
-                Start2
+                Start
             </button>
 
             <button @click="stopCamera" class="px-6 py-2 rounded-xl bg-linear-to-r from-red-500 to-rose-400
@@ -160,7 +200,36 @@ const warning = computed(() => {
     return isStarted.value && !inside.value
 })
 const exercise_tips = computed(() => { return get_exercise(props.exercise_type)?.tips || [] })
+const overlayTip = computed(() => {
+    if (warning.value) return "Di chuyển vào giữa khung để hệ thống nhận diện chính xác."
+    const tips = exercise_tips.value || []
+    if (tips.length === 0) return "Giữ thân người ổn định, tập đúng nhịp để đạt điểm tốt."
+    return tips[tipIndex.value % tips.length]
+})
 onUnmounted(() => {
     stopCamera()
 }) 
 </script>
+
+<style scoped>
+@keyframes scanlineMove {
+    0% {
+        top: 12%;
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 0.9;
+    }
+
+    100% {
+        top: 88%;
+        opacity: 0.2;
+    }
+}
+
+.scanline {
+    animation: scanlineMove 2.2s linear infinite;
+    box-shadow: 0 0 14px rgba(103, 232, 249, 0.8);
+}
+</style>

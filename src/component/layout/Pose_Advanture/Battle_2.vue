@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen overflow-scroll bg-linear-to-b from-gray-900 to-black text-white pt-10">
         <menu_btn class="text-white absolute top-3 left-3 z-50"></menu_btn>
-        <NavBar></NavBar>
+        <!-- <NavBar></NavBar> -->
         <Warmup v-if="get_state_warmup()"></Warmup>
         <div v-else class="relative w-full h-screen flex flex-col">
             <div class="p-10 bg-slate-900 flex flex-col items-center">
@@ -70,8 +70,8 @@
                 <!-- CAMERA & EXERCISE - MIDDLE/RIGHT -->
                 <div
                     class="col-span-6 bg-black rounded-3xl border-3 border-emerald-500/50 overflow-hidden flex flex-col">
-                    <CaneraView :exercise_type="currentExerciseType" :workoutPlan="workoutPlan"
-                        @result="result_handle" @finish="finish_handle" @is_analyst_active="handle_is_analyst_active">
+                    <CaneraView :exercise_type="currentExerciseType" :workoutPlan="workoutPlan" @result="result_handle"
+                        @finish="finish_handle" @is_analyst_active="handle_is_analyst_active">
                     </CaneraView>
                 </div>
 
