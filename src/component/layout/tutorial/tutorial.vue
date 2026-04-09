@@ -75,13 +75,17 @@ const nextStep = () => {
 const prevStep = () => {
     if (currentStep.value > 1) currentStep.value--;
 };
+import Music from '../../bases/Music.vue';
 import { get_translate } from '../../../composable/helpers';
 const { only_from_left } = get_translate()
 </script>
 
 <template>
     <div class="min-h-screen relative bg-black flex flex-col items-center justify-center p-4 font-sans text-white">
-        <Back_btn></Back_btn>
+        <div class="h-15">
+            <Back_btn></Back_btn>
+            <Music></Music>
+        </div>
         <div class="flex gap-2 mb-8">
             <div v-for="i in totalSteps" :key="i" :class="[
                 'h-2.5 rounded-full transition-all duration-300',

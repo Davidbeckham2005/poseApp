@@ -1,4 +1,4 @@
-export const exercises_data = [
+const exercises_data = [
     {
         type: 'squat',
         image: '/image/squat.jpg',
@@ -24,7 +24,8 @@ export const exercises_data = [
             "Hít vào khi xuống, thở ra khi lên"
         ],
         proTip: 'Hít vào khi hạ người xuống và thở ra mạnh khi đẩy người lên để tối ưu sức mạnh và giữ ổn định cơ lõi.',
-        damege: 30
+        damege: 30,
+        gif: '/GIF/squat.gif'
     },
     {
         type: 'pushup',
@@ -53,6 +54,7 @@ export const exercises_data = [
         ],
         proTip: 'Giữ cơ bụng siết chặt và không để hông võng để tránh chấn thương lưng.',
         damege: 30,
+        gif: '/GIF/pushup.gif'
     },
     {
         type: 'plank',
@@ -78,7 +80,8 @@ export const exercises_data = [
             "Cố gắng giữ vững tư thế, đừng rung lắc"
         ],
         proTip: 'Giữ thân người thẳng và dồn lực vào gót chân trước để tăng hiệu quả tập luyện.',
-        damege: 20
+        damege: 20,
+        gif: ""
     },
     {
         type: 'lungue',
@@ -105,7 +108,8 @@ export const exercises_data = [
             "Dùng lực chân trước để đẩy người trở lại vị trí ban đầu"
         ],
         proTip: 'Hít vào khi hạ người xuống và thở ra mạnh khi đẩy người lên để tối ưu sức mạnh cốt lõi.',
-        damege: 30
+        damege: 30,
+        gif: '/GIF/lunge.gif'
     },
     {
         type: "bicep_curls",
@@ -131,7 +135,8 @@ export const exercises_data = [
             "Giữ cổ tay thẳng, không gập cổ tay khi cuốn"
         ],
         proTip: "Siết chặt bắp tay ở đỉnh động tác và hạ xuống chậm gấp đôi khi đưa lên để xé nhỏ sợi cơ.",
-        damage: 25
+        damage: 25,
+        gif: "/GIF/bicep_curls.gif"
     },
     {
         type: "shoulder_press",
@@ -157,6 +162,14 @@ export const exercises_data = [
             "Cùi chỏ hơi hướng về phía trước khoảng 30 độ để bảo vệ khớp vai"
         ],
         proTip: "Tưởng tượng bạn đang đẩy trần nhà lên cao để kích hoạt tối đa nhóm cơ vai.",
-        damage: 45
+        damage: 45,
+        gif: '/GIF/shoulder_press'
     }
 ];
+export function useExercise() {
+    const get_exercises = () => { return exercises_data }
+    const get_exercise = (type) => {
+        return exercises_data.find(ex => ex.type === type)
+    }
+    return { get_exercises,get_exercise }
+}

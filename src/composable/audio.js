@@ -2,6 +2,8 @@ import { ref, watch } from 'vue'
 
 // ĐƯA BIẾN RA NGOÀI: Để tất cả component dùng chung 1 trạng thái duy nhất
 const audioEnabled = ref(true)
+const currentTrack = ref(null)
+
 let audioUnlocked = false
 const globalVolume = ref(1)
 const sounds = {
@@ -50,12 +52,12 @@ export function useAudio() {
     const stopSpeak = () => window.speechSynthesis.cancel()
     const toggleAudio = () => audioEnabled.value = !audioEnabled.value
 
-    const currentTrack = ref('cartoon')
     const playBGM = (name) => {
         if (!audioEnabled.value) return
         Object.values(bg).forEach(b => {
             b.pause(); b.currentTime = 0;
         })
+
         const bgm = bg[name]
         if (bgm) {
             currentTrack.value = name

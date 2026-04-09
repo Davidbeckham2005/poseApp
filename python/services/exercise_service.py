@@ -99,11 +99,23 @@ class exercise_Service:
             "src_output": self.capture.get_file_name(), 
             "size" :self.capture.get_size(),
             "form" :get_form(accuracy),
-            "time" : calc_time(),
+            "time" : calc_time(),   
             "time_video" : time_video,
             "calory" : calculating_caloris(time_video,self.weight,accuracy,self.type)
         }
         return data
+    def get_data_game(self,time_video):
+        accuracy = calculating_accuracy(self.count_good,self.count_total)
+        data = {
+            "total" : self.count_total,
+            "good" : self.count_good,
+            "accuracy" : accuracy,
+            "record" : self.record_couting,
+            "form" :get_form(accuracy),
+            "calory" : calculating_caloris(time_video,self.weight,accuracy,self.type)
+        }
+        return data
+
     def get_result_webcam(self):
         return
     def show_camera_not_make_video(self):

@@ -15,7 +15,7 @@ class ExerciseFactory:
             'bicep_curls': bicep_service,
             'shoulder_press': ShoulderPressServices
         }
-        data = Webcam_Schemas(Analyst_FPS=False,type=exercise_type)
+        data = Webcam_Schemas(Analyst_FPS=False,type=exercise_type,weight=70,height=170)
         service_class = services.get(exercise_type)
         if service_class:
             return service_class(None,None,None,data)

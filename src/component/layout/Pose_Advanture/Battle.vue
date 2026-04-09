@@ -143,7 +143,7 @@
                         class="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-3 border-l-4 border-purple-500">
                         <span class="text-lg font-semibold text-gray-300">Damage Dealt</span>
                         <span class="text-2xl font-black text-purple-400">{{ (monster.maxHp - monster.currentHp) || 0
-                            }}</span>
+                        }}</span>
                     </div>
 
                     <div
@@ -178,11 +178,14 @@ import { calculating } from '../../../composable/helpers';
 import { Use_is_warmup } from '../../../composable/help_game';
 import { useMonster } from '../../../composable/help_game';
 import { useRouter } from 'vue-router';
+import { useAudio } from '../../../composable/audio'
 const { get_state_warmup } = Use_is_warmup()
+const { stopSpeak } = useAudio()
 const router = useRouter()
 const win = ref(true)
 const is_finish = ref(false)
 const finish_handle = () => {
+    stopSpeak()
     is_finish.value = true
 }
 const { get_monster } = useMonster()

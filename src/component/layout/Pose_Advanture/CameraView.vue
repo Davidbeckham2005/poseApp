@@ -54,7 +54,8 @@ import { useGameChoose } from "../../../composable/help_game"
 import { computed, onUnmounted, ref, watch } from "vue"
 import { startPose, stopPose, startPose_game2 } from "../../../services/PoseDetector"
 import { usePose } from "../../../services/detect_help"
-import { exercises_data } from "../../../constants/exercise"
+import { useExercise } from "../../../constants/exercise"
+const { get_exercise } = useExercise()
 import { useAudio, playSound } from '../../../composable/audio'
 // khai bao bien
 const { isInside } = usePose()
@@ -76,6 +77,9 @@ const signal_type = ref(null)
 const handleResult = (type) => {
     pendingSignal.value = true
     signal_type.value = type
+}
+const handle_game = () => {
+    isStarted.value = false
 }
 const manageVoiceLogic = () => {
     if (!isStarted.value) {
@@ -129,9 +133,8 @@ watch(() => props.currentHp, (newValue) => {
 
 // start camera và bắt đầu bài tập
 const start2 = () => {
-
     isStarted.value = true
-    startPose_game2(videoRef.value, canvasRef.value, isStarted, emit, handleResult)
+    startPose_game2(videoRef.value, canvasRef.value, isStarted, emit, handleResult, handle_game)
     emit('is_analyst_active', true)
 }
 const startCamera = () => {
@@ -156,7 +159,7 @@ const stopCamera = () => {
 const warning = computed(() => {
     return isStarted.value && !inside.value
 })
-const exercise_tips = computed(() => { return exercises_data.find(e => e.type === current_exercise_type.value)?.tips })
+const exercise_tips = computed(() => { return get_exercise(props.exercise_type)?.tips || [] })
 onUnmounted(() => {
     stopCamera()
 }) 

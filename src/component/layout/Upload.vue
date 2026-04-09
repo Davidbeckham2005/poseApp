@@ -7,12 +7,13 @@ import cp_Load from "../bases/cp_Load.vue";
 import { useNavigation, get_translate, get_status_upload_video } from "../../composable/helpers";
 import { ref, computed } from 'vue'
 import Exercise_card from './Upload/Exercise_card.vue'
-import { exercises_data } from "../../constants/exercise";
+import { useExercise } from "../../constants/exercise";
+const { get_exercises } = useExercise()
 import ExerciseGuideModal from './Upload/ExerciseGuideModal.vue';
 import { useUpload } from "../../composable/upload";
 
 const { time_video_upload, src_video } = useUpload()
-const exercises = ref(exercises_data)
+const exercises = get_exercises()
 const isloading = get_status_upload_video()
 const isGuideOpen = ref(false);
 const selectedExercise = ref(null);
@@ -24,8 +25,9 @@ const openGuide = (exercise) => {
 // vibe code
 // Lấy danh sách tất cả các nhóm cơ duy nhất từ exercises_data
 const allMuscles = computed(() => {
+    console.log('Exercises data:', exercises);
     const muscles = new Set();
-    exercises_data.forEach(ex => {
+    exercises.forEach(ex => {
         ex.muscles.forEach(m => muscles.add(m));
     });
     // Trả về mảng đã sắp xếp theo bảng chữ cái
@@ -36,7 +38,7 @@ const selectedMuscle = ref('All');
 const selectedDifficulty = ref('All');
 const equipmentFilter = ref('all'); // 'all', 'equipment', 'bodyweight'
 const filteredExercises = computed(() => {
-    return exercises.value.filter(ex => {
+    return exercises.filter(ex => {
         const matchSearch = ex.title.toLowerCase().includes(searchQuery.value.toLowerCase());
         // 1. Lọc theo nhóm cơ (nằm trong mảng muscles)
         const matchMuscle = selectedMuscle.value === 'All' ||

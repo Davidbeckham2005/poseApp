@@ -23,7 +23,6 @@ class bicep_service(exercise_Service):
 
     def run_estimate(self, pose_landmark, frame):
         data = get_landmark(pose_landmark)
-        print("here")
         # Lấy các điểm cần thiết
         left_shoulder = data["left_shoulder"]
         right_shoulder = data["right_shoulder"]
@@ -39,9 +38,15 @@ class bicep_service(exercise_Service):
         if not (left_ready or right_ready):
             return False    
 
-        # Chọn tay có độ hiển thị (visibility) tốt nhất để tính toán
-        origin = self.choose_arm(right_elbow, right_shoulder, right_wrist, 
-                                 left_elbow, left_shoulder, left_wrist)
+        # Khi chỉ có một tay đủ rõ, dùng trực tiếp tay đó để tránh lấy nhầm tay bị khuất.
+        if left_ready and not right_ready:
+            origin = goc_tai_tham_so_thu_nhat(left_elbow, left_shoulder, left_wrist)
+        elif right_ready and not left_ready:
+            origin = goc_tai_tham_so_thu_nhat(right_elbow, right_shoulder, right_wrist)
+        else:
+            # Nếu cả hai tay đều đủ rõ, chọn tay có visibility tốt hơn.
+            origin = self.choose_arm(right_elbow, right_shoulder, right_wrist, 
+                                     left_elbow, left_shoulder, left_wrist)
 
         update_history(self.history_origin, origin)
 
@@ -99,7 +104,7 @@ class bicep_service(exercise_Service):
     def choose_arm(self,right_elbow,right_shoulder,right_wrist,left_elbow,left_shoulder,left_wrist):
         left_score = self.check_visibility(left_elbow,left_shoulder,left_wrist)
         right_score = self.check_visibility(right_elbow,right_shoulder,right_wrist)
-        if(left_score<right_score):
+        if left_score < right_score:
             right_elbow_origin = goc_tai_tham_so_thu_nhat(right_elbow,right_shoulder,right_wrist)
             return right_elbow_origin
         else:

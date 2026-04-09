@@ -30,8 +30,6 @@
                 </p>
             </div>
             <div class="flex-1 grid grid-cols-12 gap-4 p-4">
-
-                <!-- MONSTER SIDE - LEFT -->
                 <div class="col-span-3 flex flex-col justify-center">
                     <div class="rounded-3xl border-3 border-red-600 relative overflow-hidden p-4 bg-linear-to-b from-red-900/20 to-black"
                         :class="[
@@ -68,12 +66,12 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- MONSTER SIDE - LEFT -->
                 <!-- CAMERA & EXERCISE - MIDDLE/RIGHT -->
                 <div
                     class="col-span-6 bg-black rounded-3xl border-3 border-emerald-500/50 overflow-hidden flex flex-col">
-                    <CaneraView :exercise_type="current_exercise_type?.id" :currentHp="monster.currentHp"
-                        @result="result_handle" @finish="finish_handle" @is_analyst_active="handle_is_analyst_active">
+                    <CaneraView :exercise_type="current_exercise_type?.id" @result="result_handle"
+                        @finish="finish_handle" @is_analyst_active="handle_is_analyst_active">
                     </CaneraView>
                 </div>
 
@@ -103,65 +101,31 @@
             </div>
 
             <!-- EXERCISE SELECTOR - BOTTOM OVERLAY -->
+            <div v-if="is_start && !is_finish && currentExercise" class="fixed top-20 right-6 w-48 bg-gray-900/90 backdrop-blur-md rounded-2xl border-2 border-blue-500/50 p-2
+            shadow-2xl animate-in slide-in-from-right duration-500 z-40">
 
-        </div>
-        <!-- VICTORY/DEFEAT MODAL -->
-        <div v-if="is_finish" class="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-blur-md z-50">
-            <div class="w-130 rounded-3xl bg-linear-to-b from-gray-800 to-black text-white shadow-2xl p-10 border-3 animate-in fade-in"
-                :class="win ? 'border-green-500' : 'border-red-500'">
-
-                <!-- TITLE -->
-                <div class="text-center mb-8">
-                    <div class="text-7xl mb-4">{{ win ? '🏆' : '💔' }}</div>
-                    <h1 class="text-5xl font-black tracking-wider" :class="win ? 'text-green-400' : 'text-red-400'">
-                        {{ win ? "VICTORY!" : "DEFEAT!" }}
-                    </h1>
-                    <p class="text-gray-400 mt-3 text-lg">
-                        {{ win ? 'You defeated the monster!' : 'The monster defeated you!' }}
-                    </p>
+                <div
+                    class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1 px-1 flex justify-between">
+                    <span>Current Form</span>
+                    <span class="animate-pulse">● LIVE</span>
                 </div>
 
-                <!-- WORKOUT STATS -->
-                <div class="space-y-3 mb-8 bg-gray-900/80 rounded-2xl p-6">
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <!-- Total Reps -->
-                        <div
-                            class="bg-linear-to-br from-yellow-500/20 to-yellow-600/10 rounded-lg p-4 border-2 border-yellow-500/50">
-                            <p class="text-xs text-yellow-300 font-bold">TOTAL REPS</p>
-                            <p class="text-3xl font-black text-yellow-400">{{ old_total }}</p>
-                        </div>
-                        <!-- Perfect Form Reps -->
-                        <div
-                            class="bg-linear-to-br from-green-500/20 to-green-600/10 rounded-lg p-4 border-2 border-green-500/50">
-                            <p class="text-xs text-green-300 font-bold">PERFECT FORM</p>
-                            <p class="text-3xl font-black text-green-400">{{ old_good }}</p>
-                        </div>
-                    </div>
+                <div class="relative w-full aspect-square bg-black rounded-xl overflow-hidden border border-gray-800">
+                    <img :src="currentExercise.gif" class="w-full h-full object-cover opacity-90" />
 
-                    <div
-                        class="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-3 border-l-4 border-purple-500">
-                        <span class="text-lg font-semibold text-gray-300">Damage Dealt</span>
-                        <span class="text-2xl font-black text-purple-400">{{ (monster.maxHp - monster.currentHp) || 0
-                            }}</span>
+                    <div class="absolute bottom-0 inset-x-0 bg-linear-to-t from-black via-black/70 to-transparent p-2">
+                        <p class="text-[10px] text-blue-200 font-bold leading-tight mb-1">
+                            {{ currentExercise.title }}
+                        </p>
+                        <p class="text-[9px] text-gray-300 leading-tight italic">
+                            "{{ currentExercise.proTip }}"
+                        </p>
                     </div>
-
-                    <div
-                        class="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-3 border-l-4 border-orange-500">
-                        <span class="text-lg font-semibold text-gray-300">Form Accuracy</span>
-                        <span class="text-2xl font-black text-orange-400">{{ old_total > 0 ? Math.floor((old_good /
-                            old_total) * 100) : 0 }}%</span>
-                    </div>
-                </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="flex gap-4">
-                    <button @click="handle_menu"
-                        class="flex-1 px-6 py-4 bg-linear-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 rounded-xl text-white font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-lg">
-                        ← Back to Menu
-                    </button>
                 </div>
             </div>
         </div>
+
+        <Summary v-if="is_finish" :summary="summary" :win="win"></Summary>
     </div>
 </template>
 <script setup>
@@ -176,12 +140,22 @@ import { calculating } from '../../../composable/helpers';
 import { Use_is_warmup } from '../../../composable/help_game';
 import { useMonster } from '../../../composable/help_game';
 import { useRouter } from 'vue-router';
+import Summary from './Summary.vue';
+import { useExercise } from '../../../constants/exercise'
+import { useAudio } from '../../../composable/audio'
+const { get_exercise } = useExercise()
+const { stopSpeak } = useAudio()
 const { get_state_warmup } = Use_is_warmup()
 const router = useRouter()
-const win = ref(true)
+const currentExercise = computed(() => get_exercise(current_exercise_type.value))
+const current_exercise_type = ref(null)
 const is_finish = ref(false)
-const finish_handle = () => {
+const summary = ref(null)
+const finish_handle = (data) => {
+    stopSpeak()
     is_finish.value = true
+    summary.value = data
+    console.log('workout summary:', summary.value)
 }
 const { get_monster, get_all_monsters } = useMonster()
 const { persen } = calculating()
@@ -194,6 +168,7 @@ const old_good = ref(0)
 const user_state = ref('')
 const required_state = ref('')
 const result_handle = (e) => {
+    current_exercise_type.value = e.exercise_type
     origin.value = e.origin
     result_on_rep.value = e
     user_state.value = e.state || ''
@@ -213,7 +188,7 @@ const handle_is_analyst_active = (e) => {
     console.log('is_start:', is_start.value)
 }
 // xử lý chọn bài tập
-const current_exercise_type = ref()
+// const current_exercise_type = ref()
 
 
 const monster = computed(() => get_all_monsters().dragon)
@@ -235,12 +210,6 @@ const handleHit = async () => {
         }
     }
     finnal_damage.value = normal_damage.value
-};
-
-
-// nút trở lại menu
-const handle_menu = () => {
-    router.push({ name: 'menu' })
 }
 import { dataOnRep } from '../../../composable/help_game'
 const { set_data_on_rep, get_data_estimate } = dataOnRep()

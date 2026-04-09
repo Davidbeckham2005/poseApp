@@ -134,3 +134,8 @@ def detect_goal(user_obj):
     
 def get_now():
     return {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+def format_time(seconds):
+    mins = int(seconds // 60)
+    secs = int(seconds % 60)
+    return f"{mins:02d}:{secs:02d}"

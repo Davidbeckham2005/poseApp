@@ -5,7 +5,7 @@ import {
     drawLandmarks
 } from "@mediapipe/drawing_utils"
 import { playSound, useAudio } from "../composable/audio"
-const { speak } = useAudio()
+const { speak, stopSpeak } = useAudio()
 import { useSkeleton, use_analyst, use_analysting } from "./pose_state"
 const { get_skeleton } = useSkeleton()
 const { get_analyst } = use_analyst()
@@ -93,8 +93,24 @@ const drawHUB = (ctx, backendData) => {
 
     ctx.fillStyle = "white";
     ctx.fillText(`Trạng thái: ${backendData.state}`, 20, 160)
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    ctx.roundRect(450, 15, 170, 50, 10); // x, y, width, height, radius
+    ctx.fill();
+
+    // Vẽ text đồng hồ
+    ctx.font = "bold 32px 'Courier New'"; // Font dạng Digital cho giống đồng hồ
+    ctx.fillStyle = "#FF4500"; // Màu cam Neon hoặc đỏ cho nổi bật
+    ctx.shadowColor = "#FF4500";
+    ctx.shadowBlur = 10;
+
+    // Giả sử backendData.current_duration trả về chuỗi "00:05"
+    const timeDisplay = backendData.current_duration || "00:00";
+    ctx.fillText(timeDisplay, 480, 50);
+
+    // Reset shadow để các nét vẽ sau không bị nhòe
+    ctx.shadowBlur = 0;
 }
-export async function startPose_game2(video, canvas, isStarted, emit, handleResult) {
+export async function startPose_game2(video, canvas, isStarted, emit, handleResult, handle_game) {
     if (camera) {
         await camera.stop();
         camera = null;
@@ -126,6 +142,7 @@ export async function startPose_game2(video, canvas, isStarted, emit, handleResu
             // console.log(backendData)
             emit("result", backendData)
             if (data.event === "rest_start") {
+                // console.log(data.data)
                 lastTotal = -1
                 firstRep = true
                 const second = data.seconds || 10
@@ -138,12 +155,13 @@ export async function startPose_game2(video, canvas, isStarted, emit, handleResu
 
             }
             if (data.event === "rest_end") {
-                console.log("continue exercise");
+                // console.log("continue exercise");
                 speak("Tiếp tục tập nào!")
                 return
             }
             if (data.event === "workout_complete") {
-                handleResult("success")
+                handle_game()
+                emit("finish", data)
                 return
             }
         } catch (err) {
