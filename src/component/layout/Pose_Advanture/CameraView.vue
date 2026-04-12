@@ -37,10 +37,9 @@
                     <p class="text-xs uppercase tracking-widest text-cyan-300 font-bold mb-3">Camera Setup</p>
                     <h3 class="text-lg font-black text-white mb-3">Bật camera để bắt đầu phân tích</h3>
                     <ul class="text-sm text-slate-200 space-y-2 leading-relaxed">
-                        <li>1. Chọn bài tập ở bảng phía dưới.</li>
-                        <li>2. Nhấn Start để bật camera AI.</li>
-                        <li>3. Nếu trình duyệt hỏi quyền, chọn Allow camera.</li>
-                        <li>4. Đứng giữa khung và giữ đủ ánh sáng.</li>
+                        <li>1. Nhấn Start để bật camera AI.</li>
+                        <li>2. Nếu trình duyệt hỏi quyền, chọn Allow camera.</li>
+                        <li>3. Đứng giữa khung và giữ đủ ánh sáng.</li>
                     </ul>
                     <p class="mt-4 text-xs text-slate-400">
                         Mẹo: Nếu vẫn đen màn hình, kiểm tra camera không bị app khác chiếm dụng.

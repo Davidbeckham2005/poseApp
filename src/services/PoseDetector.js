@@ -25,6 +25,7 @@ let backendData = {
     estimate: "",
     state: "",
     origin: "",
+    require: "",
     good_standard: 0,
     bad_standard: 0,
     up_standard: 0,
@@ -167,6 +168,7 @@ export async function startPose_game2(video, canvas, isStarted, emit, handleResu
             if (data.event === "workout_complete") {
                 handle_game()
                 emit("finish", data)
+                
                 return
             }
         } catch (err) {

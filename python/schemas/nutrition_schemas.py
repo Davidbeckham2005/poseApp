@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from datetime import date, datetime
+from datetime import date as date, datetime
 from typing import Optional, List
 
 # ========== Nutrition Schemas ==========
@@ -67,6 +67,9 @@ class NutritionDayResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class CalorieBurnSummaryResponse(BaseModel):
+    date: Optional[datetime] = None
+    calories_burned: float
 
 class NutritionSummaryResponse(BaseModel):
     date: date

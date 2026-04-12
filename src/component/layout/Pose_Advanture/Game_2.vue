@@ -13,8 +13,8 @@
         <div class="relative mx-auto max-w-7xl px-4 py-6 lg:px-8 lg:py-8">
             <div class="mb-6 flex items-center justify-between gap-4">
                 <div class="">
-                    <p class="text-xs uppercase tracking-[0.35em] text-cyan-300/80">Workout Builder</p>
-                    <h1 class="text-3xl font-black tracking-tight sm:text-4xl">Choose your game mode</h1>
+                    <p class="text-xs uppercase tracking-[0.35em] text-cyan-300/80">Xây dựng bài tập</p>
+                    <h1 class="text-3xl font-black tracking-tight sm:text-4xl"></h1>
                 </div>
             </div>
 
@@ -24,23 +24,23 @@
                     <div class="mt-6 rounded-3xl border border-white/10 bg-black/20 p-5">
                         <div class="flex items-center justify-between gap-4">
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-[0.3em] text-orange-300/80">Summary</p>
-                                <h3 class="mt-1 text-lg font-black">{{ enabledCount }} exercises ready</h3>
+                                <p class="text-xs font-bold uppercase tracking-[0.3em] text-orange-300/80">Tổng cộng</p>
+                                <h3 class="mt-1 text-lg font-black">{{ enabledCount }} bài tập đang sẵn sàng</h3>
                             </div>
                             <button @click="resetPlan"
                                 class="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white">
                                 <RotateCcw :size="16" />
-                                Reset
+                                Làm mới
                             </button>
                         </div>
 
                         <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
                             <div class="rounded-2xl bg-white/5 p-3">
-                                <p class="text-[10px] uppercase tracking-[0.25em] text-white/50">Total target</p>
+                                <p class="text-[10px] uppercase tracking-[0.25em] text-white/50">Tổng số reps</p>
                                 <p class="mt-1 text-2xl font-black">{{ totalTarget }}</p>
                             </div>
                             <div class="rounded-2xl bg-white/5 p-3">
-                                <p class="text-[10px] uppercase tracking-[0.25em] text-white/50">Mode</p>
+                                <p class="text-[10px] uppercase tracking-[0.25em] text-white/50">Chế độ</p>
                                 <p class="mt-1 text-lg font-black capitalize">{{ selectedMode }}</p>
                             </div>
                             <div class="rounded-2xl bg-white/5 p-3">
@@ -50,18 +50,31 @@
                             </div>
                             <div class="rounded-2xl bg-white/5 p-3">
                                 <p class="text-[10px] uppercase tracking-[0.25em] text-white/50">Plan</p>
-                                <p class="mt-1 text-lg font-black">Custom</p>
+                                <p class="mt-1 text-lg font-black">{{ selectedPresetLabel }}</p>
                             </div>
+                        </div>
+
+                        <div class="mt-4 flex gap-2">
+                            <select v-model="selectedPreset"
+                                class="flex-1 rounded-2xl border border-white/10 bg-black/30 px-3 py-3 text-sm font-bold outline-none focus:border-cyan-400">
+                                <option v-for="(preset, key) in planPresets" :key="key" :value="key">
+                                    {{ preset.label }}
+                                </option>
+                            </select>
+                            <button @click="applyPreset()"
+                                class="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm font-bold text-emerald-100 transition hover:bg-emerald-400/20">
+                                Áp dụng plan
+                            </button>
                         </div>
 
                         <div class="mt-5 flex gap-3">
                             <button @click="enableAll"
                                 class="flex-1 rounded-2xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-3 text-sm font-bold text-cyan-100 transition hover:bg-cyan-400/20">
-                                Select all
+                                Chọn tất cả
                             </button>
                             <button @click="clearAll"
                                 class="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white/80 transition">
-                                Clear all
+                                Bỏ chọn tất cả
                             </button>
                         </div>
 
@@ -75,8 +88,8 @@
                 <section class="rounded-4xl border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-xl lg:p-6">
                     <div class="mb-5 flex items-center justify-between gap-4">
                         <div>
-                            <p class="text-xs font-bold uppercase tracking-[0.3em] text-emerald-300/80">Exercises</p>
-                            <h2 class="mt-1 text-2xl font-black">Set reps for each move</h2>
+                            <p class="text-xs font-bold uppercase tracking-[0.3em] text-emerald-300/80">Bài tập</p>
+                            <h2 class="mt-1 text-2xl font-black">Điều chỉnh số reps cho mỗi bài tập</h2>
                         </div>
                         <ListChecks class="text-emerald-300" :size="28" />
                     </div>
@@ -111,10 +124,10 @@
                                 <div>
                                     <div
                                         class="flex items-center justify-between text-xs font-bold uppercase tracking-[0.2em] text-white/50">
-                                        <span>Target reps</span>
+                                        <span>Mục tiêu</span>
                                         <span>{{ exercise.target }} reps</span>
                                     </div>
-                                    <input v-model.number="exercise.target" type="range" min="3" max="30" step="1"
+                                    <input v-model.number="exercise.target" type="range" min="3" max="50" step="1"
                                         class="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-white/10 accent-cyan-400" />
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -122,7 +135,7 @@
                                         <p class="text-[10px] uppercase tracking-[0.2em] text-white/40">Damage</p>
                                         <p class="text-lg font-black">{{ exercise.damage }}</p>
                                     </div>
-                                    <input v-model.number="exercise.target" type="number" min="3" max="30"
+                                    <input v-model.number="exercise.target" type="number" min="3" max="50"
                                         class="w-24 rounded-2xl border border-white/10 bg-black/30 px-3 py-3 text-center text-lg font-black outline-none transition focus:border-cyan-400" />
                                 </div>
                             </div>
@@ -154,6 +167,29 @@ const defaultTargets = {
     shoulder_press: 10,
 }
 
+const planPresets = {
+    beginner: {
+        label: 'Beginner',
+        mode: 'battle',
+        targets: { squat: 8, pushup: 6, plank: 12, lungue: 8, bicep_curls: 6, shoulder_press: 6 },
+    },
+    balanced: {
+        label: 'Balanced',
+        mode: 'battle',
+        targets: { ...defaultTargets },
+    },
+    strength: {
+        label: 'Strength',
+        mode: 'battle',
+        targets: { squat: 18, pushup: 14, plank: 30, lungue: 16, bicep_curls: 12, shoulder_press: 12 },
+    },
+    upperBody: {
+        label: 'Upper Body',
+        mode: 'battle',
+        targets: { squat: 0, pushup: 16, plank: 25, lungue: 0, bicep_curls: 14, shoulder_press: 14 },
+    },
+}
+
 const buildWorkoutItems = () => get_exercises().map((exercise) => ({
     type: exercise.type,
     title: exercise.title,
@@ -166,8 +202,28 @@ const buildWorkoutItems = () => get_exercises().map((exercise) => ({
 
 const workoutItems = ref(buildWorkoutItems())
 const selectedMode = ref('battle')
+const selectedPreset = ref('balanced')
 
+const selectedPresetLabel = computed(
+    () => planPresets[selectedPreset.value]?.label || 'Custom'
+)
 
+const applyPreset = (presetKey = selectedPreset.value) => {
+    const preset = planPresets[presetKey]
+    if (!preset) return
+
+    workoutItems.value.forEach((exercise) => {
+        const target = preset.targets[exercise.type]
+        if (typeof target === 'number') {
+            exercise.target = Math.max(3, Math.min(50, target))
+            exercise.enabled = target > 0
+        } else {
+            exercise.enabled = false
+        }
+    })
+
+    if (preset.mode) selectedMode.value = preset.mode
+}
 
 const enabledExercises = computed(() => workoutItems.value.filter((exercise) => exercise.enabled && exercise.target > 0))
 const enabledCount = computed(() => enabledExercises.value.length)
@@ -188,6 +244,7 @@ const clearAll = () => {
 const resetPlan = () => {
     workoutItems.value = buildWorkoutItems()
     selectedMode.value = 'battle'
+    selectedPreset.value = 'balanced'
 }
 
 const startWorkout = () => {

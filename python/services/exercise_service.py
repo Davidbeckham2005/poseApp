@@ -9,6 +9,7 @@ class exercise_Service:
     def __init__(self,draw: DrawingService, pose: PoseDetector, capture :VideoService,data):
         self.count_total = 0
         self.count_good = 0
+        self.origin = 0
         self.require = ""
         self.estimate = ""
         self.state = "up"
@@ -126,3 +127,17 @@ class exercise_Service:
 
     def get_data_live(self):
         return self.data_on_rep
+
+    def setData_live_websocket(self,origin):
+        self.data_on_rep = {
+            "total" : self.count_total,
+            "estimate" : self.estimate,
+            "good" : self.count_good,
+            "state" : self.state,
+            "origin" : origin,
+            "require" : self.require,
+            "good_standard" : self.good_standard,
+            "bad_standard" : self.bad_standard,
+            "up_standard" : self.up_standard,   
+            "down_standard" : self.down_standard
+        }

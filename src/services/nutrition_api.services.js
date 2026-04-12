@@ -30,5 +30,14 @@ export const nutritionApi = {
     markScheduleComplete: async (entryId) =>
         (await api.patch(`api/nutrition/schedule/${entryId}/complete`)).data,
     get_all_food_items: async () =>
-        (await api.get(`api/nutrition/foods/get_all`)).data
+        (await api.get(`api/nutrition/foods/get_all`)).data,
+    update_calories_burned: async (userId, caloriesBurnData) =>
+        (await api.post(`api/nutrition/user/${userId}/nutrition/calories_burned`, caloriesBurnData)).data,
+    get_nutrition_all: async (userId, startDate, endDate) =>
+        (await api.get(`api/nutrition/user/${userId}/nutrition/all`, {
+            params: {
+                start_date: startDate,
+                end_date: endDate
+            }
+        })).data,
 }

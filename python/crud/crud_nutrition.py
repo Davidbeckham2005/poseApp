@@ -6,7 +6,7 @@ from model.nutrition_model import (
 )
 from schemas.nutrition_schemas import (
     FoodItemCreate, MealLogCreate, SleepRecordCreate,
-    ScheduleEntryCreate, ScheduleEntryUpdate
+    ScheduleEntryCreate, ScheduleEntryUpdate,CalorieBurnSummaryResponse
 )
 from model.user_model import user
 
@@ -22,30 +22,39 @@ class CRUDNutrition:
     def create_or_update_nutrition_day(db: Session, user_id: int, date_obj: date):
         from services.nutrition_service import AINutritionService
 
+        nutrition_day = db.query(NutritionDay).filter(
+            and_(NutritionDay.user_id == user_id, NutritionDay.date == date_obj)
+        ).first()
+        if nutrition_day:
+            return nutrition_day
+        
         db_user = db.query(user).filter(user.id == user_id).first()
         if not db_user:
             print(f"User with ID {user_id} not found when creating/updating nutrition day for date {date_obj}")
             return None
-        nutrition_day = db.query(NutritionDay).filter(
-            and_(NutritionDay.user_id == user_id, NutritionDay.date == date_obj)
-        ).first()
         target_caloris = round(AINutritionService.calculate_daily_calories(db_user), 0)
-        if not nutrition_day:
-            nutrition_day = NutritionDay(
-                user_id=user_id,
-                date=date_obj,
-                calories_target=target_caloris  # Default target
-            )
+        nutrition_day = NutritionDay(
+            user_id=user_id,
+            date=date_obj,
+            calories_target=target_caloris  # Default target
+        )
+        try:
             db.add(nutrition_day)
-            db.commit()
-        # print(f"Nutrition day record for user_id={user_id} on date={date_obj}: {nutrition_day.__dict__}")
-        return nutrition_day
+            db.commit() # Chỉ commit khi tạo mới thành công
+            db.refresh(nutrition_day)
+            return nutrition_day
+        except Exception as e:
+            db.rollback()
+            print(f"Error creating nutrition day: {e}")
+            return None
     
    # thay đổi nutriton của một ngày
     @staticmethod
     def add_meal(db: Session, user_id: int, meal_data: MealLogCreate):
         date_obj = meal_data.meal_time.date() if meal_data.meal_time else date.today()
         nutrition_day = CRUDNutrition.create_or_update_nutrition_day(db, user_id, date_obj)
+        if not nutrition_day:
+            return None
         
         food = db.query(FoodItem).filter(FoodItem.id == meal_data.food_id).first()
         if not food:
@@ -65,10 +74,34 @@ class CRUDNutrition:
         nutrition_day.carbs_grams += (food.carbs * meal_data.servings)
         nutrition_day.fat_grams += (food.fat * meal_data.servings)
         
-        db.add(meal_log)
-        db.commit()
-        return meal_log
-    
+        try:
+            db.add(meal_log)
+            db.commit()
+            db.refresh(meal_log)
+            return meal_log
+        except Exception as e:
+            db.rollback()
+            print(f"Error adding meal log: {e}")
+            return None
+    @staticmethod
+    def add_calories_burned(db: Session, user_id: int, date_obj: date, calories: CalorieBurnSummaryResponse):
+        if isinstance(date_obj, datetime):
+            date_obj = date_obj.date()
+
+        nutrition_day = db.query(NutritionDay).filter(
+            and_(NutritionDay.user_id == user_id, NutritionDay.date == date_obj)
+        ).first()
+        if not nutrition_day:
+            return None
+        nutrition_day.calories_burned += calories.calories_burned
+        try:
+            db.commit()
+            db.refresh(nutrition_day)
+            return nutrition_day
+        except Exception as e:
+            db.rollback()
+            print(f"Error updating calories burned: {e}")
+            return None
     @staticmethod
     def get_daily_nutrition(db: Session, user_id: int, date_obj: date):
         user_obj = db.query(user).filter(user.id == user_id).first()
@@ -81,6 +114,24 @@ class CRUDNutrition:
         ).first()
 
         return nutrition_day
+
+    @staticmethod
+    def get_nutrition_range(db: Session, user_id: int, start_date: date, end_date: date):
+        user_obj = db.query(user).filter(user.id == user_id).first()
+        if not user_obj:
+            print(f"User with ID {user_id} not found when fetching nutrition range {start_date} -> {end_date}")
+            return []
+
+        return db.query(NutritionDay).filter(
+            and_(
+                NutritionDay.user_id == user_id,
+                NutritionDay.date >= start_date,
+                NutritionDay.date <= end_date
+            )
+        ).order_by(NutritionDay.date.asc()).all()
+   
+ 
+    
     @staticmethod
     def get_daily_meals(db: Session, user_id: int, date_obj: date):
         nutrition_day = CRUDNutrition.get_daily_nutrition(db, user_id, date_obj)
@@ -94,7 +145,6 @@ class CRUDNutrition:
         db.add(food)
         db.commit()
         return food
-    
     @staticmethod
     def get_foods_by_category(db: Session, category: str):
         return db.query(FoodItem).filter(FoodItem.category == category).all()

@@ -10,7 +10,7 @@ from schemas.nutrition_schemas import (
     NutritionDayResponse, NutritionSummaryResponse, SleepRecordCreate,
     SleepRecordResponse, SleepStatisticsResponse, ScheduleEntryCreate,
     ScheduleEntryResponse, DailyScheduleResponse, NutritionRecommendationResponse,
-    AIMenuSuggestionResponse, ScheduleEntryUpdate
+    AIMenuSuggestionResponse, ScheduleEntryUpdate, CalorieBurnSummaryResponse
 )
 from crud.crud_nutrition import CRUDNutrition, CRUDSleep, CRUDSchedule
 from services.nutrition_service import AINutritionService
@@ -51,17 +51,31 @@ def log_meal(user_id: int, meal: MealLogCreate, db: Session = Depends(get_db)):
     if not result:
         raise HTTPException(status_code=404, detail="Food item not found")
     return result
+@router.post("/user/{user_id}/nutrition/calories_burned", response_model=NutritionDayResponse)
+def update_todays_nutrition(user_id: int,calories_burn: CalorieBurnSummaryResponse, db: Session = Depends(get_db)):
+    if calories_burn.calories_burned < 0:
+        raise HTTPException(status_code=400, detail="calories_burned must be >= 0")
 
-# @router.get("/user/{user_id}/nutrition/today", response_model=NutritionDayResponse)
-# def get_todays_nutrition(user_id: int, db: Session = Depends(get_db)):
-#     """Get today's nutrition summary"""
-#     today = date.today()
-#     nutrition = CRUDNutrition.create_or_update_nutrition_day(db, user_id, today)
+    target_date = calories_burn.date or date.today()
+    nutrition = CRUDNutrition.add_calories_burned(db, user_id, target_date, calories_burn)
+    if not nutrition:
+        raise HTTPException(status_code=404, detail="User not found or unable to create nutrition day")
+    return nutrition
+@router.get("/user/{user_id}/nutrition/all")
+def get_nutrition_range(user_id: int, start_date: str, end_date: str, db: Session = Depends(get_db)):
+    """Get nutrition summary for a date range"""
+    try:
+        start_date_obj = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date_obj = datetime.strptime(end_date, "%Y-%m-%d").date()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
     
-#     if not nutrition:
-#         raise HTTPException(status_code=404, detail="No nutrition data for today")
-#     return nutrition
+    if start_date_obj > end_date_obj:
+        raise HTTPException(status_code=400, detail="start_date must be before or equal to end_date.")
+    
+    return CRUDNutrition.get_nutrition_range(db, user_id, start_date_obj, end_date_obj)
 # lấy thông tin dinh dưỡng tổng quan của một ngày cụ thể, bao gồm tổng calo, protein, carbs, fat đã tiêu thụ và các bữa ăn đã log trong ngày đó
+# nếu
 @router.get("/user/{user_id}/nutrition/{date_str}", response_model=NutritionDayResponse)
 def get_daily_nutrition(user_id: int,date_str: str,db: Session = Depends(get_db)):
     """Get daily nutrition summary"""

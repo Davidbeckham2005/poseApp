@@ -71,17 +71,8 @@ class bicep_service(exercise_Service):
             self.record_couting.append(record)
 
         # Cập nhật dữ liệu hiển thị lên UI
-        self.data_on_rep = {
-            "total": self.count_total,
-            "estimate": self.estimate,
-            "good": self.count_good,
-            'state': self.state,
-            "origin": origin,
-            "good_standard": self.good_standard,
-            "up_standard": self.up_standard, # Ngưỡng để tính là hoàn thành lượt lên
-            "bad_standard": self.bad_standard,
-            "down_standard": self.down_standard
-        }
+        self.setData_live_websocket(origin)
+
         return True
 
     def evaluate_form(self, origin):

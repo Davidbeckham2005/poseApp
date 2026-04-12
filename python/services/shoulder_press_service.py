@@ -36,17 +36,8 @@ class ShoulderPressServices(exercise_Service):
             self.isEstimate = True
             self.state = "down"
             self.record_couting.append({"count": self.count_total, "estimate": self.estimate})
-        self.data_on_rep = {
-            "total": self.count_total,
-            "estimate": self.estimate,
-            "good": self.count_good,
-            'state': self.state,
-            "origin": origin,
-            "good_standard": self.good_standard,
-            "up_standard": self.up_standard, # Ngưỡng để tính là hoàn thành lượt lên
-            "bad_standard": self.bad_standard,
-            "down_standard": self.down_standard
-        }
+        self.setData_live_websocket(origin)
+
         
         return True
 
@@ -55,9 +46,9 @@ class ShoulderPressServices(exercise_Service):
             self.estimate, self.require = "good", "Đẩy vai rất tốt!"
             self.count_good += 1
         elif origin >= self.bad_standard:
-            self.estimate, self.require = "normal", "Hãy đẩy thẳng tay thêm."
+            self.estimate, self.require = "bad", "Hãy đẩy thẳng tay thêm."
         else:
-            self.estimate, self.require = "bad", "Tay chưa đủ độ cao!"
+            self.estimate, self.require = "high", "Tay chưa đủ độ cao!"
         self.count_total += 1
     def check_visibility(self,a,b,c):
         return a.visibility+b.visibility+c.visibility

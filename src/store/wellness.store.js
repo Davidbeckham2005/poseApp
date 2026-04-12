@@ -156,7 +156,37 @@ export const useWellness = defineStore('wellness', () => {
             return null
         }
     }
-
+    const get_nutrition_all = async (userId) => {
+        loading.value = true
+        try {
+            const response = await nutritionApi.get_nutrition_all(userId)
+            // console.log('Nutrition All Data:', response)
+            dailyNutrition.value = response
+            error.value = null
+        } catch (err) {
+            error.value = err.message
+            console.error('Error fetching nutrition all:', err)
+        } finally {
+            loading.value = false
+        }
+    }
+    const update_calories_burned = async (userId, caloriesBurned, targetDate = new Date()) => {
+        if (!userId || caloriesBurned <= 0) return
+        try {
+            console.log(`Updating calories burned for user ${userId}: ${caloriesBurned} calories`)
+            await nutritionApi.update_calories_burned(userId, {
+                date: targetDate instanceof Date ? targetDate.toISOString().split('T')[0] : targetDate,
+                calories_burned: caloriesBurned,
+            })
+            await fetchDailyNutrition(
+                userId,
+                targetDate instanceof Date ? targetDate.toISOString().split('T')[0] : targetDate
+            )
+        } catch (err) {
+            error.value = err.message
+            console.error('Error updating calories burned:', err)
+        }
+    }
     return {
         nutritionRecommendation,
         dailyMenu,
@@ -177,6 +207,8 @@ export const useWellness = defineStore('wellness', () => {
         createScheduleEntry,
         markScheduleComplete,
         get_all_food_items,
-        listFoodItems
+        listFoodItems,
+        get_nutrition_all,
+        update_calories_burned,
     }
 })

@@ -73,28 +73,18 @@ class lungService(exercise_Service):
             }
             self.record_couting.append(record)
             self.estimate="estimate"
-        self.data_on_rep = {
-                "total" : self.count_total,
-                "estimate" : self.estimate,
-                "good" : self.count_good,
-                "state" : self.state,
-                "origin" : origin,
-                "good_standard" : self.good_standard,
-                "bad_standard" : self.bad_standard,
-                "up_standard" : self.up_standard,
-                "down_standard" : self.down_standard
-            }
+        self.setData_live_websocket(origin)
         return True
     def evaluate_form(self,origin):
         if origin<self.bad_standard:
             self.estimate = "bad"
-            self.require = f"Lower than threshold!"
+            self.require = f"Quá sâu hãy giữa tư thế cao hơn!"
         elif origin< self.good_standard:
             self.estimate = "good"
             self.count_good+=1           
-            self.require = "good form detected!"
+            self.require = "Tư thế tốt rồi, hãy giữ tư thế này!"
         else:
-            self.require = f"Higher than threshold!"
+            self.require = f"Cao quá, hãy giữ thấp xuống!"
             self.estimate = "high"
 
             

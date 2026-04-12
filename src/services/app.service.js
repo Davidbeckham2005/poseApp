@@ -35,3 +35,4 @@ export async function get_user() {
 export async function update_user(path) {
     return (await api.post("/user/update", path)).data
 }
+

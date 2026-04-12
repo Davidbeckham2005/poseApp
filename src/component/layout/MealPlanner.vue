@@ -39,23 +39,24 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div class="bg-black/40 rounded-lg p-4">
-                    <p class="text-sm text-gray-400 mb-2">Total Calories</p>
-                    <p class="text-3xl font-bold text-yellow-400">{{ calculateTotalNutrition().calories }}</p>
+                    <p class="text-sm text-gray-400 mb-2">Calo hôm nay</p>
+                    <p class="text-3xl font-bold" :class="isOverTarget ? 'text-red-400' : 'text-yellow-400'">{{
+                        nutritionTotals.calories }}</p>
                 </div>
                 <div class="bg-black/40 rounded-lg p-4">
                     <p class="text-sm text-gray-400 mb-2">Protein</p>
-                    <p class="text-3xl font-bold text-red-400">{{ calculateTotalNutrition().protein }}g</p>
+                    <p class="text-3xl font-bold text-red-400">{{ nutritionTotals.protein }}g</p>
                 </div>
                 <div class="bg-black/40 rounded-lg p-4">
                     <p class="text-sm text-gray-400 mb-2">Carbs</p>
-                    <p class="text-3xl font-bold text-blue-400">{{ calculateTotalNutrition().carbs }}g</p>
+                    <p class="text-3xl font-bold text-blue-400">{{ nutritionTotals.carbs }}g</p>
                 </div>
                 <div class="bg-black/40 rounded-lg p-4">
                     <p class="text-sm text-gray-400 mb-2">Fat</p>
-                    <p class="text-3xl font-bold text-orange-400">{{ calculateTotalNutrition().fat }}g</p>
+                    <p class="text-3xl font-bold text-orange-400">{{ nutritionTotals.fat }}g</p>
                 </div>
                 <div class="bg-black/40 rounded-lg p-4">
-                    <p class="text-sm text-gray-400 mb-2">Goal</p>
+                    <p class="text-sm text-gray-400 mb-2">Đề xuất</p>
                     <p class="text-3xl font-bold text-purple-400">{{ userProfile.dailyCalorieGoal }}</p>
                 </div>
             </div>
@@ -64,13 +65,34 @@
             <div class="mt-6">
                 <div class="flex justify-between mb-2">
                     <span>Dinh dưỡng hôm nay</span>
-                    <span class="font-bold">{{ calculateTotalNutrition().calories }} / {{ userProfile.dailyCalorieGoal
+                    <span class="font-bold" :class="isOverTarget ? 'text-red-400' : 'text-white'">{{
+                        nutritionTotals.calories }} / {{ userProfile.dailyCalorieGoal
                         }} cal</span>
                 </div>
                 <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
-                    <div class="h-full bg-linear-to-r from-green-500 to-blue-500 rounded-full transition-all"
-                        :style="{ width: Math.min((calculateTotalNutrition().calories / userProfile.dailyCalorieGoal) * 100, 100) + '%' }">
+                    <div class="h-full rounded-full transition-all" :class="isOverTarget
+                        ? 'bg-linear-to-r from-red-500 to-orange-500'
+                        : 'bg-linear-to-r from-green-500 to-blue-500'"
+                        :style="{ width: calorieProgressPercent + '%' }">
                     </div>
+                </div>
+                <p v-if="isOverTarget" class="text-xs text-red-400 font-semibold mt-2">
+                    Bạn đã vượt mục tiêu {{ overTargetCalories }} cal hôm nay.
+                </p>
+            </div>
+
+            <div class="mt-5 rounded-lg border border-emerald-500/30 bg-black/30 p-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-emerald-300 font-semibold">Calories burn today</span>
+                    <span class="font-bold text-emerald-300">{{ caloriesBurnedToday }} cal</span>
+                </div>
+                <div class="w-full h-2.5 bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-linear-to-r from-emerald-500 to-cyan-400 rounded-full transition-all"
+                        :style="{ width: burnedProgressPercent + '%' }"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-400 mt-2">
+                    <span>Net calories</span>
+                    <span>{{ netCalories }} cal</span>
                 </div>
             </div>
             <!-- <div class="mt-6">
@@ -86,6 +108,56 @@
                 </div>
             </div> -->
         </div>
+
+        <div class="mt-6 mb-3 flex justify-end">
+            <button @click="toggleCalendar"
+                class="px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-gray-800 hover:bg-gray-700 border border-cyan-500/40 text-cyan-300">
+                {{ showCalendar ? 'Ẩn lịch sử dinh dưỡng' : 'Xem lịch sử dinh dưỡng' }}
+            </button>
+        </div>
+
+        <div v-if="showCalendar" class="mt-2 mb-8 dark:bg-gray-800/50 rounded-xl border border-cyan-500/30 p-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+                <h3 class="text-xl font-bold">Lịch sử dinh dưỡng</h3>
+                <div class="flex items-center gap-2">
+                    <button @click="changeCalendarMonth(-1)"
+                        class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-sm font-semibold">Trước</button>
+                    <div class="min-w-40 text-center text-sm font-bold text-cyan-300">{{ calendarMonthLabel }}</div>
+                    <button @click="changeCalendarMonth(1)"
+                        class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-sm font-semibold">Sau</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-7 gap-2 mb-2">
+                <div v-for="w in weekdayLabels" :key="w" class="text-center text-xs font-black uppercase text-gray-500">
+                    {{ w }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-7 gap-2">
+                <button v-for="day in calendarDays" :key="day.key" @click="selectCalendarDate(day)"
+                    :disabled="day.isFuture" class="min-h-22 rounded-xl border p-2 text-left transition-all" :class="[
+                        day.isSelected ? 'border-cyan-400 bg-cyan-500/10' : 'border-gray-700 bg-black/30',
+                        !day.isCurrentMonth ? 'opacity-40' : '',
+                        day.isFuture ? 'cursor-not-allowed opacity-35' : 'hover:border-cyan-500/50 hover:bg-black/50'
+                    ]">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold" :class="day.isToday ? 'text-yellow-300' : 'text-gray-200'">{{
+                            day.day }}</span>
+                        <span v-if="day.isToday" class="text-[9px] text-yellow-300 font-bold">Today</span>
+                    </div>
+
+                    <div v-if="day.nutrition" class="mt-1 space-y-0.5">
+                        <p class="text-[10px] text-yellow-300 font-semibold">{{
+                            Math.round(day.nutrition.calories_consumed || 0) }} cal/{{
+                                Math.round(day.nutrition.calories_target || 0) }} cal</p>
+                        <p class="text-[10px] text-emerald-300">Burn {{ (day.nutrition.calories_burned || 0)
+                            }}</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+
         <div class="mb-8">
             <h2 class="text-2xl font-bold mb-4 mt-4">Bửa ăn khuyến nghị</h2>
             <span @click="get_menu_handle"
@@ -137,6 +209,17 @@
                                 <p class="text-[9px] text-gray-600">P: {{ meal.protein }}g | C: {{ meal.carbs }}g</p>
                             </div>
 
+                            <button @click="tickMealAsEaten(meal)"
+                                :disabled="isFoodLoggedToday(meal.id) || isTickLoading(meal.id)"
+                                class="mr-2 px-2 py-1 rounded-lg text-[10px] font-bold transition-all" :class="isFoodLoggedToday(meal.id)
+                                    ? 'bg-emerald-600 text-white cursor-not-allowed'
+                                    : isTickLoading(meal.id)
+                                        ? 'bg-gray-600 text-gray-200 cursor-wait'
+                                        : 'bg-blue-600 hover:bg-blue-500 text-white'">
+                                {{ isFoodLoggedToday(meal.id) ? '✓ Hôm nay' : isTickLoading(meal.id) ? 'Đang lưu...' :
+                                    'Tick ăn' }}
+                            </button>
+
                             <div class="flex gap-1 shrink-0">
                                 <button @click="remakeSingleFood(mealType, idx)"
                                     class="bg-gray-800 hover:bg-gray-700 p-2 rounded-lg transition-all" title="Đổi món">
@@ -164,38 +247,7 @@
             </div>
         </div>
     </div>
-    <!-- Choose Meals Section -->
 
-
-    <!-- All Meals Selected Today -->
-    <!-- <div class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">📅 Today's Meals</h2>
-        <div class="bg-linear-to-br from-purple-900/30 to-pink-900/30 rounded-xl border border-purple-500/30 p-6">
-            <div v-if="selectedBuoi.length === 0" class="text-center text-gray-400 py-8">
-                <p>No meals selected yet. Add meals to see them here! 👇</p>
-            </div>
-            <div v-else>
-                <div class="space-y-3">
-                    <div v-for="(meal, idx) in selectedMeals" :key="idx"
-                        class="flex justify-between items-center bg-black/40 p-4 rounded-lg">
-                        <div class="flex-1">
-                            <p class="font-semibold">{{ meal.emoji }} {{ meal.name }}</p>
-                            <p class="text-sm text-gray-400">{{ meal.description }}</p>
-                        </div>
-                        <div class="text-right mr-4">
-                            <p class="font-semibold text-yellow-400">{{ meal.calories }} cal</p>
-                        </div>
-                        <button @click="removeMealFromDay(idx)"
-                            class="bg-red-600 hover:bg-red-500 px-3 py-2 rounded-lg transition-all">
-                            Remove
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!-- Edit Profile Modal -->
-    <!-- thêm món ăn vào menu -->
     <div v-if="showAddFoodModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 min-h-screen">
         <div
             class="w-full max-w-5xl h-[85vh] bg-gray-900 rounded-xl shadow-xl flex flex-col p-4 overflow-scroll bar-thin border border-gray-700">
@@ -249,7 +301,7 @@
                         <p class="text-sm font-bold truncate mb-1" :title="food.name">{{ food.name }}</p>
 
                         <p class="text-xs text-yellow-400 font-bold mb-2">{{ food.calories }} kcal/{{ food.serving_size
-                            }}
+                        }}
 
                         </p>
 
@@ -356,10 +408,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useUser } from '../../store/user.store';
 const userStore = useUser()
 import { update_user } from '../../services/app.service';
+import { nutritionApi } from '../../services/nutrition_api.services';
 import { useWellness } from '../../store/wellness.store';
 const wellnessStore = useWellness()
 import { X } from 'lucide-vue-next';
@@ -390,9 +443,205 @@ const menus = ref(null)
 const foods = ref([])
 
 const selectedMeals = ref([]);
-const filteredMeals = computed(() => {
-    return foods.value.filter(meal => meal.category.toLowerCase() === selectedCategory.value.toLowerCase());
-});
+const loggedFoodIdsToday = ref(new Set())
+const tickingFoodIds = ref(new Set())
+const showCalendar = ref(false)
+const selectedNutritionDate = ref(new Date().toISOString().split('T')[0])
+const nutritionHistoryCache = ref({})
+const weekdayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const currentDate = new Date()
+const calendarMonth = ref(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1))
+
+const toDateKey = (dateObj) => {
+    const y = dateObj.getFullYear()
+    const m = String(dateObj.getMonth() + 1).padStart(2, '0')
+    const d = String(dateObj.getDate()).padStart(2, '0')
+    return `${y}-${m}-${d}`
+}
+
+const todayKey = computed(() => toDateKey(new Date()))
+const calendarMonthLabel = computed(() =>
+    new Intl.DateTimeFormat('vi-VN', { month: 'long', year: 'numeric' }).format(calendarMonth.value)
+)
+
+const cacheNutrition = (nutrition) => {
+    if (!nutrition?.date) return
+    nutritionHistoryCache.value = {
+        ...nutritionHistoryCache.value,
+        [nutrition.date]: nutrition,
+    }
+}
+
+const fetchNutritionForDate = async (dateKey, syncSelected = false) => {
+    const userId = userStore.user?.id
+    if (!userId) return
+
+    try {
+        const cached = nutritionHistoryCache.value[dateKey]
+        if (cached) {
+            if (syncSelected) {
+                wellnessStore.dailyNutrition = cached
+            }
+            return
+        }
+
+        const nutrition = await nutritionApi.getDailyNutrition(userId, dateKey)
+        cacheNutrition(nutrition)
+
+        if (syncSelected) {
+            wellnessStore.dailyNutrition = nutrition
+        }
+    } catch (error) {
+        console.error('Failed to fetch nutrition for date:', dateKey, error)
+    }
+}
+
+const fetchCalendarMonthData = async () => {
+    const userId = userStore.user?.id
+    if (!userId) return
+
+    const year = calendarMonth.value.getFullYear()
+    const month = calendarMonth.value.getMonth()
+    const monthStart = toDateKey(new Date(year, month, 1))
+    const monthEndRaw = toDateKey(new Date(year, month + 1, 0))
+    const monthEnd = monthEndRaw > todayKey.value ? todayKey.value : monthEndRaw
+
+    if (monthStart > monthEnd) return
+
+    try {
+        const entries = await nutritionApi.get_nutrition_all(userId, monthStart, monthEnd)
+        if (!Array.isArray(entries)) return
+        console.log('Fetched nutrition entries for calendar month:', entries)
+        const nextCache = { ...nutritionHistoryCache.value }
+        entries.forEach((entry) => {
+            if (entry?.date) {
+                nextCache[entry.date] = entry
+            }
+        })
+        nutritionHistoryCache.value = nextCache
+    } catch (error) {
+        console.error('Failed to fetch nutrition range:', error)
+    }
+}
+
+const calendarDays = computed(() => {
+    const year = calendarMonth.value.getFullYear()
+    const month = calendarMonth.value.getMonth()
+
+    const firstDay = new Date(year, month, 1)
+    const firstWeekday = (firstDay.getDay() + 6) % 7
+    const daysInCurrentMonth = new Date(year, month + 1, 0).getDate()
+    const daysInPrevMonth = new Date(year, month, 0).getDate()
+
+    const cells = []
+
+    for (let i = firstWeekday - 1; i >= 0; i--) {
+        const dayNum = daysInPrevMonth - i
+        const dt = new Date(year, month - 1, dayNum)
+        const key = toDateKey(dt)
+        cells.push({
+            key,
+            day: dayNum,
+            isCurrentMonth: false,
+            isFuture: key > todayKey.value,
+            isToday: key === todayKey.value,
+            isSelected: key === selectedNutritionDate.value,
+            nutrition: nutritionHistoryCache.value[key] || null,
+        })
+    }
+
+    for (let day = 1; day <= daysInCurrentMonth; day++) {
+        const dt = new Date(year, month, day)
+        const key = toDateKey(dt)
+        cells.push({
+            key,
+            day,
+            isCurrentMonth: true,
+            isFuture: key > todayKey.value,
+            isToday: key === todayKey.value,
+            isSelected: key === selectedNutritionDate.value,
+            nutrition: nutritionHistoryCache.value[key] || null,
+        })
+    }
+
+    let nextDay = 1
+    while (cells.length < 42) {
+        const dt = new Date(year, month + 1, nextDay)
+        const key = toDateKey(dt)
+        cells.push({
+            key,
+            day: nextDay,
+            isCurrentMonth: false,
+            isFuture: key > todayKey.value,
+            isToday: key === todayKey.value,
+            isSelected: key === selectedNutritionDate.value,
+            nutrition: nutritionHistoryCache.value[key] || null,
+        })
+        nextDay++
+    }
+
+    return cells
+})
+
+const changeCalendarMonth = (offset) => {
+    const next = new Date(calendarMonth.value)
+    next.setMonth(next.getMonth() + offset)
+    calendarMonth.value = new Date(next.getFullYear(), next.getMonth(), 1)
+}
+
+const toggleCalendar = async () => {
+    showCalendar.value = !showCalendar.value
+    if (showCalendar.value) {
+        await fetchCalendarMonthData()
+    }
+}
+
+const selectCalendarDate = async (day) => {
+    if (day.isFuture) return
+    selectedNutritionDate.value = day.key
+    await fetchNutritionForDate(day.key, true)
+}
+
+const isFoodLoggedToday = (foodId) => loggedFoodIdsToday.value.has(foodId)
+const isTickLoading = (foodId) => tickingFoodIds.value.has(foodId)
+
+const markTickLoading = (foodId, loading) => {
+    const next = new Set(tickingFoodIds.value)
+    if (loading) next.add(foodId)
+    else next.delete(foodId)
+    tickingFoodIds.value = next
+}
+
+const tickMealAsEaten = async (meal) => {
+    const userId = userStore.user?.id
+    if (!userId || !meal?.id || isFoodLoggedToday(meal.id)) return
+
+    markTickLoading(meal.id, true)
+    try {
+        await nutritionApi.logMeal(userId, {
+            food_id: meal.id,
+            servings: 1,
+            meal_time: new Date().toISOString(),
+            notes: 'Ticked in MealPlanner',
+        })
+
+        const nextLogged = new Set(loggedFoodIdsToday.value)
+        nextLogged.add(meal.id)
+        loggedFoodIdsToday.value = nextLogged
+
+        if (!selectedMeals.value.some((m) => m.id === meal.id)) {
+            selectedMeals.value.push({ ...meal })
+        }
+
+        const today = new Date().toISOString().split('T')[0]
+        await fetchNutritionForDate(today, selectedNutritionDate.value === today)
+    } catch (error) {
+        console.error('Failed to tick meal as eaten:', error)
+    } finally {
+        markTickLoading(meal.id, false)
+    }
+}
+
 // Computed Properties
 const filterFoodItems = computed(() => {
     if (selectedCategory.value === 'tất cả') return wellnessStore.listFoodItems;
@@ -409,6 +658,36 @@ const calculateTotalNutrition = () => {
         };
     }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
 };
+
+// Always read daily totals from backend snapshot to avoid UI-local conflicts.
+const nutritionTotals = computed(() => ({
+    calories: Number(wellnessStore.dailyNutrition?.calories_consumed || 0),
+    protein: Number(wellnessStore.dailyNutrition?.protein_grams || 0),
+    carbs: Number(wellnessStore.dailyNutrition?.carbs_grams || 0),
+    fat: Number(wellnessStore.dailyNutrition?.fat_grams || 0),
+}))
+const calorieGoal = computed(() => Number(userProfile.value.dailyCalorieGoal || 0))
+const caloriesBurnedToday = computed(() => Number(wellnessStore.dailyNutrition?.calories_burned || 0))
+const calorieProgressPercent = computed(() => {
+    if (calorieGoal.value <= 0) return 0
+    return Math.min((nutritionTotals.value.calories / calorieGoal.value) * 100, 100)
+})
+const burnedProgressPercent = computed(() => {
+    if (calorieGoal.value <= 0) return 0
+    return Math.min((caloriesBurnedToday.value / calorieGoal.value) * 100, 100)
+})
+const isOverTarget = computed(() => calorieGoal.value > 0 && nutritionTotals.value.calories > calorieGoal.value)
+const overTargetCalories = computed(() => Math.max(0, Math.round(nutritionTotals.value.calories - calorieGoal.value)))
+const netCalories = computed(() => Math.max(0, Math.round(nutritionTotals.value.calories - caloriesBurnedToday.value)))
+
+watch(calendarMonth, async () => {
+    await fetchCalendarMonthData()
+})
+
+onMounted(async () => {
+    await fetchNutritionForDate(selectedNutritionDate.value, true)
+    await fetchCalendarMonthData()
+})
 
 // Methods
 const addMealToDay = (meal) => {

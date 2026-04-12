@@ -1,6 +1,6 @@
 import threading
 
-from services import shoulder_press_service
+from services.shoulder_press_service import ShoulderPressServices
 from services.drawing_service import DrawingService
 from services.pushup_service import pushupService
 from services.plank_service import plankService
@@ -14,7 +14,6 @@ from services.webcam import FrameBuffer,ResultBuffer
 from services.pose_service import PoseDetector
 from schemas.video_schemas import Webcam_Schemas
 from services.bicep_service import bicep_service
-from services.shoulder_press_service import ShoulderPressServices
 from fastapi import APIRouter,WebSocket, WebSocketDisconnect# type: ignore
 import numpy as np
 import cv2, json, time
@@ -79,7 +78,7 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
     elif exercise_type == 'bicep_curls':
         service = bicep_service(draw,detector, None, data)
     elif exercise_type == "shoulder_press":
-        service = shoulder_press_service(draw,detector, None,data)
+        service = ShoulderPressServices(draw,detector, None,data)
     else:
         print("đóng nối kết do không có bài tập đó!")
         await websocket.close()
@@ -172,7 +171,7 @@ async def websocket_endpoint(websocket: WebSocket,exercise_type:str):
     elif exercise_type == 'bicep_curls':
         service = bicep_service(None,None, None, data)
     elif exercise_type == "shoulder_press":
-        service = shoulder_press_service(None,None, None,data)
+        service = ShoulderPressServices(None,None, None,data)
     else:
         print("not found exercise")
         await websocket.close()

@@ -101,12 +101,11 @@
             </div>
 
             <!-- EXERCISE SELECTOR - BOTTOM OVERLAY -->
-            <div v-if="is_start && !is_finish && currentExercise" class="fixed top-20 right-6 w-48 bg-gray-900/90 backdrop-blur-md rounded-2xl border-2 border-blue-500/50 p-2
+            <div v-if="is_start && !is_finish && currentExercise" class="fixed top-20 right-6 w-58 bg-gray-900/90 backdrop-blur-md rounded-2xl border-2 border-blue-500/50 p-2
             shadow-2xl animate-in slide-in-from-right duration-500 z-40">
 
                 <div
                     class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1 px-1 flex justify-between">
-                    <span>Current Form</span>
                     <span class="animate-pulse">● LIVE</span>
                 </div>
 
@@ -142,8 +141,12 @@ import { useRouter, useRoute } from 'vue-router';
 import Summary from './Summary.vue';
 import { useExercise } from '../../../constants/exercise'
 import { useAudio } from '../../../composable/audio'
+import { useUser } from '../../../store/user.store'
+import { useWellness } from '../../../store/wellness.store'
 const { get_exercise } = useExercise()
 const { stopSpeak } = useAudio()
+const userStore = useUser()
+const wellnessStore = useWellness()
 const { get_state_warmup } = Use_is_warmup()
 const { set_game_choose } = useGameChoose()
 const router = useRouter()
@@ -160,10 +163,24 @@ const currentExerciseType = computed(() => {
 const currentExercise = computed(() => get_exercise(currentExerciseType.value))
 const is_finish = ref(false)
 const summary = ref(null)
-const finish_handle = (data) => {
+const updateCaloriesBurnedOnFinish = async (summaryData) => {
+    const userId = userStore.user?.id
+    const caloriesBurned = Number(summaryData?.total_calories || 0)
+    if (!userId || caloriesBurned <= 0) return
+
+    try {
+        console.log(`Updating calories burned for user ${userId}: ${caloriesBurned} calories`)
+        await wellnessStore.update_calories_burned(userId, caloriesBurned, new Date())
+    } catch (error) {
+        console.error('Failed to update calories burned after game completion:', error)
+    }
+}
+
+const finish_handle = async (data) => {
     stopSpeak()
     is_finish.value = true
     summary.value = data
+    await updateCaloriesBurnedOnFinish(summary.value)
     console.log('workout summary:', summary.value)
 }
 set_game_choose('game2')

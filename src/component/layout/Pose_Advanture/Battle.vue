@@ -106,7 +106,7 @@
             </ExerciseSelector>
         </div>
         <!-- VICTORY/DEFEAT MODAL -->
-        <div v-if="is_start && !is_finish && current_exercise" class="fixed top-20 right-6 w-48 bg-gray-900/90 backdrop-blur-md rounded-2xl border-2 border-blue-500/50 p-2
+        <div v-if="is_start && !is_finish && current_exercise" class="fixed top-20 right-6 w-58 bg-gray-900/90 backdrop-blur-md rounded-2xl border-2 border-blue-500/50 p-2
             shadow-2xl animate-in slide-in-from-right duration-500 z-40">
 
             <div class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1 px-1 flex justify-between">
@@ -127,6 +127,8 @@
                 </div>
             </div>
         </div>
+
+        <Summary v-if="is_finish && summary" :summary="summary" :win="win"></Summary>
     </div>
 </template>
 <script setup>
@@ -137,25 +139,45 @@ import menu_btn from '../../bases/menu_btn.vue'
 import NavBar from './NavBar.vue'
 import Warmup from './Warmup.vue';
 import Trainer from '../Trainer/Trainer.vue';
-import { ref, computed, shallowRef } from 'vue';
+import { ref, computed, shallowRef, watch } from 'vue';
 import { calculating } from '../../../composable/helpers';
 import { Use_is_warmup } from '../../../composable/help_game';
 import { useMonster } from '../../../composable/help_game';
-import { useRouter } from 'vue-router';
 import { useAudio } from '../../../composable/audio'
-import { useExercise } from '../../../constants/exercise'
+import Summary from './Summary.vue';
+import { nutritionApi } from '../../../services/nutrition_api.services'
+import { useUser } from '../../../store/user.store'
 const { get_state_warmup } = Use_is_warmup()
 
 const { stopSpeak } = useAudio()
-const router = useRouter()
+const userStore = useUser()
+
 const win = ref(true)
 const is_finish = ref(false)
-const finish_handle = () => {
+const summary = ref(null)
+const updateCaloriesBurnedOnFinish = async (summaryData) => {
+    const userId = userStore.user?.id
+    const caloriesBurned = Number(summaryData?.total_calories || 0)
+    if (!userId || caloriesBurned <= 0) return
+
+    try {
+        await nutritionApi.update_calories_burned(userId, {
+            date: new Date().toISOString(),
+            calories_burned: caloriesBurned,
+        })
+    } catch (error) {
+        console.error('Failed to update calories burned after game completion:', error)
+    }
+}
+
+const finish_handle = async (data) => {
     stopSpeak()
+    win.value = monster.value.currentHp <= 0
+    summary.value = data?.history ? data : buildBattleSummary()
+    await updateCaloriesBurnedOnFinish(summary.value)
     is_finish.value = true
 }
 
-const { get_exercise } = useExercise()
 const { get_monster } = useMonster()
 const { persen } = calculating()
 const is_start = ref(false)
@@ -197,6 +219,45 @@ const handle_current_exercise = (attact) => {
 }
 
 const monster = computed(() => get_monster())
+const battleStartedAt = ref(null)
+
+watch(is_start, (active) => {
+    if (active && !battleStartedAt.value) {
+        battleStartedAt.value = Date.now()
+    }
+})
+
+const formatDuration = (seconds) => {
+    const s = Math.max(0, Number(seconds) || 0)
+    const mm = Math.floor(s / 60).toString().padStart(2, '0')
+    const ss = Math.floor(s % 60).toString().padStart(2, '0')
+    return `${mm}:${ss}`
+}
+
+const buildBattleSummary = () => {
+    const totalReps = Number(result_on_rep.value?.total || 0)
+    const totalGoodReps = Number(result_on_rep.value?.good || 0)
+    const accuracy = totalReps > 0 ? Math.floor((totalGoodReps / totalReps) * 100) : 0
+    const durationSeconds = battleStartedAt.value ? Math.floor((Date.now() - battleStartedAt.value) / 1000) : 0
+    const totalCalories = Number((totalReps * 0.5).toFixed(1))
+    const exerciseName = current_exercise.value?.title || current_exercise.value?.type || 'Unknown'
+
+    return {
+        total_reps: totalReps,
+        total_good_reps: totalGoodReps,
+        total_calories: totalCalories,
+        history: [
+            {
+                exercise: exerciseName,
+                duration: formatDuration(durationSeconds),
+                accuracy,
+                good_reps: totalGoodReps,
+                actual_reps: totalReps,
+                calories: totalCalories
+            }
+        ]
+    }
+}
 
 // Tính toán phần trăm máu
 const hpPercentage = computed(() => (persen(monster.value.currentHp, monster.value.maxHp)));
@@ -218,12 +279,6 @@ const handleHit = async () => {
     }
     finnal_damage.value = normal_damage.value
 };
-
-
-// nút trở lại menu
-const handle_menu = () => {
-    router.push({ name: 'menu' })
-}
 // 3/23/2026 thiết kế progress origin cho từng bài tập
 const origin = shallowRef(null)
 const up_standard = ref(140)

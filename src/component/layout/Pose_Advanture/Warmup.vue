@@ -12,7 +12,6 @@ const { get_state_warmup, set_state_warmup } = Use_is_warmup()
 const { speak } = useAudio()
 const { isInside } = usePose()
 
-// Warmup exercises with mapped exercise types for backend detection
 const warmups = [
     { name: "Dãn vai", time: 10, speak_voice: "Dãn vai", path: "/tutorial/Shoulder Stretch", exerciseId: "warmup_shoulder_stretch" },
     { name: "Dũi chân", time: 20, speak_voice: "Dũi chân", path: "/tutorial/Single Leg Hip Rotation", exerciseId: "warmup_hip_rotation" },
@@ -20,7 +19,6 @@ const warmups = [
     { name: "Jump tại chỗ", time: 20, speak_voice: "dăm tại chổ", path: "/tutorial/Jumping Jack", exerciseId: "warmup_jumping_jack" }
 ]
 
-// Refs for pose detection
 const videoRef = ref(null)
 const canvasRef = ref(null)
 const isDetecting = ref(false)
@@ -51,7 +49,6 @@ const warning = computed(() => {
     return isDetecting.value && !inside.value
 })
 
-// Handle pose detection results
 const handlePoseResult = (data) => {
     poseStats.value = {
         total: data.total || 0,
@@ -62,7 +59,6 @@ const handlePoseResult = (data) => {
     }
 }
 
-
 function nextStep() {
     isDetecting.value = false
     stopPose()
@@ -72,7 +68,6 @@ function nextStep() {
     if (step.value < warmups.length) {
         speak(`Bắt đầu ${warmups[step.value].speak_voice}`)
         timeLeft.value = warmups[step.value].time
-        // Start pose detection for next exercise
         setTimeout(() => {
             startPoseDetection()
         }, 500)
@@ -97,11 +92,6 @@ function skipWarmup() {
     nextStep()
 }
 
-
-
-
-
-// Warning feedback for out of frame
 const handleWarningChange = (newValue) => {
     if (!newValue) return
 
@@ -122,7 +112,6 @@ const handleWarningChange = (newValue) => {
 watch(warning, handleWarningChange)
 
 onMounted(async () => {
-    // Request camera permission first
     try {
         await navigator.mediaDevices.getUserMedia({ video: true })
     } catch (err) {
@@ -133,17 +122,17 @@ onMounted(async () => {
     startPoseDetection()
 
     timer = setInterval(() => {
-        // Only count down timer if user is inside safe zone
         if (!inside.value) {
             return
         }
 
-        let time = timeLeft.value - 1
+        timeLeft.value--
+        const time = timeLeft.value
 
         if (time == 3) speak("ba")
         if (time == 2) speak("hai")
         if (time == 1) speak("một")
-        timeLeft.value--
+
         if (timeLeft.value <= 0) {
             nextStep()
         }
@@ -160,21 +149,40 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div @click.once="unlockAudio" class="flex items-center justify-center bg-gray-900 text-white min-h-screen p-4">
-        <div class="w-full max-w-6xl">
-            <!-- MAIN LAYOUT: TRAINER + CAMERA + STATS -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div @click.once="unlockAudio" class="min-h-screen overflow-hidden bg-[#050816] text-white relative">
+        <!-- Animated Background Blobs -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute -top-32 -left-32 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl"></div>
+            <div class="absolute top-1/3 -right-24 h-96 w-96 rounded-full bg-orange-500/20 blur-3xl"></div>
+            <div class="absolute bottom-0 left-1/4 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl"></div>
+        </div>
+
+        <div class="relative mx-auto max-w-7xl px-4 py-6 lg:px-8 lg:py-8">
+            <!-- Header -->
+            <div class="mb-8 text-center">
+                <p class="text-xs uppercase tracking-[0.35em] text-orange-300/80">Chuẩn bị sức</p>
+                <h1 class="text-4xl font-black tracking-tight sm:text-5xl">Khởi động</h1>
+                <p class="mt-2 text-white/60">Bài {{ step + 1 }} / {{ warmups.length }}</p>
+            </div>
+
+            <!-- Main Layout: 3 Columns -->
+            <div class="grid gap-6 lg:grid-cols-[1fr_1.3fr_1fr]">
 
                 <!-- LEFT: Trainer Model -->
-                <div class="bg-gray-800 rounded-2xl p-6 shadow-xl flex flex-col justify-center">
-                    <Trainer :path_json="warmups[step].path" :key="step"></Trainer>
-                </div>
+                <section class="rounded-4xl border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-xl">
+                    <div class="flex flex-col h-full">
+                        <p class="text-xs font-bold uppercase tracking-[0.3em] text-cyan-300/80 mb-4">Hình mẫu</p>
+                        <div class="flex-1 flex items-center justify-center min-h-96">
+                            <Trainer :path_json="warmups[step].path" :key="step"></Trainer>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- CENTER: Camera with Pose Detection -->
-                <div class="bg-black rounded-2xl overflow-hidden border-3 border-emerald-500/50 shadow-2xl">
-                    <!-- Camera Feed -->
-                    <div class="relative w-full h-100 bg-gray-900 rounded-2xl overflow-hidden">
-                        <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]" autoplay
+                <section class="rounded-4xl overflow-hidden border border-emerald-500/30 shadow-2xl min-h-96">
+                    <div class="relative w-full h-full bg-linear-to-br from-gray-900 to-black">
+                        <!-- Camera Feed -->
+                        <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover" autoplay
                             playsinline />
 
                         <!-- Pose Canvas Overlay -->
@@ -183,49 +191,65 @@ onUnmounted(() => {
 
                         <!-- Warning Overlay -->
                         <div v-if="warning"
-                            class="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                            <div class="text-yellow-400 text-lg font-semibold animate-pulse text-center px-4">
-                                ⚠ Không phát hiện người <br />
-                                Hãy đứng vào khung tập
+                            class="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                            <div class="text-center">
+                                <div class="text-5xl mb-3">⚠️</div>
+                                <p class="text-yellow-300 text-lg font-bold">Không phát hiện người</p>
+                                <p class="text-yellow-300/70 text-sm mt-1">Hãy đứng vào khung tập</p>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- RIGHT: Exercise Info & Stats -->
-                <div class="bg-gray-800 rounded-2xl p-6 shadow-xl space-y-4">
+                        <!-- Corner Info Badge -->
+
+                    </div>
+                </section>
+
+                <!-- RIGHT: Exercise Info & Controls -->
+                <section
+                    class="rounded-4xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl flex flex-col">
                     <!-- Exercise Name -->
-                    <div class="text-center">
-                        <h2 class="text-2xl font-bold text-orange-400">{{ current.name }}</h2>
-                        <p class="text-gray-400 text-sm mt-1">Khởi động</p>
+                    <div class="mb-6">
+                        <p class="text-xs font-bold uppercase tracking-[0.3em] text-orange-300/80">Bài tập hiện tại</p>
+                        <h2 class="mt-2 text-3xl font-black text-orange-300">{{ current.name }}</h2>
                     </div>
 
-                    <!-- Timer -->
-                    <div class="bg-gray-700 rounded-xl p-4 text-center">
-                        <div class="flex items-center justify-center gap-2 text-orange-400 text-3xl font-bold">
-                            <Timer :size="28" />
-                            {{ timeLeft }}s
+                    <!-- Timer Card -->
+                    <div class="mb-6 rounded-3xl border border-white/10 bg-black/20 p-6 text-center">
+                        <div class="flex items-center justify-center gap-3 text-5xl font-black text-cyan-400">
+                            <Timer :size="40" />
+                            <span>{{ String(timeLeft).padStart(2, '0') }}s</span>
                         </div>
                     </div>
 
                     <!-- Progress Bar -->
-                    <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden border border-gray-600">
-                        <div class="h-full bg-linear-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-300"
-                            :style="{ width: progress + '%' }" />
+                    <div class="mb-6">
+                        <div
+                            class="h-3 w-full rounded-full border border-white/10 bg-white/5 overflow-hidden shadow-lg">
+                            <div class="h-full bg-linear-to-r from-emerald-400 to-cyan-400 rounded-full transition-all duration-300"
+                                :style="{ width: progress + '%' }" />
+                        </div>
+                        <p class="mt-2 text-center text-xs text-white/50 uppercase tracking-[0.2em]">
+                            {{ Math.round(progress) }}%
+                        </p>
                     </div>
-                    <!-- Step Indicator -->
-                    <div class="text-center text-sm text-gray-400 py-2">
-                        Bài {{ step + 1 }} / {{ warmups.length }}
+
+                    <!-- Steps Indicator -->
+                    <div class="mb-6 flex gap-2">
+                        <div v-for="(warmup, idx) in warmups" :key="idx" class="h-2 flex-1 rounded-full transition-all"
+                            :class="idx < step ? 'bg-emerald-400' : idx === step ? 'bg-cyan-400' : 'bg-white/10'" />
                     </div>
 
                     <!-- Skip Button -->
                     <button @click="skipWarmup"
-                        class="w-full flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 active:bg-gray-500 transition rounded-xl py-3 font-medium">
+                        class="mt-auto w-full flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white/80 transition hover:bg-white/10 hover:text-white active:scale-95">
                         <SkipForward :size="18" />
-                        Bỏ qua
+                        Bỏ qua bài tập
                     </button>
-                </div>
+                </section>
             </div>
+
+            <!-- Bottom Stats Bar -->
+
         </div>
     </div>
 </template>
