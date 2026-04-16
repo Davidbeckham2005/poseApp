@@ -62,7 +62,7 @@ class VideoService:
     def get_file_name(self):
         return self.fileName
     def getNewPath(self):
-        return fr"D:\hoc\nienluan\PoseApp\src\assets\videos\{self.fileName}.mp4"
+        return fr"D:\nienluan\PoseApp\src\assets\videos\{self.fileName}.mp4"
         # return newPath
     def create_file_name(self):
         name = self.path.stem

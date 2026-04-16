@@ -49,15 +49,49 @@ const active = (key_value, checked_btn) => {
 //     { name: "drawing",  },
 // ]
 const settings_detect = computed(() => ({
-    isDrawing: { title: "Display Skeleton Overlay", content: "Display pose keypoints on video", state: settingStore.setting.isDrawing },
-    isCheck_view: { title: "Display layout", content: "Switch between horizontal and vertical view", state: settingStore.setting.isCheck_view },
+    isDrawing: {
+        title: "Hiển thị khung xương",
+        content: "Hiển thị các điểm khớp trên video",
+        state: settingStore.setting.isDrawing
+    },
+    isCheck_view: {
+        title: "Hiển thị bố cục",
+        content: "Chuyển đổi giữa chế độ ngang và dọc",
+        state: settingStore.setting.isCheck_view
+    },
 }))
+
 const setting_analyst = computed(() => ({
-    isAnalyst: { title: "Display Analytics", content: "Display rep counter, and exercise state analysis.", state: settingStore.setting.isAnalyst },
-    Analyst_FPS: { title: "Display FPS", content: "Display real-time FPS", state: settingStore.setting.Analyst_FPS },
-    Analyst_state: { title: "Display Exercise State", content: "Display current movement status (e.g., Up/Down/Hold)", state: settingStore.setting.Analyst_state },
-    Analyst_count: { title: "Display Count", content: "Display total number of repetitions performed", state: settingStore.setting.Analyst_count },
-    Analyst_count_good: { title: "Display good count", content: "Display the count of correctly movements", state: settingStore.setting.Analyst_count_good },
-    Analyst_estimate: { title: "Display Form Feedback", content: "Display real-time quality (e.g., Good/Bad/Incomplete)", state: settingStore.setting.Analyst_estimate },
+    isAnalyst: {
+        title: "Hiển thị phân tích",
+        content: "Hiển thị số lần lặp, trạng thái...",
+        state: settingStore.setting.isAnalyst
+    },
+    Analyst_FPS: {
+        title: "Hiển thị FPS",
+        content: "Hiển thị tốc độ khung hình theo thời gian thực",
+        state: settingStore.setting.Analyst_FPS
+    },
+    Analyst_state: {
+        title: "Hiển thị trạng thái bài tập",
+        content: "Hiển thị trạng thái chuyển động hiện tại (VD: Lên/Xuống/Giữ)",
+        state: settingStore.setting.Analyst_state
+    },
+    Analyst_count: {
+        title: "Hiển thị số lần lặp",
+        content: "Hiển thị tổng số lần lặp đã thực hiện",
+        state: settingStore.setting.Analyst_count
+    },
+    Analyst_count_good: {
+        title: "Hiển thị số lần đúng",
+        content: "Hiển thị số lần thực hiện đúng động tác",
+        state: settingStore.setting.Analyst_count_good
+    },
+    Analyst_estimate: {
+        title: "Hiển thị phản hồi động tác",
+        content: "Hiển thị chất lượng động tác theo thời gian thực (VD: Tốt/Xấu/Chưa hoàn chỉnh)",
+        state: settingStore.setting.Analyst_estimate
+    },
 }))
+
 </script>

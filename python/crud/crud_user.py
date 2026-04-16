@@ -40,7 +40,6 @@ def create(data, db: Session = Depends(get_db)):
 
 def get(db: Session = Depends(get_db)):
     user_to_get = db.query(user).filter(user.id == 1).first()
-    logging.info(f"Lấy thông tin user_id=1 vào lúc ")
     logging.info(f"Thông tin user: {user_to_get.__dict__ }")
     return user_to_get
 

@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row justify-between text-xs">
-        <span class=" font-normal text-gray-500">{{ formatTime(time) }}</span>
+        <!-- <span class=" font-normal text-gray-500">{{ formatTime(time) }}</span> -->
         <div :class="color">Reps {{ count }}</div>
         <div class="truncate " :class="color">{{ require }}</div>
     </div>

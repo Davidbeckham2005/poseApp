@@ -94,7 +94,7 @@
                         <ListChecks class="text-emerald-300" :size="28" />
                     </div>
 
-                    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
+                    <div class="grid gap-4 grid-cols-1">
                         <article v-for="exercise in workoutItems" :key="exercise.type"
                             class="rounded-3xl border p-4 transition"
                             :class="exercise.enabled ? 'border-white/15 bg-black/20' : 'border-white/5 bg-white/5 opacity-60'">

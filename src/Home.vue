@@ -63,7 +63,7 @@ const menuItems = [
     { name: 'profile', label: 'Trang cá nhân', icon: UserRound },
     { name: 'meals', label: 'Bữa ăn & Dinh dưỡng', icon: Apple },
     { name: 'upload', label: 'Kiểm tra tập luyện', icon: UploadIcon },
-    { name: 'history', label: 'lịch sử', icon: HistoryIcon },
+    // { name: 'history', label: 'lịch sử', icon: HistoryIcon },
     { name: 'settings', label: 'Cài đặt', icon: SettingsIcon },
 
 ];
